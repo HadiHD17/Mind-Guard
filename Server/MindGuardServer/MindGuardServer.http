@@ -1,0 +1,6 @@
+@MindGuardServer_HostAddress = http://localhost:5262
+
+GET {{MindGuardServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
