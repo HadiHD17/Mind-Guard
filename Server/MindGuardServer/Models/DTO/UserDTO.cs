@@ -57,6 +57,8 @@ namespace MindGuardServer.Models.DTO
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string? AccessToken { get; set; }
+        public int ExpiresIn {  get; set; }
         public bool DarkMode { get; set; }
         public bool CalendarSyncEnabled { get; set; }
         public DateTime CreatedAt { get; set; }

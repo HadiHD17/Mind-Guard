@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 
 namespace MindGuardServer.Data
@@ -13,5 +14,24 @@ namespace MindGuardServer.Data
         public DbSet<Routine_Occurence> Routine_Occurunces { get; set; }
         public DbSet<AI_Prediction> AI_Predictions { get; set; }
         public DbSet<Weekly_Summary> Weekly_Summaries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasData(
+                new User() { 
+                    Id = -1,
+                    FullName="Hadi Haidar",
+                    Email="hadi@gmail.com",
+                    Password=PasswordHashHandler.HashPassword("hadi"),
+                    PhoneNumber="81918422",
+                    IsDark=true,
+                    Calendar_sync_enabled=true,
+                    CreatedAt=DateTime.UtcNow,
+                    UpdatedAt=DateTime.UtcNow,
+                
+                });
+        }
     }
 }
