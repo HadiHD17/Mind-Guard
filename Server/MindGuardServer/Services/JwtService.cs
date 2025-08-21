@@ -59,10 +59,10 @@ namespace MindGuardServer.Services
                 Id = userAccount.Id,
                 FullName = userAccount.FullName,
                 Email = userAccount.Email,
-                Phone = userAccount.PhoneNumber,
+                PhoneNumber = userAccount.PhoneNumber,
                 ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds,
-                DarkMode = userAccount.IsDark,
-                CalendarSyncEnabled = userAccount.Calendar_sync_enabled,
+                IsDark = userAccount.IsDark,
+                Calendar_sync_enabled = userAccount.Calendar_sync_enabled,
                 CreatedAt = userAccount.CreatedAt,
                 UpdatedAt = userAccount.UpdatedAt
 
@@ -85,9 +85,9 @@ namespace MindGuardServer.Services
                 FullName = user.FullName,
                 Email = user.Email,
                 Password = hashedPassword,
-                PhoneNumber = user.Phone,
-                IsDark = user.DarkMode,
-                Calendar_sync_enabled = user.CalendarSyncEnabled,
+                PhoneNumber = user.PhoneNumber,
+                IsDark = user.IsDark,
+                Calendar_sync_enabled = user.Calendar_sync_enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

@@ -23,10 +23,10 @@ namespace MindGuardServer.Models.DTO
         [Required(ErrorMessage = "Phone number is required")]
         [Phone(ErrorMessage = "Invalid phone number format")]
         [StringLength(50, ErrorMessage = "Phone number cannot be longer than 50 characters")]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
-        public bool DarkMode { get; set; } = false;
-        public bool CalendarSyncEnabled { get; set; } = false;
+        public bool IsDark { get; set; } = false;
+        public bool Calendar_sync_enabled { get; set; } = false;
     }
 
     public class UserUpdateDto
@@ -38,17 +38,12 @@ namespace MindGuardServer.Models.DTO
         [StringLength(150, ErrorMessage = "Email cannot be longer than 150 characters")]
         public string? Email { get; set; }
 
-        [StringLength(150, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 150 characters")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
-            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")]
-        public string? Password { get; set; }
-
         [Phone(ErrorMessage = "Invalid phone number format")]
         [StringLength(50, ErrorMessage = "Phone number cannot be longer than 50 characters")]
-        public string? Phone { get; set; }
+        public string? PhoneNumber { get; set; }
 
-        public bool? DarkMode { get; set; }
-        public bool? CalendarSyncEnabled { get; set; }
+        public bool? IsDark { get; set; }
+        public bool? Calendar_sync_enabled { get; set; }
     }
 
     public class UserResponseDto
@@ -56,11 +51,11 @@ namespace MindGuardServer.Models.DTO
         public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
         public string? AccessToken { get; set; }
         public int ExpiresIn {  get; set; }
-        public bool DarkMode { get; set; }
-        public bool CalendarSyncEnabled { get; set; }
+        public bool IsDark { get; set; }
+        public bool Calendar_sync_enabled { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
@@ -73,6 +68,27 @@ namespace MindGuardServer.Models.DTO
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+    }
+
+    public class UpdatePasswordDto
+    {
+            [Required]
+        [StringLength(150, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 150 characters")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
+            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")]
+        public string CurrentPassword { get; set; }
+
+            [Required]
+        [StringLength(150, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 150 characters")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
+            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")]
+        public string NewPassword { get; set; }
+
+            [Required]
+            [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+            public string ConfirmNewPassword { get; set; }
+
+
     }
 
 
