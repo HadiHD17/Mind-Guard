@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MindGuardServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec06b9f147244a08f1f5a08727ec39c63912c00e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e04032da43c757c0761a8e1998f6803bd78d0b1")]
 [assembly: System.Reflection.AssemblyProductAttribute("MindGuardServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MindGuardServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
