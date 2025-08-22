@@ -10,32 +10,32 @@ namespace MindGuardServer.Models.DTO
         public int UserId { get; set; }
 
         [Required(ErrorMessage = "Predicted date is required")]
-        public DateTime PredictedDate { get; set; }
+        public DateTime Predicted_Date { get; set; }
 
         [StringLength(50, ErrorMessage = "Risk level cannot be longer than 50 characters")]
-        public string? RiskLevel { get; set; }
+        public string? Risk_Level { get; set; }
 
         public string? Tips { get; set; }
-        public bool IsAcknowledged { get; set; } = false;
+        public bool Is_Acknowledged { get; set; } = false;
     }
 
     public class AIPredictionUpdateDto
     {
         [StringLength(50, ErrorMessage = "Risk level cannot be longer than 50 characters")]
-        public string? RiskLevel { get; set; }
+        public string? Risk_Level { get; set; }
 
         public string? Tips { get; set; }
-        public bool? IsAcknowledged { get; set; }
+        public bool? Is_Acknowledged { get; set; }
     }
 
     public class AIPredictionResponseDto
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public DateTime PredictedDate { get; set; }
-        public string? RiskLevel { get; set; }
+        public DateTime Predicted_Date { get; set; }
+        public string? Risk_Level { get; set; }
         public string? Tips { get; set; }
-        public bool IsAcknowledged { get; set; }
+        public bool Is_Acknowledged { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
