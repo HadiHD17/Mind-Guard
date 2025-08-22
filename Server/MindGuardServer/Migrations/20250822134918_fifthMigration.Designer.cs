@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MindGuardServer.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MindGuardServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250822134918_fifthMigration")]
+    partial class fifthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,13 +239,13 @@ namespace MindGuardServer.Migrations
                         {
                             Id = -1,
                             Calendar_sync_enabled = true,
-                            CreatedAt = new DateTime(2025, 8, 22, 14, 1, 50, 34, DateTimeKind.Utc).AddTicks(571),
+                            CreatedAt = new DateTime(2025, 8, 22, 13, 49, 17, 690, DateTimeKind.Utc).AddTicks(2422),
                             Email = "hadi@gmail.com",
                             FullName = "Hadi Haidar",
                             IsDark = true,
-                            Password = "AQAAAAIAAYagAAAAEL0qEmg6um555A01jwXMm6G66naj1adr/wmYynMOqvwHT/ihxkyswok42Em8F6Enrg==",
+                            Password = "AQAAAAIAAYagAAAAENVxutDrGe6stmMgZu1OIIJsScTAoZx2ya2RbKan79yhXhcJ7Tu4LmpZQGmkrHJiSQ==",
                             PhoneNumber = "81918422",
-                            UpdatedAt = new DateTime(2025, 8, 22, 14, 1, 50, 34, DateTimeKind.Utc).AddTicks(579)
+                            UpdatedAt = new DateTime(2025, 8, 22, 13, 49, 17, 690, DateTimeKind.Utc).AddTicks(2427)
                         });
                 });
 

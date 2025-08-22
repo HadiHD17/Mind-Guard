@@ -61,6 +61,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EntryService>();
+builder.Services.AddScoped<RoutineService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

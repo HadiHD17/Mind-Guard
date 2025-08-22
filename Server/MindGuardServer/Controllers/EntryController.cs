@@ -35,7 +35,7 @@ namespace MindGuardServer.Controllers
             return Ok(_mapper.Map<IEnumerable<JournalEntryResponseDto>>(entries));
         }
 
-        [HttpGet("Entry/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEntryById(int id)
         {
             var entry = await _entryservice.GetEntryById(id);
