@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
@@ -25,7 +26,9 @@ namespace MindGuardServer.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var user = await _userService.GetUserById(id);
-            return Ok(_mapper.Map<UserResponseDto>(user));
+            var responseDTO = _mapper.Map<UserResponseDto>(user);
+            var response = new ApiResponse<UserResponseDto>(responseDTO);
+            return Ok(response);
         }
 
         [HttpPut("UpdateAccount/{id}")]

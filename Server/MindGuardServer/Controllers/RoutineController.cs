@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
@@ -27,7 +28,9 @@ namespace MindGuardServer.Controllers
         {
             var r = _mapper.Map<Routine>(routine);
             await _routineService.AddRoutine(r);
-            return Ok(_mapper.Map<RoutineResponseDto>(r));
+            var responseDTO = _mapper.Map<RoutineResponseDto>(r);
+            var response = new ApiResponse<RoutineResponseDto>(responseDTO);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
@@ -45,14 +48,18 @@ namespace MindGuardServer.Controllers
         public async Task<IActionResult> GetRoutinesByUserId(int userId)
         {
             var routines = await _routineService.GetRoutinesByUserId(userId);
-            return Ok(_mapper.Map<IEnumerable<RoutineResponseDto>>(routines));
+            var responseDTO = _mapper.Map<IEnumerable<RoutineResponseDto>>(routines);
+            var response = new ApiResponse<IEnumerable<RoutineResponseDto>>(responseDTO);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoutineById(int id)
         {
             var routine = await _routineService.GetRoutineById(id);
-            return Ok(_mapper.Map<RoutineResponseDto>(routine));
+            var responseDTO = _mapper.Map<RoutineResponseDto>(routine);
+            var response = new ApiResponse<RoutineResponseDto>(responseDTO);
+            return Ok(response);
         }
     }
 }

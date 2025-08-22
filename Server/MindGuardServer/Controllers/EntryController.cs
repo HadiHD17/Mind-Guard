@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
@@ -25,21 +26,27 @@ namespace MindGuardServer.Controllers
         {
             var J = _mapper.Map<Journal_Entry>(journal);
             await _entryservice.AddEntry(J);
-            return Ok(_mapper.Map<JournalEntryResponseDto>(J));
+            var responseDTO = _mapper.Map<JournalEntryResponseDto>(J);
+            var response = new ApiResponse<JournalEntryResponseDto>(responseDTO);
+            return Ok(response);
         }
 
         [HttpGet("UserEntries/{userId}")]
         public async Task<IActionResult> GetEntryByUserId(int userId)
         {
             var entries = await _entryservice.GetEntryByUserId(userId);
-            return Ok(_mapper.Map<IEnumerable<JournalEntryResponseDto>>(entries));
+            var responseDTO = _mapper.Map<IEnumerable<JournalEntryResponseDto>>(entries);
+            var response = new ApiResponse<IEnumerable<JournalEntryResponseDto>>(responseDTO);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEntryById(int id)
         {
             var entry = await _entryservice.GetEntryById(id);
-            return Ok(_mapper.Map<JournalEntryResponseDto>(entry));
+            var responseDTO = _mapper.Map<JournalEntryResponseDto>(entry);
+            var response = new ApiResponse<JournalEntryResponseDto>(responseDTO);
+            return Ok(response);
         }
 
     }
