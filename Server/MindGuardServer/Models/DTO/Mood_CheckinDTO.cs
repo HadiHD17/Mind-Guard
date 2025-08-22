@@ -11,7 +11,7 @@ namespace MindGuardServer.Models.DTO
 
         [Required(ErrorMessage = "Mood label is required")]
         [StringLength(50, ErrorMessage = "Mood label cannot be longer than 50 characters")]
-        public string MoodLabel { get; set; }
+        public string Mood_Label { get; set; }
 
     }
 
@@ -19,7 +19,7 @@ namespace MindGuardServer.Models.DTO
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string MoodLabel { get; set; }
+        public string Mood_Label { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

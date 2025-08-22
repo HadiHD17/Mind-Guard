@@ -63,6 +63,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EntryService>();
 builder.Services.AddScoped<RoutineService>();
 builder.Services.AddScoped<SummaryService>();
+builder.Services.AddScoped<MoodService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
