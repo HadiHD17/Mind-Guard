@@ -28,38 +28,42 @@ namespace MindGuardServer.Controllers
         {
             var r = _mapper.Map<Routine>(routine);
             await _routineService.AddRoutine(r);
+            if (r == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<RoutineResponseDto>(r);
-            var response = new ApiResponse<RoutineResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<RoutineResponseDto>.Success(responseDTO));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoutine(int id)
         {
             var deleted = await _routineService.RemoveRoutine(id);
-            if(deleted == false)
-            {
-                return BadRequest("routine not deleted");
-            }
-            return Ok("routine deleted");
+            if (deleted == false)
+                return BadRequest(ApiResponse<object>.Error());
+            return Ok(ApiResponse<object>.Success(deleted));
         }
 
         [HttpGet("UserRoutine/{userId}")]
         public async Task<IActionResult> GetRoutinesByUserId(int userId)
         {
             var routines = await _routineService.GetRoutinesByUserId(userId);
+            if (routines == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<IEnumerable<RoutineResponseDto>>(routines);
-            var response = new ApiResponse<IEnumerable<RoutineResponseDto>>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<IEnumerable<RoutineResponseDto>>.Success(responseDTO));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoutineById(int id)
         {
             var routine = await _routineService.GetRoutineById(id);
+            if (routine == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<RoutineResponseDto>(routine);
-            var response = new ApiResponse<RoutineResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<RoutineResponseDto>.Success(responseDTO));
         }
 
         [HttpPost("{routineId}")]
@@ -68,13 +72,10 @@ namespace MindGuardServer.Controllers
             var result = await _routineService.MarkAsCompleteAsync(routineId);
 
             if (!result.Success)
-            {
-                return BadRequest(new { status = "error", message = result.Message });
-            }
+                return BadRequest(ApiResponse<object>.Error());
 
             var responseDTO = _mapper.Map<RoutineOccurrenceResponseDto>(result.Occurrence);
-            var response = new ApiResponse<RoutineOccurrenceResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<RoutineOccurrenceResponseDto>.Success(responseDTO));
         }
     }
 }

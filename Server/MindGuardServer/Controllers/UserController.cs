@@ -26,30 +26,33 @@ namespace MindGuardServer.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var user = await _userService.GetUserById(id);
+            if (user == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<UserResponseDto>(user);
-            var response = new ApiResponse<UserResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<UserResponseDto>.Success(responseDTO));
         }
 
         [HttpPut("UpdateAccount/{id}")]
         public async Task<IActionResult> UpdateAccount(int id, [FromBody]UserUpdateDto updateduser)
         {
             var user = _mapper.Map<User>(updateduser);
-            await _userService.UpdateUser(id, user);
-            return Ok("User updated successfully");
+            var u = await _userService.UpdateUser(id, user);
+            var responseDTO = _mapper.Map<UserResponseDto>(u);
+            return Ok(ApiResponse<UserResponseDto>.Success(responseDTO));
         }
 
         [HttpPut("UpdatePassword/{id}")]
         public async Task<IActionResult> UpdatePassword(int id,[FromBody]UpdatePasswordDto dto)
         {
-             if (dto.NewPassword != dto.ConfirmNewPassword)
-                  return BadRequest("New password and confirmation do not match.");
+            if (dto.NewPassword != dto.ConfirmNewPassword)
+                return BadRequest(ApiResponse<object>.Error());
 
-           var result = await _userService.UpdatePassword(id, dto);
-               if (!result)
-                    return BadRequest("Current password is incorrect.");
+            var result = await _userService.UpdatePassword(id, dto);
+            if (!result)
+                return BadRequest(ApiResponse<object>.Error());
 
-            return Ok("Password updated successfully.");
+            return Ok(ApiResponse<object>.Success(new { UserId = id }));
 
         }
     }

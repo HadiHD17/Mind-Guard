@@ -28,17 +28,21 @@ namespace MindGuardServer.Controllers
         {
             var m = _mapper.Map<Mood_Checkin>(mood);
             await _moodService.AddMood(m);
+            if (m == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<MoodCheckinResponseDto>(m);
-            var response = new ApiResponse<MoodCheckinResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<MoodCheckinResponseDto>.Success(responseDTO));
         }
         [HttpGet("{userid}")]
         public async Task<IActionResult> GetMoodByUserId(int userid)
         {
             var mood = await _moodService.GetMoodByUserId(userid);
+            if (mood == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<MoodCheckinResponseDto>(mood);
-            var response = new ApiResponse<MoodCheckinResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<MoodCheckinResponseDto>.Success(responseDTO));
         }
     }
 }

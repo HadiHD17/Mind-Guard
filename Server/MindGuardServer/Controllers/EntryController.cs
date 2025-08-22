@@ -26,27 +26,33 @@ namespace MindGuardServer.Controllers
         {
             var J = _mapper.Map<Journal_Entry>(journal);
             await _entryservice.AddEntry(J);
+            if (J == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<JournalEntryResponseDto>(J);
-            var response = new ApiResponse<JournalEntryResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<JournalEntryResponseDto>.Success(responseDTO));
         }
 
         [HttpGet("UserEntries/{userId}")]
         public async Task<IActionResult> GetEntryByUserId(int userId)
         {
             var entries = await _entryservice.GetEntryByUserId(userId);
+            if (entries == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<IEnumerable<JournalEntryResponseDto>>(entries);
-            var response = new ApiResponse<IEnumerable<JournalEntryResponseDto>>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<IEnumerable<JournalEntryResponseDto>>.Success(responseDTO));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEntryById(int id)
         {
             var entry = await _entryservice.GetEntryById(id);
+            if (entry == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<JournalEntryResponseDto>(entry);
-            var response = new ApiResponse<JournalEntryResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<JournalEntryResponseDto>.Success(responseDTO));
         }
 
     }

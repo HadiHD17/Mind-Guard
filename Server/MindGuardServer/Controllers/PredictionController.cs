@@ -28,18 +28,22 @@ namespace MindGuardServer.Controllers
         {
             var p = _mapper.Map<AI_Prediction>(prediction);
             await _predictionService.AddPrediction(p);
+            if (p == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<AIPredictionResponseDto>(p);
-            var response = new ApiResponse<AIPredictionResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<AIPredictionResponseDto>.Success(responseDTO));
         }
 
         [HttpGet("{userid}")]
         public async Task<IActionResult> GetPreditionByUserId(int userid)
         {
             var prediction = await _predictionService.GetPrediction(userid);
+            if (prediction == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<AIPredictionResponseDto>(prediction);
-            var response = new ApiResponse<AIPredictionResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<AIPredictionResponseDto>.Success(responseDTO));
         }
     }
 }

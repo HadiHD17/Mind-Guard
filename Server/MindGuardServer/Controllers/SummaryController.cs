@@ -28,18 +28,22 @@ namespace MindGuardServer.Controllers
         {
             var s = _mapper.Map<Weekly_Summary>(summary);
             await _summaryservice.AddSummary(s);
+            if (s == null)
+                return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(s);
-            var response = new ApiResponse<WeeklySummaryResponseDto>(responseDTO);
-            return Ok(response);
+            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
         }
 
         [HttpGet("{userid}")]
         public async Task<IActionResult> GetSummaryByUserId(int userid)
         {
             var summaries = await _summaryservice.GetSummaryByUserId(userid);
-            var responseDTO = _mapper.Map<IEnumerable<WeeklySummaryResponseDto>>(summaries);
-            var response = new ApiResponse<IEnumerable<WeeklySummaryResponseDto>>(responseDTO);
-            return Ok(response);
+            if (summaries == null)
+                return NotFound(ApiResponse<object>.Error());
+
+            var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(summaries);
+            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
         }
 
     }
