@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MindGuardServer.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MindGuardServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250822122445_thirdMigration")]
+    partial class thirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +79,11 @@ namespace MindGuardServer.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Detected_Emotion")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Sentiment_Score")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -236,13 +241,13 @@ namespace MindGuardServer.Migrations
                         {
                             Id = -1,
                             Calendar_sync_enabled = true,
-                            CreatedAt = new DateTime(2025, 8, 22, 12, 28, 59, 803, DateTimeKind.Utc).AddTicks(2873),
+                            CreatedAt = new DateTime(2025, 8, 22, 12, 24, 44, 554, DateTimeKind.Utc).AddTicks(5752),
                             Email = "hadi@gmail.com",
                             FullName = "Hadi Haidar",
                             IsDark = true,
-                            Password = "AQAAAAIAAYagAAAAENOAWYHtXqv9DarfkgbvqNX3rWFmEHKaRGpXSPOAP3e3zFlZ5C+9zHhUKfFvjBq5Gw==",
+                            Password = "AQAAAAIAAYagAAAAEPstuQOeSONaIIcECwZS7yNj1mTJl+5JHxmEejquMYGnlRj7tY9IRzJD89NFKmF0xg==",
                             PhoneNumber = "81918422",
-                            UpdatedAt = new DateTime(2025, 8, 22, 12, 28, 59, 803, DateTimeKind.Utc).AddTicks(2878)
+                            UpdatedAt = new DateTime(2025, 8, 22, 12, 24, 44, 554, DateTimeKind.Utc).AddTicks(5757)
                         });
                 });
 
