@@ -61,5 +61,20 @@ namespace MindGuardServer.Controllers
             var response = new ApiResponse<RoutineResponseDto>(responseDTO);
             return Ok(response);
         }
+
+        [HttpPost("{routineId}")]
+        public async Task<IActionResult> MarkRoutineAsComplete(int routineId)
+        {
+            var result = await _routineService.MarkAsCompleteAsync(routineId);
+
+            if (!result.Success)
+            {
+                return BadRequest(new { status = "error", message = result.Message });
+            }
+
+            var responseDTO = _mapper.Map<RoutineOccurrenceResponseDto>(result.Occurrence);
+            var response = new ApiResponse<RoutineOccurrenceResponseDto>(responseDTO);
+            return Ok(response);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace MindGuardServer.Models.DTO
         public int RoutineId { get; set; }
 
         [Required(ErrorMessage = "Date is required")]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
 
         public bool IsCompleted { get; set; } = false;
         public DateTime? CompletedAt { get; set; }
@@ -26,7 +26,7 @@ namespace MindGuardServer.Models.DTO
     {
         public int Id { get; set; }
         public int RoutineId { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime? CompletedAt { get; set; }
     }
