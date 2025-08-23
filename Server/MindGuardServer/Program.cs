@@ -65,6 +65,8 @@ builder.Services.AddScoped<RoutineService>();
 builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
+builder.Services.AddHttpClient<GeminiAnalyzerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

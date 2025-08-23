@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MindGuardServer.Data;
 using MindGuardServer.Models.Domain;
@@ -8,15 +9,25 @@ namespace MindGuardServer.Services
     public class EntryService
     {
         private readonly AppDbContext _context;
-        public EntryService(AppDbContext context)
+        private readonly GeminiAnalyzerService _ai;
+
+        public EntryService(AppDbContext context, GeminiAnalyzerService ai)
         {
             _context = context;
+            _ai = ai;
         }
 
-        public async Task<Journal_Entry> AddEntry(Journal_Entry entry)
+        public async Task<Journal_Entry> AddEntry(Journal_Entry entry, CancellationToken ct = default)
         {
-            await _context.Journal_Entries.AddAsync(entry);
-            await _context.SaveChangesAsync();
+            var analysis = await _ai.AnalyzeAsync(entry.Content, ct);
+
+            // Fallbacks to keep DB constraints happy
+            entry.DetectedEmotion = analysis?.Mood ?? "neutral";
+            // If Sentiment_Score is string in your model, save normalized string:
+            entry.SentimentScore = (analysis?.SentimentScore ?? 1).ToString(CultureInfo.InvariantCulture);
+
+            _context.Journal_Entries.Add(entry);
+            await _context.SaveChangesAsync(ct);
             return entry;
         }
 
