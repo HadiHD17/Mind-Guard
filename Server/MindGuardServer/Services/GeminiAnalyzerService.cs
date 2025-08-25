@@ -51,7 +51,6 @@ Text:
                     response_mime_type = "application/json"
                 }
             };
-
             var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={_apiKey}";
             var json = JsonSerializer.Serialize(body);
 

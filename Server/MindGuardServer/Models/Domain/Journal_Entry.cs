@@ -9,7 +9,7 @@ namespace MindGuardServer.Models.Domain
         [Required]
         public string Content { get; set; }
         public string? DetectedEmotion { get; set; }
-        public string? SentimentScore { get; set; }
+        public double? SentimentScore { get; set; }
         
         public int UserId { get; set; }          
         public virtual User User { get; set; }

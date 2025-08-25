@@ -27,7 +27,7 @@ namespace MindGuardServer.Models.DTO
         public int UserId { get; set; }
         public string Content { get; set; }
         public string? DetectedEmotion { get; set; }
-        public string SentimentScore { get; set; }
+        public double SentimentScore { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 

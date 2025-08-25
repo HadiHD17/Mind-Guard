@@ -24,7 +24,7 @@ namespace MindGuardServer.Services
             // Fallbacks to keep DB constraints happy
             entry.DetectedEmotion = analysis?.Mood ?? "neutral";
             // If Sentiment_Score is string in your model, save normalized string:
-            entry.SentimentScore = (analysis?.SentimentScore ?? 1).ToString(CultureInfo.InvariantCulture);
+            entry.SentimentScore = (analysis?.SentimentScore ?? 1.0);
 
             _context.Journal_Entries.Add(entry);
             await _context.SaveChangesAsync(ct);

@@ -14,6 +14,7 @@ namespace MindGuardServer.Models.DTO
 
         [StringLength(50, ErrorMessage = "Risk level cannot be longer than 50 characters")]
         public string? Risk_Level { get; set; }
+       
 
         public string? Tips { get; set; }
         public bool Is_Acknowledged { get; set; } = false;
