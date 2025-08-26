@@ -7,9 +7,4 @@ export default StyleSheet.create({
     borderTopColor: "#D3D3D3", // light grey
     height: 60,
   },
-  screen: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
 });
