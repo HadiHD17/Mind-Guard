@@ -1,6 +1,6 @@
 import React from "react";
-import MoodTestScreen from "./Moodtestscreen";
+import BottomNav from "./Components/Shared/Bottom-Nav";
 
 export default function App() {
-  return <MoodTestScreen />;
+  return <BottomNav />;
 }
