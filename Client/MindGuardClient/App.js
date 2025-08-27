@@ -1,28 +1,24 @@
 import React from "react";
-import { SafeAreaView, View, StyleSheet } from "react-native";
-import BottomNav from "./Components/Shared/Bottom-Nav";
-import TopBar from "./Components/Shared/Top-Bar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { routes } from "./Routes/AppRoutes";
+import BottomNav from "./Components/Shared/Bottom-Nav/index";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <TopBar />
-      <View style={styles.content}>
-        {/* Your main content goes here */}
-        <BottomNav />
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="Landing">
+        {routes
+          .filter((r) => ["Landing", "Login", "Register"].includes(r.name))
+          .map((r) => (
+            <Stack.Screen key={r.name} name={r.name} component={r.component} />
+          ))}
+        <Stack.Screen name="MainTabs" component={BottomNav} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  content: {
-    flex: 1,
-    // optional: paddingHorizontal: 20,
-    // optional: paddingTop: 10,
-  },
-});

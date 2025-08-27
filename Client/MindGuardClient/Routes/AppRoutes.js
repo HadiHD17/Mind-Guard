@@ -2,8 +2,15 @@ import HomeScreen from "../Screens/HomeScreen/index";
 import JournalScreen from "../Screens/JournalScreen/index";
 import InsightScreen from "../Screens/InsightScreen/index";
 import ProfileScreen from "../Screens/ProfileScreen/index";
+import LoginScreen from "../Screens/LoginScreen";
+import RegisterScreen from "../Screens/RegisterScreen";
+import LandingScreen from "../Screens/LandingScreen";
 
 export const routes = [
+  {
+    name: "Landing",
+    component: LandingScreen,
+  },
   {
     name: "Home",
     component: HomeScreen,
@@ -23,5 +30,13 @@ export const routes = [
     name: "Profile",
     component: ProfileScreen,
     icon: { focused: "person", default: "person-outline" },
+  },
+  {
+    name: "Login",
+    component: LoginScreen,
+  },
+  {
+    name: "Register",
+    component: RegisterScreen,
   },
 ];

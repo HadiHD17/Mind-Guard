@@ -8,6 +8,8 @@ export default StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
+    width: "60%", // ✅ makes both buttons the same width relative to screen
+    alignSelf: "center", // ✅ centers them
   },
   text: {
     color: "#1E3A5F",
