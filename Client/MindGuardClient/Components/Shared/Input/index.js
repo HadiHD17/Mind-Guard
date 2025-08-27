@@ -7,7 +7,9 @@ export default function Input({
   placeholder,
   value,
   onChangeText,
+  secureTextEntry,
   style,
+  ...props
 }) {
   return (
     <View style={[styles.container, style]}>
@@ -17,7 +19,9 @@ export default function Input({
         placeholder={placeholder}
         placeholderTextColor="rgba(36,36,36,0.6)"
         value={value}
+        secureTextEntry={secureTextEntry}
         onChangeText={onChangeText}
+        {...props}
       />
     </View>
   );
