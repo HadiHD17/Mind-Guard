@@ -21,12 +21,13 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   buttonWrapper: {
-    width: "60%", // control shared button width
+    width: 208,
     alignItems: "center",
     gap: 15,
   },
   button: {
-    width: "100%", // make both Primary + Secondary same width
+    width: 208,
+    height: 51,
   },
 });
 

@@ -7,42 +7,45 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // for edit & logout icons
+import { Ionicons } from "@expo/vector-icons";
 import styles from "./profile.styles";
 import ProfileCard from "../../Components/ProfileCard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import EditAccountModal from "../../Components/EditModal";
+import EditPasswordModal from "../../Components/EditPasswordModal";
 
 export default function ProfileScreen() {
   const [darkMode, setDarkMode] = useState(false);
   const [calendarSync, setCalendarSync] = useState(false);
 
-  const handleLogout = () => {
-    console.log("Logout pressed");
-    // Add logout logic here
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editPasswordVisible, setEditPasswordVisible] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("@user_data");
+      navigation.replace("Login");
+    } catch (error) {
+      console.log("logout error:", error);
+    }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
-        contentContainerStyle={styles.scrollContent} // ✅ apply alignment here
+        contentContainerStyle={styles.scrollContent}
         style={styles.scrollView}>
-        {/* Welcome */}
         <Text style={styles.welcomeText}>Welcome, John</Text>
-
-        {/* Profile Settings Title */}
         <Text style={styles.sectionTitle}>Profile Settings</Text>
-
-        {/* Card 1: User Info */}
         <ProfileCard>
           <View>
             <Text style={styles.cardTitle}>Name</Text>
             <Text style={styles.cardSubtitle}>john.doe@email.com</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setEditModalVisible(true)}>
             <Ionicons name="pencil" size={20} color="black" />
           </TouchableOpacity>
         </ProfileCard>
-
-        {/* Card 2: Preferences */}
         <ProfileCard>
           <View style={{ flex: 1 }}>
             <Text style={styles.cardTitle}>Preferences</Text>
@@ -56,12 +59,12 @@ export default function ProfileScreen() {
             </View>
           </View>
         </ProfileCard>
-
-        {/* Card 3: Account */}
         <ProfileCard>
           <View style={{ flex: 1 }}>
             <Text style={styles.cardTitle}>Account</Text>
-            <TouchableOpacity style={{ marginTop: 12 }}>
+            <TouchableOpacity
+              style={{ marginTop: 12 }}
+              onPress={() => setEditPasswordVisible(true)}>
               <Text style={styles.cardSubtitle}>Change Password</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleLogout} style={{ marginTop: 12 }}>
@@ -71,6 +74,28 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </ProfileCard>
+        <EditAccountModal
+          visible={editModalVisible}
+          onClose={() => setEditModalVisible(false)}
+          onSave={(data) => {
+            console.log("Saved data:", data);
+            setEditModalVisible(false);
+          }}
+          initialData={{
+            name: "John Doe",
+            email: "john@example.com",
+            phone: "1234567890",
+          }}
+        />
+        <EditPasswordModal
+          visible={editPasswordVisible}
+          onClose={() => setEditPasswordVisible(false)}
+          onSave={(data) => {
+            console.log("Saved data:", data);
+            setEditPasswordVisible(false);
+          }}
+        />
+        ;
       </ScrollView>
     </SafeAreaView>
   );
