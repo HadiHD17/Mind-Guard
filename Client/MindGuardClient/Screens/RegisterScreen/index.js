@@ -72,11 +72,11 @@ export default function RegisterScreen({ navigation }) {
 
         <Text style={styles.titleText}>Create Account</Text>
 
-        {/* Full Name */}
         <View style={styles.inputWrapper}>
           <Input
             label="Full Name"
             value={fullName}
+            placeholder={"enter your full name"}
             onChangeText={setFullName}
             style={styles.input}
           />
@@ -85,11 +85,11 @@ export default function RegisterScreen({ navigation }) {
           )}
         </View>
 
-        {/* Email */}
         <View style={styles.inputWrapper}>
           <Input
             label="Email"
             value={email}
+            placeholder={"enter your email address"}
             onChangeText={setEmail}
             style={styles.input}
             keyboardType="email-address"
@@ -97,11 +97,11 @@ export default function RegisterScreen({ navigation }) {
           {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
         </View>
 
-        {/* Password */}
         <View style={styles.inputWrapper}>
           <Input
             label="Password"
             value={password}
+            placeholder={"enter your password"}
             onChangeText={setPassword}
             style={styles.input}
             secureTextEntry
@@ -111,11 +111,11 @@ export default function RegisterScreen({ navigation }) {
           )}
         </View>
 
-        {/* Confirm Password */}
         <View style={styles.inputWrapper}>
           <Input
             label="Confirm Password"
             value={confirmPassword}
+            placeholder={"Re-enter your password"}
             onChangeText={setConfirmPassword}
             style={styles.input}
             secureTextEntry
@@ -125,11 +125,11 @@ export default function RegisterScreen({ navigation }) {
           )}
         </View>
 
-        {/* Phone */}
         <View style={styles.inputWrapper}>
           <Input
             label="Phone"
             value={phoneNumber}
+            placeholder={"enter your phone number"}
             onChangeText={setPhoneNumber}
             style={styles.input}
             keyboardType="phone-pad"
@@ -137,14 +137,12 @@ export default function RegisterScreen({ navigation }) {
           {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
         </View>
 
-        {/* Register Button */}
         <PrimaryButton
           title="Register"
           onPress={handleRegister}
           style={styles.registerButton}
         />
 
-        {/* Already have account */}
         <View style={styles.loginWrapper}>
           <Text style={styles.loginText}>Already have an account? </Text>
           <Text

@@ -36,7 +36,7 @@ export default StyleSheet.create({
   },
 
   button: {
-    width: 134,
+    width: 100,
     height: 51,
   },
 });

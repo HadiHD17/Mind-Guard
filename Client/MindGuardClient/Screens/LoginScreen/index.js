@@ -80,6 +80,7 @@ export default function LoginScreen({ navigation }) {
           <Input
             label="Email"
             value={email}
+            placeholder={"enter your email address"}
             onChangeText={setEmail}
             style={styles.input}
             keyboardType="email-address"
@@ -93,6 +94,7 @@ export default function LoginScreen({ navigation }) {
           <Input
             label="Password"
             value={password}
+            placeholder={"enter your password"}
             onChangeText={setPassword}
             style={styles.input}
             secureTextEntry

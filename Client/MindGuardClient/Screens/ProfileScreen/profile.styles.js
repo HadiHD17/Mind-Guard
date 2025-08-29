@@ -20,23 +20,24 @@ export default StyleSheet.create({
     fontWeight: "600",
     marginTop: 20,
     marginBottom: 50,
-    textAlign: "center", // ✅ only this one centered
+    textAlign: "center",
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 15,
-    alignSelf: "flex-start", // ✅ left aligned
+    alignSelf: "flex-start",
+    marginLeft: 22,
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: "600",
-    textAlign: "left", // ✅ inside cards left aligned
+    textAlign: "left",
   },
   cardSubtitle: {
     fontSize: 12,
     marginTop: 2,
-    textAlign: "left", // ✅ inside cards left aligned
+    textAlign: "left",
   },
   preferenceRow: {
     flexDirection: "row",

@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const [darkMode, setDarkMode] = useState(false);
   const [calendarSync, setCalendarSync] = useState(false);
 
@@ -24,7 +24,7 @@ export default function ProfileScreen() {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("@user_data");
-      navigation.replace("Login");
+      navigation.replace("Landing");
     } catch (error) {
       console.log("logout error:", error);
     }

@@ -29,7 +29,6 @@ export default function EditAccountModal({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.modalWrapper}>
         <View style={styles.modalContainer}>
-          {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Edit Account</Text>
             <TouchableOpacity onPress={onClose}>
@@ -37,7 +36,6 @@ export default function EditAccountModal({
             </TouchableOpacity>
           </View>
 
-          {/* Inputs */}
           <View style={styles.inputsWrapper}>
             <Input label="Name" value={name} onChangeText={setName} />
             <Input
