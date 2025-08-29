@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import ProfileCard from "../../Components/ProfileCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
+import { getUserData } from "../../Helpers/Storage";
 
 export default function ProfileScreen({ navigation }) {
   const [darkMode, setDarkMode] = useState(false);
@@ -30,17 +31,27 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
+  const [user, setUser] = useState(null);
+  const fetchUser = async () => {
+    const data = await getUserData();
+    setUser(data);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         style={styles.scrollView}>
-        <Text style={styles.welcomeText}>Welcome, John</Text>
+        <Text style={styles.welcomeText}>Welcome, {user?.fullName}</Text>
         <Text style={styles.sectionTitle}>Profile Settings</Text>
         <ProfileCard>
           <View>
-            <Text style={styles.cardTitle}>Name</Text>
-            <Text style={styles.cardSubtitle}>john.doe@email.com</Text>
+            <Text style={styles.cardTitle}>{user?.fullName}</Text>
+            <Text style={styles.cardSubtitle}>{user?.email}</Text>
           </View>
           <TouchableOpacity onPress={() => setEditModalVisible(true)}>
             <Ionicons name="pencil" size={20} color="black" />
@@ -77,14 +88,11 @@ export default function ProfileScreen({ navigation }) {
         <EditAccountModal
           visible={editModalVisible}
           onClose={() => setEditModalVisible(false)}
-          onSave={(data) => {
-            console.log("Saved data:", data);
-            setEditModalVisible(false);
-          }}
+          onSave={(updatedUser) => setUser(updatedUser)}
           initialData={{
-            name: "John Doe",
-            email: "john@example.com",
-            phone: "1234567890",
+            name: user?.fullName || "",
+            email: user?.email || "",
+            phone: user?.phoneNumber || "",
           }}
         />
         <EditPasswordModal
