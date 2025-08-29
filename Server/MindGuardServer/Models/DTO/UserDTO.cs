@@ -84,9 +84,9 @@ namespace MindGuardServer.Models.DTO
             ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")]
         public string NewPassword { get; set; }
 
-            [Required]
-            [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
-            public string ConfirmNewPassword { get; set; }
+        [Required]
+        [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmNewPassword { get; set; }
 
 
     }

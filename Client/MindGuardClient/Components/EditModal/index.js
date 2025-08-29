@@ -46,7 +46,7 @@ export default function EditAccountModal({
       setName(initialData?.name || "");
       setEmail(initialData?.email || "");
       setPhone(initialData?.phone || "");
-      setErrors({}); // reset errors whenever modal opens
+      setErrors({});
     }
   }, [visible, initialData]);
 

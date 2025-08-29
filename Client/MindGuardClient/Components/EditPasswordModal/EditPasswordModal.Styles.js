@@ -29,12 +29,16 @@ export default StyleSheet.create({
     gap: 15,
     marginBottom: 20,
   },
+  errorText: {
+    color: "red",
+    marginTop: 5,
+    marginLeft: 30,
+  },
   buttonsWrapper: {
     flexDirection: "row",
     justifyContent: "center",
     gap: 40,
   },
-
   button: {
     width: 100,
     height: 51,

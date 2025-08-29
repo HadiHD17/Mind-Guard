@@ -98,8 +98,7 @@ export default function ProfileScreen({ navigation }) {
         <EditPasswordModal
           visible={editPasswordVisible}
           onClose={() => setEditPasswordVisible(false)}
-          onSave={(data) => {
-            console.log("Saved data:", data);
+          onSave={() => {
             setEditPasswordVisible(false);
           }}
         />
