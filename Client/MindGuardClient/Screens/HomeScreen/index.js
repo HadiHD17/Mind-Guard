@@ -6,18 +6,39 @@ import { getUserData } from "../../Helpers/Storage";
 import AIInsightCard from "../../Components/AIInsightCard";
 import MoodTrendCard from "../../Components/MoodTrendCard";
 import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
+import api from "../../Api";
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState(null);
+  const [routine, setRoutine] = useState(null);
 
   const loadUser = async () => {
     const u = await getUserData();
     setUser(u);
   };
 
+  const getRoutine = async () => {
+    try {
+      const res = await api.get(`/Routine/UpcomingRoutine/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+      if (res.data.status == "success") {
+        setRoutine(res.data.payload);
+      }
+    } catch (err) {
+      console.log("routine error: ", err);
+    }
+  };
+
   useEffect(() => {
     loadUser();
   }, []);
+
+  useEffect(() => {
+    getRoutine();
+  }, [user]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -65,12 +86,21 @@ export default function HomeScreen({ navigation }) {
             ]}
           />
 
-          <UpcomingRoutineCard
-            title="Upcoming Routine"
-            rightText="View Routines"
-            onRightPress={() => console.log("View Routines pressed")}
-            subtitle="Evening journal at 21:00"
-          />
+          {routine ? (
+            <UpcomingRoutineCard
+              title="Upcoming Routine"
+              rightText="View Routines"
+              onRightPress={() => console.log("View Routines pressed")}
+              subtitle={`${routine.description} at ${routine.reminder_Time}`}
+            />
+          ) : (
+            <UpcomingRoutineCard
+              title="Upcoming Routine"
+              rightText="View Routines"
+              onRightPress={() => console.log("View Routines pressed")}
+              subtitle="No upcoming routine found"
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

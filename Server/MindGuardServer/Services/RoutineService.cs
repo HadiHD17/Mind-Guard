@@ -43,6 +43,15 @@ namespace MindGuardServer.Services
             return routine;
         }
 
+        public async Task<Routine?> GetUpcomingRoutine(int userId)
+        {
+            var now = DateTime.Now.TimeOfDay;
+            return await _context.Routines
+                .Where(r => r.UserId == userId && r.Reminder_Time> now)
+                .OrderBy(r => r.Reminder_Time) 
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<(bool Success, string Message, Routine_Occurence Occurrence, int TotalCompletions)> 
             MarkAsCompleteAsync(int routineId)
         {

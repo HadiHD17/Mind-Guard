@@ -54,6 +54,15 @@ namespace MindGuardServer.Controllers
             var responseDTO = _mapper.Map<IEnumerable<RoutineResponseDto>>(routines);
             return Ok(ApiResponse<IEnumerable<RoutineResponseDto>>.Success(responseDTO));
         }
+        [HttpGet("UpcomingRoutine/{userId}")]
+        public async Task<IActionResult> GetUpcomingRoutine(int userId)
+        {
+            var routine = await _routineService.GetUpcomingRoutine(userId);
+            if (routine == null)
+                return NotFound(ApiResponse<object>.Error());
+            var responseDTO = _mapper.Map<RoutineResponseDto>(routine);
+            return Ok(ApiResponse<RoutineResponseDto>.Success(responseDTO));
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoutineById(int id)
