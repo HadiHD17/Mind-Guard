@@ -6,6 +6,7 @@ using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
+using static MindGuardServer.Services.MoodService;
 
 namespace MindGuardServer.Controllers
 {
@@ -43,6 +44,17 @@ namespace MindGuardServer.Controllers
 
             var responseDTO = _mapper.Map<MoodCheckinResponseDto>(mood);
             return Ok(ApiResponse<MoodCheckinResponseDto>.Success(responseDTO));
+        }
+
+        [HttpGet("All/{userid}")]
+        public async Task<IActionResult> GetAllMoods(int userid)
+        {
+            var allmoods = await _moodService.GetAllMoods(userid);
+            if (allmoods == null)
+                return NotFound(ApiResponse<object>.Error());
+
+            return Ok(ApiResponse<List<MoodDto>>.Success(allmoods));
+
         }
     }
 }

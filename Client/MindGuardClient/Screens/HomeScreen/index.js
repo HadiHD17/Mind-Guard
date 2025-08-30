@@ -3,18 +3,45 @@ import { SafeAreaView, View, Text, ScrollView } from "react-native";
 import FeelingCard from "../../Components/FeelingCard";
 import styles from "./home.styles";
 import { getUserData } from "../../Helpers/Storage";
-import AIInsightCard from "../../Components/AIInsightCard";
 import MoodTrendCard from "../../Components/MoodTrendCard";
 import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
 import api from "../../Api";
+import { moodToEmoji, getDayOfWeek } from "../../Helpers/MoodHelpers";
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState(null);
   const [routine, setRoutine] = useState(null);
+  const [mood, setMood] = useState([]);
 
   const loadUser = async () => {
     const u = await getUserData();
     setUser(u);
+  };
+
+  const getMoods = async () => {
+    try {
+      const res = await api.get(`/Mood/All/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+      if (res.data?.payload) {
+        const transformed = res.data.payload.map((item) => ({
+          day: getDayOfWeek(item.date),
+          mood: moodToEmoji[item.mood_Label] || "❓",
+        }));
+
+        const uniqueByDay = Array.from(
+          transformed
+            .reduce((map, obj) => map.set(obj.day, obj), new Map())
+            .values()
+        );
+
+        setMood(uniqueByDay);
+      }
+    } catch (err) {
+      console.log("mood error: ", err);
+    }
   };
 
   const getRoutine = async () => {
@@ -38,6 +65,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     getRoutine();
+    getMoods();
   }, [user]);
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -66,24 +94,23 @@ export default function HomeScreen({ navigation }) {
 
         {/* Info Cards */}
         <View style={styles.infoCardsColumn}>
-          <AIInsightCard
-            title="AI Insight"
-            subtitle="Your average mood this week is 5/10. Keep tracking to get personalized tips."
-          />
-
           <MoodTrendCard
             title="Mood Trend"
             rightText="View Details"
             onRightPress={() => console.log("View Details pressed")}
-            moods={[
-              { day: "Mon", mood: "😐" },
-              { day: "Tue", mood: "🙂" },
-              { day: "Wed", mood: "😔" },
-              { day: "Thu", mood: "😃" },
-              { day: "Fri", mood: "😐" },
-              { day: "Sat", mood: "😄" },
-              { day: "Sun", mood: "😐" },
-            ]}
+            moods={
+              mood.length
+                ? mood
+                : [
+                    { day: "Mon", mood: "😐" },
+                    { day: "Tue", mood: "🙂" },
+                    { day: "Wed", mood: "😔" },
+                    { day: "Thu", mood: "😃" },
+                    { day: "Fri", mood: "😐" },
+                    { day: "Sat", mood: "😄" },
+                    { day: "Sun", mood: "😐" },
+                  ]
+            }
           />
 
           {routine ? (

@@ -42,8 +42,8 @@ namespace MindGuardServer.Controllers
             if (summaries == null)
                 return NotFound(ApiResponse<object>.Error());
 
-            var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(summaries);
-            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
+            var responseDTO = _mapper.Map<IEnumerable<WeeklySummaryResponseDto>>(summaries);
+            return Ok(ApiResponse<IEnumerable<WeeklySummaryResponseDto>>.Success(responseDTO));
         }
 
     }

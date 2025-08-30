@@ -29,5 +29,31 @@ namespace MindGuardServer.Services
             }
             return latestMood;
         }
+
+
+
+        public async Task<List<MoodDto>> GetAllMoods(int userid)
+        {
+            var allMoods = await _context.Mood_Checkins
+                .Where(c => c.UserId == userid)
+                .Select(c => new MoodDto { Mood_Label = c.Mood_Label, Source = "Checkin", Date = c.CreatedAt })
+                .Union(
+                    _context.Journal_Entries
+                    .Where(j => j.UserId == userid && j.DetectedEmotion != null)
+                    .Select(j => new MoodDto { Mood_Label = j.DetectedEmotion, Source = "Journal", Date = j.CreatedAt })
+                )
+                .OrderByDescending(m => m.Date)
+                .ToListAsync();
+
+            return allMoods;
+        }
+
+        public class MoodDto
+        {
+            public string Mood_Label { get; set; }
+            public string Source { get; set; }
+            public DateTime Date { get; set; }
+        }
+
     }
 }

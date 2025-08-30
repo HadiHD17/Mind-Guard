@@ -3,10 +3,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import styles from "./bottom-nav.styles";
 import { routes } from "../../../Routes/AppRoutes";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNav() {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -34,7 +36,11 @@ export default function BottomNav() {
         },
         tabBarActiveTintColor: "orange",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: {
+          ...styles.tabBar,
+          paddingBottom: insets.bottom + 10,
+          height: 40 + insets.bottom,
+        },
       })}>
       {routes
         .filter((r) =>
