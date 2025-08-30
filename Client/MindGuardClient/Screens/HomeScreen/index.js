@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, ScrollView } from "react-native";
 import FeelingCard from "../../Components/FeelingCard";
-import InfoCard from "../../Components/InfoCard";
 import styles from "./home.styles";
 import { getUserData } from "../../Helpers/Storage";
+import AIInsightCard from "../../Components/AIInsightCard";
+import MoodTrendCard from "../../Components/MoodTrendCard";
+import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState(null);
@@ -43,19 +45,27 @@ export default function HomeScreen({ navigation }) {
 
         {/* Info Cards */}
         <View style={styles.infoCardsColumn}>
-          <InfoCard
+          <AIInsightCard
             title="AI Insight"
             subtitle="Your average mood this week is 5/10. Keep tracking to get personalized tips."
           />
 
-          <InfoCard
+          <MoodTrendCard
             title="Mood Trend"
             rightText="View Details"
             onRightPress={() => console.log("View Details pressed")}
-            subtitle="Mon 😐  Tue 🙂  Wed 😔  Thu 😃  Fri 😐  Sat 😄  Sun 😐"
+            moods={[
+              { day: "Mon", mood: "😐" },
+              { day: "Tue", mood: "🙂" },
+              { day: "Wed", mood: "😔" },
+              { day: "Thu", mood: "😃" },
+              { day: "Fri", mood: "😐" },
+              { day: "Sat", mood: "😄" },
+              { day: "Sun", mood: "😐" },
+            ]}
           />
 
-          <InfoCard
+          <UpcomingRoutineCard
             title="Upcoming Routine"
             rightText="View Routines"
             onRightPress={() => console.log("View Routines pressed")}

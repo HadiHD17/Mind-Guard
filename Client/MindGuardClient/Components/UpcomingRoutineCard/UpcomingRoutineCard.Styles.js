@@ -1,30 +1,33 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  infoCard: {
+  card: {
     backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 15,
     borderWidth: 1,
     borderColor: "#d3d3d3",
-    marginBottom: 10,
+    borderRadius: 12,
+    padding: 25,
+    marginBottom: 20,
+    width: "100%",
+    height: 130,
   },
-  infoCardHeader: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  infoCardTitle: {
+  title: {
     fontSize: 16,
     fontWeight: "600",
   },
-  infoCardRightText: {
+  rightText: {
     fontSize: 14,
-    color: "#1E90FF",
+    color: "#80C6DA",
     fontWeight: "500",
   },
-  infoCardSubtitle: {
+  subtitle: {
     fontSize: 12,
-    color: "#555",
+    fontWeight: "400",
+    color: "#333",
   },
 });
