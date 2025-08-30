@@ -7,11 +7,13 @@ import MoodTrendCard from "../../Components/MoodTrendCard";
 import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
 import api from "../../Api";
 import { moodToEmoji, getDayOfWeek } from "../../Helpers/MoodHelpers";
+import LogMoodModal from "../../Components/LogMood";
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState(null);
   const [routine, setRoutine] = useState(null);
   const [mood, setMood] = useState([]);
+  const [logmoodvisible, setLogMoodVisible] = useState(false);
 
   const loadUser = async () => {
     const u = await getUserData();
@@ -19,6 +21,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const getMoods = async () => {
+    if (!user) return;
     try {
       const res = await api.get(`/Mood/All/${user.id}`, {
         headers: {
@@ -45,6 +48,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const getRoutine = async () => {
+    if (!user) return;
     try {
       const res = await api.get(`/Routine/UpcomingRoutine/${user.id}`, {
         headers: {
@@ -64,6 +68,7 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
+    if (!user) return;
     getRoutine();
     getMoods();
   }, [user]);
@@ -88,7 +93,7 @@ export default function HomeScreen({ navigation }) {
             title="Log Mood"
             bgColor="#1E3A5F"
             textColor="#fff"
-            onPress={() => console.log("Sad pressed")}
+            onPress={() => setLogMoodVisible(true)}
           />
         </View>
 
@@ -129,6 +134,11 @@ export default function HomeScreen({ navigation }) {
             />
           )}
         </View>
+        <LogMoodModal
+          visible={logmoodvisible}
+          onClose={() => setLogMoodVisible(false)}
+          onSelectMood={() => setLogMoodVisible(false)}
+        />
       </ScrollView>
     </SafeAreaView>
   );
