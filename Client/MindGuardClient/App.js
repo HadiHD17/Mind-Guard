@@ -13,7 +13,9 @@ export default function App() {
         screenOptions={{ headerShown: false }}
         initialRouteName="Landing">
         {routes
-          .filter((r) => ["Landing", "Login", "Register"].includes(r.name))
+          .filter((r) =>
+            ["Landing", "Login", "Register", "Map", "Routine"].includes(r.name)
+          )
           .map((r) => (
             <Stack.Screen key={r.name} name={r.name} component={r.component} />
           ))}

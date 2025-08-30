@@ -5,6 +5,8 @@ import ProfileScreen from "../Screens/ProfileScreen/index";
 import LoginScreen from "../Screens/LoginScreen";
 import RegisterScreen from "../Screens/RegisterScreen";
 import LandingScreen from "../Screens/LandingScreen";
+import RoutineScreen from "../Screens/RoutineScreen";
+import MoodMapScreen from "../Screens/MoodMapScreen/MoodMap.Styles";
 
 export const routes = [
   {
@@ -38,5 +40,13 @@ export const routes = [
   {
     name: "Register",
     component: RegisterScreen,
+  },
+  {
+    name: "Routine",
+    component: RoutineScreen,
+  },
+  {
+    name: "Map",
+    component: MoodMapScreen,
   },
 ];

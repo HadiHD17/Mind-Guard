@@ -87,7 +87,7 @@ export default function HomeScreen({ navigation }) {
             title="Add Journal Entry"
             bgColor="#80C6DA"
             textColor="#1E3A5F"
-            onPress={() => console.log("Happy pressed")}
+            onPress={() => navigation.navigate("Journal")}
           />
           <FeelingCard
             title="Log Mood"
@@ -102,7 +102,7 @@ export default function HomeScreen({ navigation }) {
           <MoodTrendCard
             title="Mood Trend"
             rightText="View Details"
-            onRightPress={() => console.log("View Details pressed")}
+            onRightPress={() => navigation.replace("Map")}
             moods={
               mood.length
                 ? mood
@@ -122,7 +122,7 @@ export default function HomeScreen({ navigation }) {
             <UpcomingRoutineCard
               title="Upcoming Routine"
               rightText="View Routines"
-              onRightPress={() => console.log("View Routines pressed")}
+              onRightPress={() => navigation.replace("Routine")}
               subtitle={`${routine.description} at ${routine.reminder_Time}`}
             />
           ) : (
