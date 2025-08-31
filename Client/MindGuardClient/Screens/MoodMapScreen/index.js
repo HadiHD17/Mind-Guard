@@ -7,6 +7,10 @@ import StatsCard from "../../Components/StatsCard";
 import api from "../../Api/index.js";
 import styles from "./MoodMap.Styles";
 import { getUserData } from "../../Helpers/Storage.js";
+import {
+  getMostCommonMood,
+  getCurrentStreak,
+} from "../../Helpers/MoodHelpers.js";
 
 export default function MoodMapScreen({ navigation }) {
   const [entries, setEntries] = useState([]);
@@ -103,8 +107,8 @@ export default function MoodMapScreen({ navigation }) {
 
       {/* Stats Card */}
       <StatsCard
-        mostCommonMood="Happy"
-        currentStreak="4 days positive"
+        mostCommonMood={getMostCommonMood(entries)}
+        currentStreak={getCurrentStreak(entries)}
         totalEntries={`${entries.length} mood logs`}
       />
 
