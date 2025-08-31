@@ -4,7 +4,7 @@ export default StyleSheet.create({
   tabBar: {
     backgroundColor: "white",
     borderTopWidth: 1,
-    borderTopColor: "#D3D3D3", // light grey
+    borderTopColor: "#D3D3D3",
     height: 60,
   },
 });

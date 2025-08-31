@@ -6,7 +6,7 @@ import LoginScreen from "../Screens/LoginScreen";
 import RegisterScreen from "../Screens/RegisterScreen";
 import LandingScreen from "../Screens/LandingScreen";
 import RoutineScreen from "../Screens/RoutineScreen";
-import MoodMapScreen from "../Screens/MoodMapScreen/MoodMap.Styles";
+import MoodMapScreen from "../Screens/MoodMapScreen";
 
 export const routes = [
   {

@@ -28,7 +28,7 @@ export default StyleSheet.create({
   errorText: {
     color: "red",
     marginTop: 5,
-    marginLeft: 0, // align under input
+    marginLeft: 0,
   },
   registerButton: {
     width: 330,

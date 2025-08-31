@@ -30,7 +30,7 @@ export default StyleSheet.create({
   },
   sentiment: {
     fontSize: 12,
-    fontWeight: "200", // extra light
+    fontWeight: "200",
     color: "#555",
   },
 });

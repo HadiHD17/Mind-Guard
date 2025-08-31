@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     marginBottom: 16,
-    width: "80%", // ✅ default smaller width
-    alignSelf: "center", // center horizontally
+    width: "80%",
+    alignSelf: "center",
   },
   label: {
     fontSize: 14,

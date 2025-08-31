@@ -3,9 +3,9 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: "center", // centers vertically
-    alignItems: "center", // centers horizontally
-    backgroundColor: "rgba(0,0,0,0.3)", // dim background
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
   modalContainer: {
     width: 350,
