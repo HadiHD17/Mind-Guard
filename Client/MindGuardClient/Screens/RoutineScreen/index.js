@@ -9,6 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import RoutineCard from "../../Components/RoutineCard";
 import styles from "./Routine.Styles";
+import AddRoutineModal from "../../Components/RoutineModal";
 
 export default function RoutineScreen({ navigation }) {
   const [routines, setRoutines] = useState([
@@ -26,6 +27,8 @@ export default function RoutineScreen({ navigation }) {
     },
   ]);
 
+  const [AddRoutineModalVisible, setAddRoutineModalVisible] = useState(false);
+
   const handleDelete = (id) => {
     setRoutines(routines.filter((r) => r.id !== id));
   };
@@ -34,33 +37,26 @@ export default function RoutineScreen({ navigation }) {
     console.log("Marked routine complete:", id);
   };
 
-  const handleSelectDay = (id, day) => {
+  const handleUpdateDays = (id, newDays) => {
     setRoutines((prev) =>
-      prev.map((r) =>
-        r.id === id
-          ? {
-              ...r,
-              days: r.days.includes(day)
-                ? r.days.filter((d) => d !== day)
-                : [...r.days, day],
-            }
-          : r
-      )
+      prev.map((r) => (r.id === id ? { ...r, days: newDays } : r))
     );
   };
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}>
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.title}>Routines</Text>
         </View>
 
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setAddRoutineModalVisible(true)}>
           <Ionicons name="add" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -74,10 +70,18 @@ export default function RoutineScreen({ navigation }) {
             routine={item}
             onDelete={() => handleDelete(item.id)}
             onMarkComplete={() => handleMarkComplete(item.id)}
-            onSelectDay={(day) => handleSelectDay(item.id, day)}
+            setDays={(newDays) => handleUpdateDays(item.id, newDays)}
           />
         )}
         contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 8 }}
+      />
+      <AddRoutineModal
+        visible={AddRoutineModalVisible}
+        onClose={() => setAddRoutineModalVisible(false)}
+        onCreate={(newRoutine) => {
+          setRoutines((prev) => [...prev, { id: Date.now(), ...newRoutine }]);
+          setAddRoutineModalVisible(false);
+        }}
       />
     </SafeAreaView>
   );

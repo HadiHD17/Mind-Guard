@@ -8,7 +8,7 @@ export default function RoutineCard({
   routine,
   onDelete,
   onMarkComplete,
-  onSelectDay,
+  setDays, // pass a setter function from parent to update days
 }) {
   return (
     <View style={styles.card}>
@@ -24,7 +24,7 @@ export default function RoutineCard({
       <Text style={styles.time}>{routine.time}</Text>
 
       {/* Days */}
-      <Week selectedDays={routine.days} onSelectDay={onSelectDay} />
+      <Week selectedDays={routine.days} setSelectedDays={setDays} />
 
       {/* Mark as Complete */}
       <TouchableOpacity style={styles.completeButton} onPress={onMarkComplete}>
