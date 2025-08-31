@@ -1,14 +1,47 @@
-// AddEntryModal.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./EntryModal.Styles";
 import PrimaryButton from "../Shared/Button/primaryindex";
 import SecondaryButton from "../Shared/Button/secondaryindex";
+import api from "../../Api";
+import { getUserData } from "../../Helpers/Storage";
 
-const AddEntryModal = ({ visible, onClose, onSave }) => {
+export default function AddEntryModal({ visible, onClose, onSave }) {
   const [entryText, setEntryText] = useState("");
+  const [user, setUser] = useState(null);
+  const loadUser = async () => {
+    const u = await getUserData();
+    setUser(u);
+  };
 
+  const handleSave = async () => {
+    try {
+      const res = await api.post(
+        `/Entry`,
+        {
+          userId: user.id,
+          content: entryText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        }
+      );
+      if (res.data.status === "success") {
+        onSave(entryText);
+        setEntryText("");
+        onClose();
+      }
+    } catch (err) {
+      console.log("Save entry error:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
@@ -34,12 +67,10 @@ const AddEntryModal = ({ visible, onClose, onSave }) => {
           {/* Buttons */}
           <View style={styles.buttonRow}>
             <SecondaryButton title="Cancel" onPress={onClose} />
-            <PrimaryButton title="Save" onPress={() => onSave(entryText)} />
+            <PrimaryButton title="Save" onPress={handleSave} />
           </View>
         </View>
       </View>
     </Modal>
   );
-};
-
-export default AddEntryModal;
+}

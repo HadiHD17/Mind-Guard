@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
+import api from "../../Api";
+import { getUserData } from "../../Helpers/Storage";
 
-const JournalScreen = ({ navigation }) => {
+export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
-  const journals = [
-    {
-      id: 1,
-      day: "Monday",
-      mood: "😊",
-      content: "Had a great day!",
-      sentiment: "positive",
-    },
-    {
-      id: 2,
-      day: "Tuesday",
-      mood: "😔",
-      content: "Felt a bit down.",
-      sentiment: "negative",
-    },
-  ];
+  const [journals, setJournals] = useState([]);
+  const [user, setUser] = useState(null);
+
+  const fetchUser = async () => {
+    const u = await getUserData();
+    setUser(u);
+  };
+
+  const getJournals = async () => {
+    try {
+      const res = await api.get(`/Entry/UserEntries/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+      if (res.data.status === "success" && res.data.payload) {
+        setJournals(res.data.payload);
+      }
+    } catch (err) {
+      console.log("journal error: ", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      getJournals();
+    }
+  }, [user, journals]);
 
   const handleDelete = (id) => {
     console.log("Delete journal with id:", id);
@@ -51,10 +69,14 @@ const JournalScreen = ({ navigation }) => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <JournalCard
-              day={item.day}
-              mood={item.mood}
+              day={new Date(item.createdAt).toLocaleDateString("en-US", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              })}
+              mood={item.detectedEmotion}
               content={item.content}
-              sentiment={item.sentiment}
+              sentiment={item.sentimentScore}
               onDelete={() => handleDelete(item.id)}
             />
           )}
@@ -71,6 +93,4 @@ const JournalScreen = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-};
-
-export default JournalScreen;
+}
