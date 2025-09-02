@@ -47,13 +47,14 @@ namespace MindGuardServer.Controllers
         [HttpGet("UserRoutine/{userId}")]
         public async Task<IActionResult> GetRoutinesByUserId(int userId)
         {
-            var routines = await _routineService.GetRoutinesByUserId(userId);
+            var routines = await _routineService.GetRoutinesByUserId(userId); // ensure occurrences are included
             if (routines == null)
                 return NotFound(ApiResponse<object>.Error());
 
             var responseDTO = _mapper.Map<IEnumerable<RoutineResponseDto>>(routines);
             return Ok(ApiResponse<IEnumerable<RoutineResponseDto>>.Success(responseDTO));
         }
+
         [HttpGet("UpcomingRoutine/{userId}")]
         public async Task<IActionResult> GetUpcomingRoutine(int userId)
         {
@@ -81,10 +82,22 @@ namespace MindGuardServer.Controllers
             var result = await _routineService.MarkAsCompleteAsync(routineId);
 
             if (!result.Success)
-                return BadRequest(ApiResponse<object>.Error());
+                return BadRequest(ApiResponse<object>.Error(result.Message));
 
-            var responseDTO = _mapper.Map<RoutineOccurrenceResponseDto>(result.Occurrence);
-            return Ok(ApiResponse<RoutineOccurrenceResponseDto>.Success(responseDTO));
+            // Map occurrence
+            var occurrenceDTO = _mapper.Map<RoutineOccurrenceResponseDto>(result.Occurrence);
+
+            // Map routine including updated occurrences
+            var routine = await _routineService.GetRoutineById(routineId);
+            var routineDTO = _mapper.Map<RoutineResponseDto>(routine);
+
+            return Ok(ApiResponse<object>.Success(new
+            {
+                Routine = routineDTO,
+                Occurrence = occurrenceDTO
+            }));
         }
+
+
     }
 }

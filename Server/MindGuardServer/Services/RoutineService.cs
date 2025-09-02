@@ -33,9 +33,13 @@ namespace MindGuardServer.Services
 
         public async Task<IEnumerable<Routine>> GetRoutinesByUserId(int userid)
         {
-            var routines = await _context.Routines.Where(r => r.UserId == userid).ToListAsync();
+            var routines = await _context.Routines
+                .Include(r => r.Occurence)
+                .Where(r => r.UserId == userid)
+                .ToListAsync();
             return routines;
         }
+
 
         public async Task<Routine> GetRoutineById(int id)
         {
@@ -61,7 +65,7 @@ namespace MindGuardServer.Services
                 return (false, "Routine not found", null, 0);
             }
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var today = DateOnly.FromDateTime(DateTime.Now); // use local time
 
             var occurrence = await _context.Routine_Occurunces
                 .FirstOrDefaultAsync(o => o.RoutineID == routineId && o.Date == today);

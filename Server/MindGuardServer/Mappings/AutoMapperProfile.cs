@@ -26,7 +26,14 @@ namespace MindGuardServer.Mappings
             //Routine
             CreateMap<RoutineCreateDto, Routine>();
             CreateMap<RoutineUpdateDto, Routine>();
-            CreateMap<Routine, RoutineResponseDto>();
+            CreateMap<Routine, RoutineResponseDto>()
+                .ForMember(dest => dest.LastCompletedDate, opt => opt.MapFrom(src =>
+                    src.Occurence
+                       .Where(o => o.IsCompleted)
+                       .OrderByDescending(o => o.Date)
+                       .FirstOrDefault().Date
+                ));
+
 
             //Occurence
             CreateMap<RoutineOccurrenceCreateDto, Routine_Occurence>();

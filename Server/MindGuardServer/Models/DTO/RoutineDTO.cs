@@ -38,8 +38,16 @@ namespace MindGuardServer.Models.DTO
         public int UserId { get; set; }
         public string? Description { get; set; }
         public string Frequency { get; set; }
+        public virtual ICollection<Routine_Occurence> Occurence { get; set; } = new List<Routine_Occurence>();
+
         public TimeSpan? Reminder_Time { get; set; }
         public bool Synced_Calendar { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public DateOnly? LastCompletedDate =>
+            Occurence
+                .Where(o => o.IsCompleted)
+                .OrderByDescending(o => o.Date)
+                .FirstOrDefault()?.Date;
     }
 }
