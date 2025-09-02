@@ -24,7 +24,7 @@ export default StyleSheet.create({
   },
   input: {
     width: inputWidth,
-    marginBottom: 15,
+    marginBottom: 5,
   },
   forgotWrapper: {
     width: inputWidth,

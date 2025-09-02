@@ -8,23 +8,33 @@ export default function RoutineCard({
   routine,
   onDelete,
   onMarkComplete,
-  setDays, // pass a setter function from parent to update days
+  setDays,
 }) {
+  const daysArray = routine.frequency
+    ? routine.frequency.split(",").map((day) => {
+        // capitalize first letter
+        return day.charAt(0).toUpperCase() + day.slice(1, 3);
+      })
+    : [];
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        routine.completedToday && { backgroundColor: "#d3d3d3" }, // grey if completed today
+      ]}>
       {/* Title & Delete */}
       <View style={styles.topRow}>
-        <Text style={styles.title}>{routine.title}</Text>
+        <Text style={styles.title}>{routine.description}</Text>
         <TouchableOpacity onPress={onDelete}>
           <Ionicons name="trash" size={20} color="#F44336" />
         </TouchableOpacity>
       </View>
 
       {/* Time */}
-      <Text style={styles.time}>{routine.time}</Text>
+      <Text style={styles.time}>{routine.reminder_Time}</Text>
 
       {/* Days */}
-      <Week selectedDays={routine.days} setSelectedDays={setDays} />
+      <Week selectedDays={daysArray} readOnly />
 
       {/* Mark as Complete */}
       <TouchableOpacity style={styles.completeButton} onPress={onMarkComplete}>

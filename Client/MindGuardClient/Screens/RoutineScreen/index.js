@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,31 +10,67 @@ import { Ionicons } from "@expo/vector-icons";
 import RoutineCard from "../../Components/RoutineCard";
 import styles from "./Routine.Styles";
 import AddRoutineModal from "../../Components/RoutineModal";
+import { getUserData } from "../../Helpers/Storage";
+import api from "../../Api";
 
 export default function RoutineScreen({ navigation }) {
-  const [routines, setRoutines] = useState([
-    {
-      id: 1,
-      title: "Morning Workout",
-      time: "07:00 AM",
-      days: ["Mon", "Wed", "Fri"],
-    },
-    {
-      id: 2,
-      title: "Read Book",
-      time: "09:00 PM",
-      days: ["Tue", "Thu", "Sat"],
-    },
-  ]);
-
+  const [routines, setRoutines] = useState([]);
+  const [user, setUser] = useState(null);
   const [AddRoutineModalVisible, setAddRoutineModalVisible] = useState(false);
 
-  const handleDelete = (id) => {
-    setRoutines(routines.filter((r) => r.id !== id));
+  const loadUser = async () => {
+    const u = await getUserData();
+    setUser(u);
   };
 
-  const handleMarkComplete = (id) => {
-    console.log("Marked routine complete:", id);
+  const loadRoutines = async () => {
+    try {
+      const res = await api.get(`/Routine/UserRoutine/${user.id}`, {
+        headers: { Authorization: `Bearer ${user.accessToken}` },
+      });
+      if (res.data.status === "success" && res.data.payload) {
+        const today = new Date().toISOString().split("T")[0];
+        const routinesWithCompletion = res.data.payload.map((r) => ({
+          ...r,
+          completedToday: r.lastCompletedDate === today,
+        }));
+        setRoutines(routinesWithCompletion);
+      }
+    } catch (err) {
+      console.log("Error fetching routines:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await api.delete(`/Routine/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+    } catch (err) {
+      console.log("Error deleting routine:", err);
+    }
+  };
+
+  const handleMarkComplete = async (id) => {
+    try {
+      const res = await api.post(`/Routine/${id}`, null, {
+        headers: { Authorization: `Bearer ${user.accessToken}` },
+      });
+      if (res.data.status === "success" && res.data.payload) {
+        const { routineId, date, isCompleted } = res.data.payload;
+        setRoutines((prev) =>
+          prev.map((r) =>
+            r.id === routineId
+              ? { ...r, completedToday: isCompleted, lastCompletedDate: date }
+              : r
+          )
+        );
+      }
+    } catch (err) {
+      console.log("Error marking routine complete:", err.message);
+    }
   };
 
   const handleUpdateDays = (id, newDays) => {
@@ -42,6 +78,15 @@ export default function RoutineScreen({ navigation }) {
       prev.map((r) => (r.id === id ? { ...r, days: newDays } : r))
     );
   };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (user) loadRoutines();
+  }, [user]);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}

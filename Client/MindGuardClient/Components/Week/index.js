@@ -5,8 +5,13 @@ import styles from "./Week.Styles";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export default function Week({ selectedDays = [], setSelectedDays }) {
+export default function Week({
+  selectedDays = [],
+  setSelectedDays,
+  readOnly = false,
+}) {
   const toggleDay = (day) => {
+    if (readOnly) return;
     if (selectedDays.includes(day)) {
       setSelectedDays(selectedDays.filter((d) => d !== day));
     } else {

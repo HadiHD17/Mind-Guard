@@ -71,7 +71,7 @@ export default function HomeScreen({ navigation }) {
     if (!user) return;
     getRoutine();
     getMoods();
-  }, [user]);
+  }, [user, routine, mood]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
