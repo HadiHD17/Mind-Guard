@@ -11,34 +11,41 @@ export default function RoutineCard({
   setDays,
 }) {
   const daysArray = routine.frequency
-    ? routine.frequency.split(",").map((day) => {
-        // capitalize first letter
-        return day.charAt(0).toUpperCase() + day.slice(1, 3);
-      })
+    ? routine.frequency
+        .split(",")
+        .map((day) => day.charAt(0).toUpperCase() + day.slice(1, 3))
     : [];
+
+  const isCompleted = routine.completedToday;
+
   return (
-    <View
-      style={[
-        styles.card,
-        routine.completedToday && { backgroundColor: "#d3d3d3" }, // grey if completed today
-      ]}>
-      {/* Title & Delete */}
+    <View style={[styles.card, isCompleted && { backgroundColor: "#d3d3d3" }]}>
+      {/* Title & Mark Complete */}
       <View style={styles.topRow}>
         <Text style={styles.title}>{routine.description}</Text>
-        <TouchableOpacity onPress={onDelete}>
-          <Ionicons name="trash" size={20} color="#F44336" />
+        <TouchableOpacity
+          style={[
+            styles.completeButton,
+            isCompleted && { backgroundColor: "#a9a9a9" },
+          ]}
+          onPress={onMarkComplete}
+          disabled={isCompleted}>
+          <Text style={styles.completeButtonText}>
+            {isCompleted ? "Completed" : "Mark as done"}
+          </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Time */}
+      {/* Reminder Time */}
       <Text style={styles.time}>{routine.reminder_Time}</Text>
 
       {/* Days */}
       <Week selectedDays={daysArray} readOnly />
 
-      {/* Mark as Complete */}
-      <TouchableOpacity style={styles.completeButton} onPress={onMarkComplete}>
-        <Text style={styles.completeButtonText}>Mark as complete</Text>
+      {/* Delete Button */}
+      <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+        <Ionicons name="trash" size={18} color="#fff" />
+        <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
     </View>
   );

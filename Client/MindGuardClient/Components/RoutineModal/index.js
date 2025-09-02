@@ -22,6 +22,7 @@ export default function AddRoutineModal({ visible, onClose, onCreate }) {
 
   const handleCreate = async () => {
     if (!title || !time || selectedDays.length === 0) return;
+
     try {
       const res = await api.post(
         "/Routine",
@@ -35,14 +36,16 @@ export default function AddRoutineModal({ visible, onClose, onCreate }) {
           headers: { Authorization: `Bearer ${user.accessToken}` },
         }
       );
-      if (res.data.status === "success") {
+
+      if (res.data.status === "success" && res.data.payload) {
+        // Return the routine with completedToday = false and empty occurence array
         onCreate({
-          id: res.data.payload.id,
-          description: title,
-          reminder_Time: time,
-          frequency: selectedDays.join(","),
+          ...res.data.payload,
+          completedToday: false,
+          occurence: [],
         });
 
+        // Reset inputs
         setTitle("");
         setTime("");
         setSelectedDays([]);
@@ -52,6 +55,7 @@ export default function AddRoutineModal({ visible, onClose, onCreate }) {
       console.log("Error creating routine:", err);
     }
   };
+
   useEffect(() => {
     loadUser();
   }, []);

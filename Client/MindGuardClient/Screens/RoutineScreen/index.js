@@ -48,6 +48,7 @@ export default function RoutineScreen({ navigation }) {
           Authorization: `Bearer ${user.accessToken}`,
         },
       });
+      setRoutines((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
       console.log("Error deleting routine:", err);
     }
@@ -58,12 +59,21 @@ export default function RoutineScreen({ navigation }) {
       const res = await api.post(`/Routine/${id}`, null, {
         headers: { Authorization: `Bearer ${user.accessToken}` },
       });
+
       if (res.data.status === "success" && res.data.payload) {
-        const { routineId, date, isCompleted } = res.data.payload;
+        const updatedRoutine = res.data.payload.Routine;
+        const updatedOccurrence = res.data.payload.Occurrence;
+        const today = new Date().toISOString().split("T")[0];
+
         setRoutines((prev) =>
           prev.map((r) =>
-            r.id === routineId
-              ? { ...r, completedToday: isCompleted, lastCompletedDate: date }
+            r.id === updatedRoutine.id
+              ? {
+                  ...updatedRoutine,
+                  completedToday: updatedRoutine.lastCompletedDate === today,
+                  // add new occurrence to the array
+                  occurence: updatedRoutine.occurence.concat(updatedOccurrence),
+                }
               : r
           )
         );
