@@ -23,28 +23,36 @@ namespace MindGuardServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddSummary([FromBody]WeeklySummaryCreateDto summary)
+        [HttpPost("generate/{userId}")]
+        public async Task<IActionResult> GenerateSummary(int userId)
         {
-            var s = _mapper.Map<Weekly_Summary>(summary);
-            await _summaryservice.AddSummary(s);
-            if (s == null)
-                return NotFound(ApiResponse<object>.Error());
+            var summary = await _summaryservice.GenerateWeeklySummary(userId);
 
-            var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(s);
-            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
+            if (summary == null)
+                return BadRequest(ApiResponse<object>.Error("No logs found for this week."));
+
+            // Map domain model(s) to DTO(s)
+            var summaryDto = _mapper.Map<WeeklySummaryResponseDto>(summary);
+
+            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(summaryDto));
         }
 
-        [HttpGet("{userid}")]
-        public async Task<IActionResult> GetSummaryByUserId(int userid)
+
+        [HttpGet("latest/{userid}")]
+        public async Task<IActionResult> GetLatestSummary(int userid)
         {
             var summaries = await _summaryservice.GetSummaryByUserId(userid);
-            if (summaries == null)
-                return NotFound(ApiResponse<object>.Error());
 
-            var responseDTO = _mapper.Map<IEnumerable<WeeklySummaryResponseDto>>(summaries);
-            return Ok(ApiResponse<IEnumerable<WeeklySummaryResponseDto>>.Success(responseDTO));
+            if (summaries == null || !summaries.Any())
+                return NotFound(ApiResponse<object>.Error("No weekly summaries found."));
+
+            // Get the latest one by CreatedAt
+            var latestSummary = summaries.OrderByDescending(s => s.CreatedAt).First();
+
+            return Ok(ApiResponse<Weekly_Summary>.Success(latestSummary));
         }
+
+
 
     }
 }
