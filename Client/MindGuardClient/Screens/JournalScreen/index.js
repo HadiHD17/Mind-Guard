@@ -6,12 +6,14 @@ import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
 import api from "../../Api";
+import { useIsFocused } from "@react-navigation/native";
 import { getUserData } from "../../Helpers/Storage";
 
 export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
   const [journals, setJournals] = useState([]);
   const [user, setUser] = useState(null);
+  const isFocused = useIsFocused();
 
   const fetchUser = async () => {
     const u = await getUserData();
@@ -38,10 +40,10 @@ export default function JournalScreen() {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user && isFocused) {
       getJournals();
     }
-  }, [user, journals]);
+  }, [user, isFocused]);
 
   const handleDelete = (id) => {
     console.log("Delete journal with id:", id);
@@ -51,7 +53,9 @@ export default function JournalScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* Welcome Message */}
-        <Text style={styles.welcomeText}>Welcome</Text>
+        <Text style={styles.welcomeText}>
+          Welcome, {user ? user.fullName : ""}
+        </Text>
 
         {/* Header Row */}
         <View style={styles.headerRow}>
@@ -85,8 +89,7 @@ export default function JournalScreen() {
         <AddEntryModal
           visible={AddEntryModalVisible}
           onClose={() => setAddEntryModalVisible(false)}
-          onSave={(text) => {
-            console.log("New journal entry:", text);
+          onSave={() => {
             setAddEntryModalVisible(false);
           }}
         />

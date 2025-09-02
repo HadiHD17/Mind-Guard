@@ -43,9 +43,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        style={styles.scrollView}>
+      <ScrollView style={styles.container}>
         <Text style={styles.welcomeText}>Welcome, {user?.fullName}</Text>
         <Text style={styles.sectionTitle}>Profile Settings</Text>
         <ProfileCard>
@@ -102,7 +100,6 @@ export default function ProfileScreen({ navigation }) {
             setEditPasswordVisible(false);
           }}
         />
-        ;
       </ScrollView>
     </SafeAreaView>
   );

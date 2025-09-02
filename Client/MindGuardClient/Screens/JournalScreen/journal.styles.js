@@ -7,13 +7,13 @@ export default StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     backgroundColor: "#Fff",
   },
   welcomeText: {
     fontSize: 24,
     fontWeight: "600",
-    textAlign: "center",
+    textAlign: "left",
     marginBottom: 20,
   },
   headerRow: {

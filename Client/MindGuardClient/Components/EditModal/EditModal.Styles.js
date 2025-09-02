@@ -25,10 +25,6 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
-  inputsWrapper: {
-    gap: 15,
-    marginBottom: 20,
-  },
   errorText: {
     color: "red",
     marginTop: 5,
@@ -41,7 +37,6 @@ export default StyleSheet.create({
   },
 
   button: {
-    width: 100,
-    height: 51,
+    flex: 1,
   },
 });

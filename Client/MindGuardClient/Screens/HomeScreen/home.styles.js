@@ -11,7 +11,7 @@ export default StyleSheet.create({
   welcomeText: {
     fontSize: 24,
     fontWeight: "600",
-    textAlign: "center",
+    textAlign: "left",
     marginBottom: 20,
   },
   questionText: {
@@ -23,11 +23,11 @@ export default StyleSheet.create({
   feelingCardsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 10,
     marginBottom: 20,
   },
 
   infoCardsColumn: {
     flexDirection: "column",
-    gap: 15,
   },
 });

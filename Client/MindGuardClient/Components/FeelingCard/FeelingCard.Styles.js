@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   feelingCard: {
     flex: 1,
-    marginHorizontal: 5,
     paddingVertical: 40,
     borderRadius: 12,
     alignItems: "center",

@@ -10,7 +10,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    color: "#1E3A5F",
+    color: "#fff",
     fontSize: 16,
     fontWeight: "600",
   },

@@ -98,23 +98,38 @@ export default function EditAccountModal({
             </TouchableOpacity>
           </View>
 
-          <View style={styles.inputsWrapper}>
-            <View style={{ marginBottom: 10 }}>
-              <Input label="Name" value={name} onChangeText={setName} />
+          <View>
+            <View style={{ marginBottom: 5 }}>
+              <Input
+                label="Name"
+                value={name}
+                onChangeText={setName}
+                style={{ width: "100%" }}
+              />
               {errors.fullName && (
                 <Text style={styles.errorText}>{errors.fullName}</Text>
               )}
             </View>
 
-            <View style={{ marginBottom: 10 }}>
-              <Input label="Email" value={email} onChangeText={setEmail} />
+            <View style={{ marginBottom: 5 }}>
+              <Input
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                style={{ width: "100%" }}
+              />
               {errors.email && (
                 <Text style={styles.errorText}>{errors.email}</Text>
               )}
             </View>
 
-            <View style={{ marginBottom: 10 }}>
-              <Input label="Phone" value={phone} onChangeText={setPhone} />
+            <View style={{ marginBottom: 5 }}>
+              <Input
+                label="Phone"
+                value={phone}
+                onChangeText={setPhone}
+                style={{ width: "100%" }}
+              />
               {errors.phone && (
                 <Text style={styles.errorText}>{errors.phone}</Text>
               )}

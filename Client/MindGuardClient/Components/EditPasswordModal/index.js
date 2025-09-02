@@ -82,34 +82,37 @@ export default function EditPasswordModal({ visible, onClose, onSave }) {
           </View>
 
           <View style={styles.inputsWrapper}>
-            <View style={{ marginBottom: 10 }}>
+            <View>
               <Input
                 label="Current Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                style={{ width: "100%" }}
               />
               {errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
             </View>
-            <View style={{ marginBottom: 10 }}>
+            <View>
               <Input
                 label="New Password"
                 value={newpassword}
                 onChangeText={setNewPassword}
                 secureTextEntry
+                style={{ width: "100%" }}
               />
               {errors.newpassword && (
                 <Text style={styles.errorText}>{errors.newpassword}</Text>
               )}
             </View>
-            <View style={{ marginBottom: 10 }}>
+            <View>
               <Input
                 label="Confirm New Password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
+                style={{ width: "100%" }}
               />
               {errors.confirmPassword && (
                 <Text style={styles.errorText}>{errors.confirmPassword}</Text>
