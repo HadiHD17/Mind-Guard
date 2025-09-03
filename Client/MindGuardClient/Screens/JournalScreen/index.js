@@ -6,14 +6,12 @@ import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
 import api from "../../Api";
-import { useIsFocused } from "@react-navigation/native";
 import { getUserData } from "../../Helpers/Storage";
 
 export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
   const [journals, setJournals] = useState([]);
   const [user, setUser] = useState(null);
-  const isFocused = useIsFocused();
 
   const fetchUser = async () => {
     const u = await getUserData();
@@ -40,14 +38,10 @@ export default function JournalScreen() {
   }, []);
 
   useEffect(() => {
-    if (user && isFocused) {
+    if (user) {
       getJournals();
     }
-  }, [user, isFocused]);
-
-  const handleDelete = (id) => {
-    console.log("Delete journal with id:", id);
-  };
+  }, [user, journals]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -81,7 +75,6 @@ export default function JournalScreen() {
               mood={item.detectedEmotion}
               content={item.content}
               sentiment={item.sentimentScore}
-              onDelete={() => handleDelete(item.id)}
             />
           )}
           contentContainerStyle={styles.list}

@@ -1,4 +1,3 @@
-// InsightScreen.js
 import React, { useEffect, useState } from "react";
 import { Text, SafeAreaView, ScrollView } from "react-native";
 import styles from "./insight.styles";
@@ -42,7 +41,7 @@ export default function InsightScreen() {
         <TipCard text="📓 Write down your thoughts for 10 minutes" />
         {/* Weekly Summary */}
         <Text style={styles.sectionTitle}>Weekly Summary</Text>
-        <WeeklySummaryCard entries={entries} /> {/* ✅ pass entries here */}
+        <WeeklySummaryCard entries={entries} />
       </ScrollView>
     </SafeAreaView>
   );
