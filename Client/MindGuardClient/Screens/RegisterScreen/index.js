@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -10,54 +10,25 @@ import {
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import styles from "./Register.Styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "../../Api";
+import useRegister from "../../Hooks/useRegister";
 
 export default function RegisterScreen({ navigation }) {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-
-  const [errors, setErrors] = useState({});
-
-  const validate = () => {
-    const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!email.trim()) newErrors.email = "Email is required";
-    else if (!emailRegex.test(email)) newErrors.email = "Enter a valid email";
-    if (!password.trim()) newErrors.password = "Password is required";
-    if (!confirmPassword.trim())
-      newErrors.confirmPassword = "Confirm password is required";
-    else if (password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-    if (!phoneNumber.trim()) newErrors.phone = "Phone is required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleRegister = async () => {
-    if (validate()) {
-      try {
-        const res = await api.post("/Auth/Register", {
-          fullName,
-          email,
-          password,
-          phoneNumber,
-        });
-        const data = res.data;
-        await AsyncStorage.setItem("@user_data", JSON.stringify(data));
-
-        navigation.replace("MainTabs");
-      } catch (error) {
-        console.log("Register error:", error);
-      }
-    }
-  };
+  const {
+    fullName,
+    setFullName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    phoneNumber,
+    setPhoneNumber,
+    errors,
+    handleRegister,
+    loading,
+    error,
+  } = useRegister(navigation);
 
   return (
     <KeyboardAvoidingView
@@ -69,14 +40,12 @@ export default function RegisterScreen({ navigation }) {
           style={styles.logo}
           resizeMode="contain"
         />
-
         <Text style={styles.titleText}>Create Account</Text>
-
         <View style={styles.inputWrapper}>
           <Input
             label="Full Name"
             value={fullName}
-            placeholder={"enter your full name"}
+            placeholder={"Enter your full name"}
             onChangeText={setFullName}
             style={styles.input}
           />
@@ -84,24 +53,22 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.errorText}>{errors.fullName}</Text>
           )}
         </View>
-
         <View style={styles.inputWrapper}>
           <Input
             label="Email"
             value={email}
-            placeholder={"enter your email address"}
+            placeholder={"Enter your email address"}
             onChangeText={setEmail}
             style={styles.input}
             keyboardType="email-address"
           />
           {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
         </View>
-
         <View style={styles.inputWrapper}>
           <Input
             label="Password"
             value={password}
-            placeholder={"enter your password"}
+            placeholder={"Enter your password"}
             onChangeText={setPassword}
             style={styles.input}
             secureTextEntry
@@ -110,7 +77,6 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.errorText}>{errors.password}</Text>
           )}
         </View>
-
         <View style={styles.inputWrapper}>
           <Input
             label="Confirm Password"
@@ -124,25 +90,24 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.errorText}>{errors.confirmPassword}</Text>
           )}
         </View>
-
         <View style={styles.inputWrapper}>
           <Input
             label="Phone"
             value={phoneNumber}
-            placeholder={"enter your phone number"}
+            placeholder={"Enter your phone number"}
             onChangeText={setPhoneNumber}
             style={styles.input}
             keyboardType="phone-pad"
           />
           {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
         </View>
-
         <PrimaryButton
-          title="Register"
+          title={loading ? "Registering..." : "Register"}
           onPress={handleRegister}
           style={styles.registerButton}
+          disabled={loading}
         />
-
+        {error && <Text style={styles.errorText}>{error}</Text>}
         <View style={styles.loginWrapper}>
           <Text style={styles.loginText}>Already have an account? </Text>
           <Text
