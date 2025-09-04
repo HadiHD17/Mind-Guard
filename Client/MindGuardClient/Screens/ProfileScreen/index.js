@@ -8,30 +8,25 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { logout } from "../../Redux/Slices/authSlice";
 import styles from "./profile.styles";
 import ProfileCard from "../../Components/ProfileCard";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
 import { getUserData } from "../../Helpers/Storage";
 
 export default function ProfileScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [darkMode, setDarkMode] = useState(false);
   const [calendarSync, setCalendarSync] = useState(false);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editPasswordVisible, setEditPasswordVisible] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem("@user_data");
-      navigation.replace("Landing");
-    } catch (error) {
-      console.log("logout error:", error);
-    }
-  };
-
   const [user, setUser] = useState(null);
+
   const fetchUser = async () => {
     const data = await getUserData();
     setUser(data);
@@ -41,11 +36,17 @@ export default function ProfileScreen({ navigation }) {
     fetchUser();
   }, []);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.replace("Landing");
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
         <Text style={styles.welcomeText}>Welcome, {user?.fullName}</Text>
         <Text style={styles.sectionTitle}>Profile Settings</Text>
+
         <ProfileCard>
           <View>
             <Text style={styles.cardTitle}>{user?.fullName}</Text>
@@ -55,6 +56,7 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="pencil" size={20} color="black" />
           </TouchableOpacity>
         </ProfileCard>
+
         <ProfileCard>
           <View style={{ flex: 1 }}>
             <Text style={styles.cardTitle}>Preferences</Text>
@@ -68,6 +70,7 @@ export default function ProfileScreen({ navigation }) {
             </View>
           </View>
         </ProfileCard>
+
         <ProfileCard>
           <View style={{ flex: 1 }}>
             <Text style={styles.cardTitle}>Account</Text>
@@ -83,6 +86,7 @@ export default function ProfileScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </ProfileCard>
+
         <EditAccountModal
           visible={editModalVisible}
           onClose={() => setEditModalVisible(false)}
@@ -93,12 +97,11 @@ export default function ProfileScreen({ navigation }) {
             phone: user?.phoneNumber || "",
           }}
         />
+
         <EditPasswordModal
           visible={editPasswordVisible}
           onClose={() => setEditPasswordVisible(false)}
-          onSave={() => {
-            setEditPasswordVisible(false);
-          }}
+          onSave={() => setEditPasswordVisible(false)}
         />
       </ScrollView>
     </SafeAreaView>

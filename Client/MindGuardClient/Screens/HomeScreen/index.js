@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }) {
           <FeelingCard
             title="Add Journal Entry"
             bgColor="#80C6DA"
-            textColor="#1E3A5F"
+            textColor="#fff"
             onPress={() => navigation.navigate("Journal")}
           />
           <FeelingCard
