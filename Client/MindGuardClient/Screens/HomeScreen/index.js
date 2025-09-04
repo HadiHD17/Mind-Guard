@@ -1,87 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView, View, Text, ScrollView } from "react-native";
 import FeelingCard from "../../Components/FeelingCard";
 import styles from "./home.styles";
-import { getUserData } from "../../Helpers/Storage";
 import MoodTrendCard from "../../Components/MoodTrendCard";
 import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
-import api from "../../Api";
-import { moodToEmoji, getDayOfWeek } from "../../Helpers/MoodHelpers";
 import LogMoodModal from "../../Components/LogMood";
+import useUser from "../../Hooks/useUser";
+import useMoods from "../../Hooks/useMoods";
+import useRoutine from "../../Hooks/useRoutine";
 
 export default function HomeScreen({ navigation }) {
-  const [user, setUser] = useState(null);
-  const [routine, setRoutine] = useState(null);
-  const [mood, setMood] = useState([]);
+  const { user, loading: userLoading, error: userError } = useUser();
+  const {
+    moods,
+    loading: moodsLoading,
+    error: moodsError,
+  } = useMoods(user?.id);
+  const {
+    routine,
+    loading: routineLoading,
+    error: routineError,
+  } = useRoutine(user?.id);
+
   const [logmoodvisible, setLogMoodVisible] = useState(false);
 
-  const loadUser = async () => {
-    const u = await getUserData();
-    setUser(u);
-  };
+  if (userLoading || moodsLoading || routineLoading)
+    return <Text>Loading...</Text>;
 
-  const getMoods = async () => {
-    if (!user) return;
-    try {
-      const res = await api.get(`/Mood/All/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      });
-      if (res.data?.payload) {
-        const transformed = res.data.payload.map((item) => ({
-          day: getDayOfWeek(item.date),
-          mood: moodToEmoji[item.mood_Label] || "❓",
-        }));
-
-        const uniqueByDay = Array.from(
-          transformed
-            .reduce((map, obj) => map.set(obj.day, obj), new Map())
-            .values()
-        );
-
-        setMood(uniqueByDay);
-      }
-    } catch (err) {
-      console.log("mood error: ", err);
-    }
-  };
-
-  const getRoutine = async () => {
-    if (!user) return;
-    try {
-      const res = await api.get(`/Routine/UpcomingRoutine/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      });
-      if (res.data.status == "success") {
-        setRoutine(res.data.payload);
-      }
-    } catch (err) {
-      console.log("routine error: ", err);
-    }
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    if (!user) return;
-    getRoutine();
-    getMoods();
-  }, [user, routine, mood]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Welcome */}
         <Text style={styles.welcomeText}>Welcome, {user?.fullName}</Text>
 
-        {/* Question */}
+        {userError && (
+          <Text style={styles.errorText}>
+            Error loading user data: {userError}
+          </Text>
+        )}
+        {moodsError && (
+          <Text style={styles.errorText}>
+            Error loading mood data: {moodsError}
+          </Text>
+        )}
+        {routineError && (
+          <Text style={styles.errorText}>
+            Error loading routine data: {routineError}
+          </Text>
+        )}
+
         <Text style={styles.questionText}>How Are You Feeling Today?</Text>
 
-        {/* Feeling Cards */}
         <View style={styles.feelingCardsRow}>
           <FeelingCard
             title="Add Journal Entry"
@@ -97,25 +65,12 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
 
-        {/* Info Cards */}
         <View style={styles.infoCardsColumn}>
           <MoodTrendCard
             title="Mood Trend"
             rightText="View Details"
             onRightPress={() => navigation.replace("Map")}
-            moods={
-              mood.length
-                ? mood
-                : [
-                    { day: "Mon", mood: "😐" },
-                    { day: "Tue", mood: "🙂" },
-                    { day: "Wed", mood: "😔" },
-                    { day: "Thu", mood: "😃" },
-                    { day: "Fri", mood: "😐" },
-                    { day: "Sat", mood: "😄" },
-                    { day: "Sun", mood: "😐" },
-                  ]
-            }
+            moods={moods.length ? moods : [{ day: "Mon", mood: "😐" }]}
           />
 
           {routine ? (
@@ -134,6 +89,7 @@ export default function HomeScreen({ navigation }) {
             />
           )}
         </View>
+
         <LogMoodModal
           visible={logmoodvisible}
           onClose={() => setLogMoodVisible(false)}
