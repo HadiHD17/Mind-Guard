@@ -22,7 +22,7 @@ export default function useMoodMap() {
     const marks = {};
     journals.forEach((entry) => {
       const date = entry.createdAt.split("T")[0];
-      let color = "#808080"; // Default color for "neutral"
+      let color = "#808080";
       if (entry.detectedEmotion === "happy") color = "#4CAF50";
       else if (entry.detectedEmotion === "sad") color = "#2196F3";
       else if (entry.detectedEmotion === "angry") color = "#F44336";

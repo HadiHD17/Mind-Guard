@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
             <UpcomingRoutineCard
               title="Upcoming Routine"
               rightText="View Routines"
-              onRightPress={() => console.log("View Routines pressed")}
+              onRightPress={() => navigation.replace("Routine")}
               subtitle="No upcoming routine found"
             />
           )}

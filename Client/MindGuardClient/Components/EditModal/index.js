@@ -15,6 +15,8 @@ import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
 import api from "../../Api";
 import { getUserData } from "../../Helpers/Storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useUser from "../../Hooks/useUser";
+import useEditAccount from "../../Hooks/useEditAccount";
 
 export default function EditAccountModal({
   visible,
@@ -25,6 +27,9 @@ export default function EditAccountModal({
   const [name, setName] = useState(initialData?.name || "");
   const [email, setEmail] = useState(initialData?.email || "");
   const [phone, setPhone] = useState(initialData?.phone || "");
+
+  const { user } = useUser(); // Get user data from Redux
+  const { editAccount } = useEditAccount();
 
   const [errors, setErrors] = useState({});
 
@@ -53,34 +58,10 @@ export default function EditAccountModal({
   const handleSave = async () => {
     if (validate()) {
       try {
-        const user = await getUserData();
-        const res = await api.put(
-          `/User/UpdateAccount/${user.id}`,
-          {
-            fullName: name,
-            email: email,
-            phoneNumber: phone,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.accessToken}`,
-            },
-          }
-        );
-        const updateduser = {
-          ...user,
-          ...res.data.payload,
-          accessToken: user.accessToken,
-          expiresIn: user.expiresIn,
-        };
-
-        await AsyncStorage.setItem("@user_data", JSON.stringify(updateduser));
-        if (onSave) {
-          onSave(updateduser);
-        }
+        await editAccount(name, email, phone, user.id, user.accessToken);
         onClose();
       } catch (err) {
-        console.log("Update Error", err);
+        console.error("Failed to save account changes:", err);
       }
     }
   };

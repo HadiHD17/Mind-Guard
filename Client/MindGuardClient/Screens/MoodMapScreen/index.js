@@ -24,7 +24,6 @@ export default function MoodMapScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}>
@@ -33,7 +32,6 @@ export default function MoodMapScreen({ navigation }) {
         <Text style={styles.title}>Mood Map</Text>
       </View>
 
-      {/* Calendar */}
       <Calendar
         markedDates={markedDates}
         onDayPress={handleDayPress}
@@ -44,14 +42,12 @@ export default function MoodMapScreen({ navigation }) {
         }}
       />
 
-      {/* Stats Card */}
       <StatsCard
         mostCommonMood={getMostCommonMood(journals)}
         currentStreak={getCurrentStreak(journals)}
         totalEntries={`${journals.length} mood logs`}
       />
 
-      {/* Entries for the selected day */}
       {selectedDayEntries.length > 0 && (
         <View style={styles.entryList}>
           <Text style={styles.entryTitle}>Entries for {selectedDate}</Text>

@@ -9,32 +9,22 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { logout } from "../../Redux/Slices/authSlice";
+import { logout, setUser } from "../../Redux/Slices/authSlice";
 import styles from "./profile.styles";
 import ProfileCard from "../../Components/ProfileCard";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
-import { getUserData } from "../../Helpers/Storage";
+import useUser from "../../Hooks/useUser";
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
-
-  const [darkMode, setDarkMode] = useState(false);
-  const [calendarSync, setCalendarSync] = useState(false);
-
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editPasswordVisible, setEditPasswordVisible] = useState(false);
+  const { user, loading: userLoading, error: userError } = useUser();
 
-  const [user, setUser] = useState(null);
-
-  const fetchUser = async () => {
-    const data = await getUserData();
-    setUser(data);
+  const handleUpdateUser = (updatedUser) => {
+    dispatch(setUser(updatedUser));
   };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -62,11 +52,11 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.cardTitle}>Preferences</Text>
             <View style={styles.preferenceRow}>
               <Text style={styles.cardSubtitle}>Dark Mode</Text>
-              <Switch value={darkMode} onValueChange={setDarkMode} />
+              <Switch value={user.isDark} onValueChange={true} />
             </View>
             <View style={styles.preferenceRow}>
               <Text style={styles.cardSubtitle}>Calendar Syncing</Text>
-              <Switch value={calendarSync} onValueChange={setCalendarSync} />
+              <Switch value={user.calendar_sync_enabled} onValueChange={true} />
             </View>
           </View>
         </ProfileCard>
@@ -90,7 +80,7 @@ export default function ProfileScreen({ navigation }) {
         <EditAccountModal
           visible={editModalVisible}
           onClose={() => setEditModalVisible(false)}
-          onSave={(updatedUser) => setUser(updatedUser)}
+          onSave={handleUpdateUser}
           initialData={{
             name: user?.fullName || "",
             email: user?.email || "",

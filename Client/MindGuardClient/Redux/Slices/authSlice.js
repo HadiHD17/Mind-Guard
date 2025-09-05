@@ -39,6 +39,40 @@ export const register = createAsyncThunk(
   }
 );
 
+export const updateAccount = createAsyncThunk(
+  "auth/updateAccount",
+  async (
+    { fullName, email, phone, userId, accessToken },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.put(
+        `/User/UpdateAccount/${userId}`,
+        { fullName, email, phoneNumber: phone },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const updatedUser = {
+        ...response.data.payload,
+        accessToken,
+        userId,
+      };
+
+      await AsyncStorage.setItem("@user_data", JSON.stringify(updatedUser));
+
+      return updatedUser;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update account"
+      );
+    }
+  }
+);
+
 const initialState = {
   user: null,
   token: null,
@@ -97,6 +131,21 @@ const authSlice = createSlice({
         state.token = action.payload.accessToken;
       })
       .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(updateAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAccount.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.token = action.payload.accessToken;
+        state.loading = false;
+      })
+      .addCase(updateAccount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
