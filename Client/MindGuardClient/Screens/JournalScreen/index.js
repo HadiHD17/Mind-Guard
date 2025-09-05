@@ -1,57 +1,32 @@
-import React, { use, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
-import api from "../../Api";
-import { getUserData } from "../../Helpers/Storage";
+import useJournals from "../../Hooks/useJournals";
+import useUser from "../../Hooks/useUser";
 
 export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
-  const [journals, setJournals] = useState([]);
-  const [user, setUser] = useState(null);
+  const { user, loading: userLoading, error: userError } = useUser();
+  const { journals, loading, error } = useJournals(user?.id);
 
-  const fetchUser = async () => {
-    const u = await getUserData();
-    setUser(u);
-  };
-
-  const getJournals = async () => {
-    try {
-      const res = await api.get(`/Entry/UserEntries/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      });
-      if (res.data.status === "success" && res.data.payload) {
-        setJournals(res.data.payload);
-      }
-    } catch (err) {
-      console.log("journal error: ", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      getJournals();
-    }
-  }, [user, journals]);
+  if (userLoading || loading) return <Text>Loading...</Text>;
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Welcome Message */}
         <Text style={styles.welcomeText}>
           Welcome, {user ? user.fullName : ""}
         </Text>
 
-        {/* Header Row */}
         <View style={styles.headerRow}>
           <Text style={styles.title}>Journal</Text>
           <TouchableOpacity
@@ -61,7 +36,13 @@ export default function JournalScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Journal Entries */}
+        {userError && (
+          <Text style={styles.errorText}>
+            Error loading user data: {userError}
+          </Text>
+        )}
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
         <FlatList
           data={journals}
           keyExtractor={(item) => item.id.toString()}
@@ -79,6 +60,7 @@ export default function JournalScreen() {
           )}
           contentContainerStyle={styles.list}
         />
+
         <AddEntryModal
           visible={AddEntryModalVisible}
           onClose={() => setAddEntryModalVisible(false)}

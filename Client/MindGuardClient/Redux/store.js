@@ -3,6 +3,7 @@ import authReducer from "./Slices/authSlice";
 import userReducer from "./Slices/userSlice";
 import moodReducer from "./Slices/moodSlice";
 import routineReducer from "./Slices/routineSlice";
+import journalReducer from "./Slices/journalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     user: userReducer,
     mood: moodReducer,
     routine: routineReducer,
+    journal: journalReducer,
   },
 });
