@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { updateAccount } from "../Redux/Slices/authSlice";
+import { updateAccount, changePassword } from "../Redux/Slices/authSlice";
 
 export default function useEditAccount() {
   const dispatch = useDispatch();
@@ -15,5 +15,21 @@ export default function useEditAccount() {
     }
   };
 
-  return { editAccount };
+  const editPassword = async (
+    currentPassword,
+    newPassword,
+    userId,
+    accessToken
+  ) => {
+    try {
+      await dispatch(
+        changePassword({ currentPassword, newPassword, userId, accessToken })
+      ).unwrap();
+    } catch (error) {
+      console.error("Failed to change password:", error);
+      throw new Error("Failed to change password");
+    }
+  };
+
+  return { editAccount, editPassword };
 }

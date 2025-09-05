@@ -73,6 +73,38 @@ export const updateAccount = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (
+    { currentPassword, newPassword, userId, accessToken },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.put(
+        `/User/UpdatePassword/${userId}`,
+        {
+          currentPassword,
+          newPassword,
+          confirmNewPassword: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      return response.data.payload;
+    } catch (error) {
+      console.log(error.response);
+
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to change password"
+      );
+    }
+  }
+);
+
 const initialState = {
   user: null,
   token: null,
@@ -148,6 +180,22 @@ const authSlice = createSlice({
       .addCase(updateAccount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      });
+
+    builder
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });

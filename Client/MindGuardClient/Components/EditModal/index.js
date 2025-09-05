@@ -12,9 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
-import api from "../../Api";
-import { getUserData } from "../../Helpers/Storage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import useUser from "../../Hooks/useUser";
 import useEditAccount from "../../Hooks/useEditAccount";
 
@@ -28,7 +25,7 @@ export default function EditAccountModal({
   const [email, setEmail] = useState(initialData?.email || "");
   const [phone, setPhone] = useState(initialData?.phone || "");
 
-  const { user } = useUser(); // Get user data from Redux
+  const { user } = useUser();
   const { editAccount } = useEditAccount();
 
   const [errors, setErrors] = useState({});

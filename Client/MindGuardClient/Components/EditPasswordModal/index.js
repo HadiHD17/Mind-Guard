@@ -12,13 +12,16 @@ import { Ionicons } from "@expo/vector-icons";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
-import { getUserData } from "../../Helpers/Storage";
-import api from "../../Api";
+import useUser from "../../Hooks/useUser";
+import useEditAccount from "../../Hooks/useEditAccount";
 
 export default function EditPasswordModal({ visible, onClose, onSave }) {
   const [password, setPassword] = useState("");
   const [newpassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const { user } = useUser();
+  const { editPassword } = useEditAccount();
 
   const [errors, setErrors] = useState({});
 
@@ -44,26 +47,10 @@ export default function EditPasswordModal({ visible, onClose, onSave }) {
   const handleSave = async () => {
     if (validate()) {
       try {
-        const user = await getUserData();
-        const res = await api.put(
-          `/User/UpdatePassword/${user.id}`,
-          {
-            currentPassword: password,
-            newPassword: newpassword,
-            confirmNewPassword: confirmPassword,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.accessToken}`,
-            },
-          }
-        );
-        if (res.data.status == "success") {
-          onSave();
-        }
+        await editPassword(password, newpassword, user.id, user.accessToken);
         onClose();
       } catch (err) {
-        console.log("Update Error", err);
+        console.error("Failed to save account changes:", err.response || err);
       }
     }
   };
