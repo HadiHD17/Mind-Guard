@@ -21,6 +21,13 @@ export default function JournalScreen() {
     user?.accessToken
   );
 
+  const handleSaveEntry = (entryText) => {
+    if (entryText.trim()) {
+      addJournalEntry(entryText);
+      setAddEntryModalVisible(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -65,10 +72,7 @@ export default function JournalScreen() {
         <AddEntryModal
           visible={AddEntryModalVisible}
           onClose={() => setAddEntryModalVisible(false)}
-          onSave={(entryText) => {
-            addJournalEntry(entryText);
-            setAddEntryModalVisible(false);
-          }}
+          onSave={handleSaveEntry}
         />
       </View>
     </SafeAreaView>
