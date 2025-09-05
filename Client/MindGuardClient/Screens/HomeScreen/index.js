@@ -20,7 +20,7 @@ export default function HomeScreen({ navigation }) {
     routine,
     loading: routineLoading,
     error: routineError,
-  } = useRoutine(user?.id);
+  } = useRoutine(user?.id, user?.accessToken);
 
   const [logmoodvisible, setLogMoodVisible] = useState(false);
 

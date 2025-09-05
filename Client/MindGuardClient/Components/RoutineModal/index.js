@@ -6,59 +6,37 @@ import Input from "../Shared/Input";
 import PrimaryButton from "../Shared/Button/primaryindex";
 import SecondaryButton from "../Shared/Button/secondaryindex";
 import Week from "../Week";
-import { getUserData } from "../../Helpers/Storage";
-import api from "../../Api";
 
 export default function AddRoutineModal({ visible, onClose, onCreate }) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);
-  const [user, setUser] = useState(null);
 
-  const loadUser = async () => {
-    const u = await getUserData();
-    setUser(u);
-  };
+  useEffect(() => {
+    if (visible) {
+      setTitle("");
+      setTime("");
+      setSelectedDays([]);
+    }
+  }, [visible]);
 
-  const handleCreate = async () => {
+  const handleCreate = () => {
     if (!title || !time || selectedDays.length === 0) return;
 
     try {
-      const res = await api.post(
-        "/Routine",
-        {
-          userId: user.id,
-          description: title,
-          reminder_Time: time,
-          frequency: selectedDays.join(","),
-        },
-        {
-          headers: { Authorization: `Bearer ${user.accessToken}` },
-        }
-      );
+      onCreate({
+        title,
+        time,
+        selectedDays,
+        completedToday: false,
+        occurrence: [],
+      });
 
-      if (res.data.status === "success" && res.data.payload) {
-        // Return the routine with completedToday = false and empty occurence array
-        onCreate({
-          ...res.data.payload,
-          completedToday: false,
-          occurence: [],
-        });
-
-        // Reset inputs
-        setTitle("");
-        setTime("");
-        setSelectedDays([]);
-        onClose();
-      }
+      onClose();
     } catch (err) {
-      console.log("Error creating routine:", err);
+      console.error("Error creating routine:", err);
     }
   };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
 
   return (
     <Modal visible={visible} transparent animationType="slide">

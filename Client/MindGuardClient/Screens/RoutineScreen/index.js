@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,96 +10,25 @@ import { Ionicons } from "@expo/vector-icons";
 import RoutineCard from "../../Components/RoutineCard";
 import styles from "./Routine.Styles";
 import AddRoutineModal from "../../Components/RoutineModal";
-import { getUserData } from "../../Helpers/Storage";
-import api from "../../Api";
+import useUser from "../../Hooks/useUser";
+import useRoutine from "../../Hooks/useRoutine";
 
 export default function RoutineScreen({ navigation }) {
-  const [routines, setRoutines] = useState([]);
-  const [user, setUser] = useState(null);
   const [AddRoutineModalVisible, setAddRoutineModalVisible] = useState(false);
-
-  const loadUser = async () => {
-    const u = await getUserData();
-    setUser(u);
-  };
-
-  const loadRoutines = async () => {
-    try {
-      const res = await api.get(`/Routine/UserRoutine/${user.id}`, {
-        headers: { Authorization: `Bearer ${user.accessToken}` },
-      });
-      if (res.data.status === "success" && res.data.payload) {
-        const today = new Date().toISOString().split("T")[0];
-        const routinesWithCompletion = res.data.payload.map((r) => ({
-          ...r,
-          completedToday: r.lastCompletedDate === today,
-        }));
-        setRoutines(routinesWithCompletion);
-      }
-    } catch (err) {
-      console.log("Error fetching routines:", err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const res = await api.delete(`/Routine/${id}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      });
-      setRoutines((prev) => prev.filter((r) => r.id !== id));
-    } catch (err) {
-      console.log("Error deleting routine:", err);
-    }
-  };
-
-  const handleMarkComplete = async (id) => {
-    try {
-      const res = await api.post(`/Routine/${id}`, null, {
-        headers: { Authorization: `Bearer ${user.accessToken}` },
-      });
-
-      if (res.data.status === "success" && res.data.payload) {
-        const updatedRoutine = res.data.payload.Routine;
-        const updatedOccurrence = res.data.payload.Occurrence;
-        const today = new Date().toISOString().split("T")[0];
-
-        setRoutines((prev) =>
-          prev.map((r) =>
-            r.id === updatedRoutine.id
-              ? {
-                  ...updatedRoutine,
-                  completedToday: updatedRoutine.lastCompletedDate === today,
-                  // add new occurrence to the array
-                  occurence: updatedRoutine.occurence.concat(updatedOccurrence),
-                }
-              : r
-          )
-        );
-      }
-    } catch (err) {
-      console.log("Error marking routine complete:", err.message);
-    }
-  };
-
-  const handleUpdateDays = (id, newDays) => {
-    setRoutines((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, days: newDays } : r))
-    );
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    if (user) loadRoutines();
-  }, [user]);
+  const { user } = useUser();
+  const {
+    routine,
+    routines,
+    loading,
+    error,
+    handleDeleteRoutine,
+    handleMarkCompleteRoutine,
+    handleUpdateRoutineDays,
+    handleAddRoutine,
+  } = useRoutine(user?.id, user?.accessToken);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity
@@ -116,16 +45,16 @@ export default function RoutineScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Routines List */}
       <FlatList
         data={routines}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <RoutineCard
+            key={item.id}
             routine={item}
-            onDelete={() => handleDelete(item.id)}
-            onMarkComplete={() => handleMarkComplete(item.id)}
-            setDays={(newDays) => handleUpdateDays(item.id, newDays)}
+            onDelete={() => handleDeleteRoutine(item.id)}
+            onMarkComplete={() => handleMarkCompleteRoutine(item.id)}
+            setDays={(newDays) => handleUpdateRoutineDays(item.id, newDays)}
           />
         )}
         contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 8 }}
@@ -134,7 +63,11 @@ export default function RoutineScreen({ navigation }) {
         visible={AddRoutineModalVisible}
         onClose={() => setAddRoutineModalVisible(false)}
         onCreate={(newRoutine) => {
-          setRoutines((prev) => [...prev, { id: Date.now(), ...newRoutine }]);
+          handleAddRoutine(
+            newRoutine.title,
+            newRoutine.time,
+            newRoutine.selectedDays
+          );
           setAddRoutineModalVisible(false);
         }}
       />
