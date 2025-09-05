@@ -3,22 +3,23 @@ import {
   SafeAreaView,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
-import useJournals from "../../Hooks/useJournals";
 import useUser from "../../Hooks/useUser";
+import useJournals from "../../Hooks/useJournals";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
   const { user, loading: userLoading, error: userError } = useUser();
-  const { journals, loading, error } = useJournals(user?.id);
-
-  if (userLoading || loading) return <Text>Loading...</Text>;
+  const { journals, loading, error, addJournalEntry } = useJournals(
+    user?.id,
+    user?.accessToken
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -26,6 +27,13 @@ export default function JournalScreen() {
         <Text style={styles.welcomeText}>
           Welcome, {user ? user.fullName : ""}
         </Text>
+
+        {userError && (
+          <Text style={styles.errorText}>
+            Error loading user data: {userError}
+          </Text>
+        )}
+        {error && <Text style={styles.errorText}>{error}</Text>}
 
         <View style={styles.headerRow}>
           <Text style={styles.title}>Journal</Text>
@@ -35,13 +43,6 @@ export default function JournalScreen() {
             <Ionicons name="add" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
-
-        {userError && (
-          <Text style={styles.errorText}>
-            Error loading user data: {userError}
-          </Text>
-        )}
-        {error && <Text style={styles.errorText}>{error}</Text>}
 
         <FlatList
           data={journals}
@@ -64,7 +65,8 @@ export default function JournalScreen() {
         <AddEntryModal
           visible={AddEntryModalVisible}
           onClose={() => setAddEntryModalVisible(false)}
-          onSave={() => {
+          onSave={(entryText) => {
+            addJournalEntry(entryText);
             setAddEntryModalVisible(false);
           }}
         />
