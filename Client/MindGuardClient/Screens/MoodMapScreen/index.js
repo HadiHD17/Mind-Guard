@@ -1,87 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import StatsCard from "../../Components/StatsCard";
-import api from "../../Api/index.js";
 import styles from "./MoodMap.Styles";
-import { getUserData } from "../../Helpers/Storage.js";
-import {
-  getMostCommonMood,
-  getCurrentStreak,
-} from "../../Helpers/MoodHelpers.js";
+import useMoodMap from "../../Hooks/useMoodMap";
+import { getMostCommonMood, getCurrentStreak } from "../../Helpers/MoodHelpers";
 
 export default function MoodMapScreen({ navigation }) {
-  const [entries, setEntries] = useState([]);
-  const [markedDates, setMarkedDates] = useState({});
-  const [selectedDayEntries, setSelectedDayEntries] = useState([]);
-  const [user, setUser] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const {
+    journals,
+    loading,
+    error,
+    markedDates,
+    selectedDayEntries,
+    selectedDate,
+    handleDayPress,
+  } = useMoodMap();
 
-  const loadUser = async () => {
-    const u = await getUserData();
-    setUser(u);
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      fetchEntries();
-    }
-  }, [user]);
-
-  const fetchEntries = async () => {
-    try {
-      const res = await api.get(`/Entry/UserEntries/${user.id}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-        },
-      });
-      const data = res.data.payload;
-
-      setEntries(data);
-
-      const marks = {};
-      data.forEach((entry) => {
-        const date = entry.createdAt.split("T")[0];
-        let color = "#808080";
-        if (entry.detectedEmotion === "happy") color = "#4CAF50";
-        else if (entry.detectedEmotion === "sad") color = "#2196F3";
-        else if (entry.detectedEmotion === "angry") color = "#F44336";
-        else if (entry.detectedEmotion === "neutral") color = "#FFC107";
-
-        marks[date] = {
-          marked: true,
-          dotColor: color,
-        };
-      });
-      setMarkedDates(marks);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleDayPress = (day) => {
-    setSelectedDate(day.dateString);
-
-    const dayEntries = entries.filter((e) =>
-      e.createdAt.startsWith(day.dateString)
-    );
-    setSelectedDayEntries(dayEntries);
-
-    setMarkedDates((prev) => ({
-      ...prev,
-      [day.dateString]: {
-        ...(prev[day.dateString] || {}),
-        selected: true,
-        selectedColor: "#000",
-      },
-    }));
-  };
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>{error}</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,12 +46,12 @@ export default function MoodMapScreen({ navigation }) {
 
       {/* Stats Card */}
       <StatsCard
-        mostCommonMood={getMostCommonMood(entries)}
-        currentStreak={getCurrentStreak(entries)}
-        totalEntries={`${entries.length} mood logs`}
+        mostCommonMood={getMostCommonMood(journals)}
+        currentStreak={getCurrentStreak(journals)}
+        totalEntries={`${journals.length} mood logs`}
       />
 
-      {/* Entries of selected day */}
+      {/* Entries for the selected day */}
       {selectedDayEntries.length > 0 && (
         <View style={styles.entryList}>
           <Text style={styles.entryTitle}>Entries for {selectedDate}</Text>
