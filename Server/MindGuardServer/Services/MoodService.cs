@@ -32,7 +32,7 @@ namespace MindGuardServer.Services
 
 
 
-        public async Task<List<MoodDto>> GetAllMoods(int userid)
+        public virtual async Task<List<MoodDto>> GetAllMoods(int userid)
         {
             var allMoods = await _context.Mood_Checkins
                 .Where(c => c.UserId == userid)
