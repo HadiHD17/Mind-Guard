@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import styles from "./WeeklySummaryCard.Styles";
 
-// your helpers
-import {
-  moodToEmoji,
-  getMostCommonMood,
-  getCurrentStreak,
-} from "../../Helpers/MoodHelpers";
+import { moodToEmoji } from "../../Helpers/MoodHelpers";
 import { getUserData } from "../../Helpers/Storage";
 import api from "../../Api";
 
