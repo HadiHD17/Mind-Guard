@@ -18,7 +18,7 @@ namespace MindGuardServer.Services
         // Match your DB: int score instead of double
         public record AiResult(string Mood, int SentimentScore);
 
-        public async Task<AiResult?> AnalyzeAsync(string text, CancellationToken ct = default)
+        public virtual async Task<AiResult?> AnalyzeAsync(string text, CancellationToken ct = default)
         {
             var prompt = $@"
 You are an assistant that analyzes diary entries.
