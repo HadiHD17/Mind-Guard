@@ -6,13 +6,13 @@ export const moodToEmoji = {
   angry: "😡",
   stressed: "😣",
   neutral: "😐",
-  string: "❓", // fallback
+  string: "❓",
 };
 
-export function getDayOfWeek(dateString) {
-  const date = new Date(dateString);
+export function getDayOfWeek(date) {
+  const d = new Date(date);
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  return days[date.getDay()];
+  return days[d.getDay()];
 }
 
 export const getMostCommonMood = (entries) => {

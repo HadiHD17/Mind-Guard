@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMoods } from "../Redux/Slices/moodSlice";
+import { getMoods, logMood } from "../Redux/Slices/moodSlice";
 import { moodToEmoji, getDayOfWeek } from "../Helpers/MoodHelpers";
 
 export default function useMoods(userId) {
@@ -17,9 +17,10 @@ export default function useMoods(userId) {
 
   useEffect(() => {
     if (moods) {
-      const processedMoods = moods.map((item) => ({
-        day: getDayOfWeek(item.date),
-        mood: moodToEmoji[item.mood_Label] || "❓",
+      const moodsArray = Array.isArray(moods) ? moods : [moods];
+      const processedMoods = moodsArray.map((item) => ({
+        day: getDayOfWeek(new Date(item.date ?? item.createdAt)),
+        mood: moodToEmoji[(item.mood_Label ?? "").toLowerCase().trim()],
       }));
 
       const uniqueMoods = Array.from(
@@ -32,5 +33,13 @@ export default function useMoods(userId) {
     }
   }, [moods]);
 
-  return { moods: uniqueMoodsByDay, loading, error };
+  const handleLogMood = useCallback(
+    (mood) => {
+      if (!userId) return;
+      dispatch(logMood({ userId, mood }));
+    },
+    [dispatch, userId]
+  );
+
+  return { moods: uniqueMoodsByDay, loading, error, handleLogMood };
 }

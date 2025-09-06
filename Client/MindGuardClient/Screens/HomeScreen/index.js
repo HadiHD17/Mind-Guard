@@ -15,7 +15,9 @@ export default function HomeScreen({ navigation }) {
     moods,
     loading: moodsLoading,
     error: moodsError,
-  } = useMoods(user?.id);
+    handleLogMood,
+  } = useMoods(userLoading ? null : user?.id);
+
   const {
     routine,
     loading: routineLoading,
@@ -23,9 +25,6 @@ export default function HomeScreen({ navigation }) {
   } = useRoutine(user?.id, user?.accessToken);
 
   const [logmoodvisible, setLogMoodVisible] = useState(false);
-
-  if (userLoading || moodsLoading || routineLoading)
-    return <Text>Loading...</Text>;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -93,7 +92,7 @@ export default function HomeScreen({ navigation }) {
         <LogMoodModal
           visible={logmoodvisible}
           onClose={() => setLogMoodVisible(false)}
-          onSelectMood={() => setLogMoodVisible(false)}
+          onSelectMood={(mood) => handleLogMood(mood)}
         />
       </ScrollView>
     </SafeAreaView>
