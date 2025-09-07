@@ -1,21 +1,23 @@
 module.exports = {
   preset: "react-native",
-  setupFilesAfterEnv: ["@testing-library/jest-native/extend-expect"],
-  transform: {
-    "^.+\\.[jt]sx?$": "babel-jest",
-  },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   transformIgnorePatterns: [
-    "node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@expo/vector-icons)",
+    "node_modules/(?!(react-native|@react-native|@react-navigation|expo|@expo|@reduxjs).*)",
   ],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  testMatch: ["**/__tests__/**/*.test.[jt]s?(x)"],
-  moduleNameMapping: {
+  moduleNameMapper: {
     "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/__mocks__/fileMock.js",
+    "@expo/vector-icons": "<rootDir>/__mocks__/expo-vector-icons.js",
+    "@react-native-async-storage/async-storage":
+      "<rootDir>/__mocks__/async-storage.js",
   },
+  testEnvironment: "node",
   collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/**/*.test.{js,jsx,ts,tsx}",
-    "!src/index.js",
+    "**/*.{js,jsx}",
+    "!**/*.test.{js,jsx}",
+    "!**/node_modules/**",
+    "!**/coverage/**",
+    "!jest.config.js",
+    "!babel.config.js",
+    "!**/__mocks__/**",
   ],
 };
