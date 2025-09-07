@@ -70,6 +70,27 @@ builder.Services.AddHttpClient<GeminiAnalyzerService>();
 
 var app = builder.Build();
 
+_ = Task.Run(async () =>
+{
+    try
+    {
+        using var client = new HttpClient();
+        var baseUrl = builder.Configuration["AI:Ollama:BaseUrl"] ?? "http://localhost:11434";
+        var model = builder.Configuration["AI:Ollama:Model"] ?? "qwen2.5:7b-instruct";
+        var payload = new
+        {
+            model,
+            stream = false,
+            format = "json",
+            keep_alive = "30m",
+            options = new { num_predict = 8, num_ctx = 256, temperature = 0.0 },
+            messages = new[] { new { role = "user", content = "ok" } }
+        };
+        await client.PostAsJsonAsync($"{baseUrl}/api/chat", payload);
+    }
+    catch { /* ignore warmup errors */ }
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
