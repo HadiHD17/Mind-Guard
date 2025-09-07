@@ -36,16 +36,6 @@ export default function HomeScreen({ navigation }) {
             Error loading user data: {userError}
           </Text>
         )}
-        {moodsError && (
-          <Text style={styles.errorText}>
-            Error loading mood data: {moodsError}
-          </Text>
-        )}
-        {routineError && (
-          <Text style={styles.errorText}>
-            Error loading routine data: {routineError}
-          </Text>
-        )}
 
         <Text style={styles.questionText}>How Are You Feeling Today?</Text>
 

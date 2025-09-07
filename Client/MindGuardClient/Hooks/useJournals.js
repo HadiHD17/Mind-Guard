@@ -14,7 +14,7 @@ export default function useJournals(userId, accessToken) {
 
   const addJournalEntry = (content) => {
     if (userId && accessToken) {
-      dispatch(saveJournal({ content, userId, accessToken }));
+      return dispatch(saveJournal({ content, userId, accessToken })).unwrap();
     }
   };
 

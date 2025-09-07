@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   View,
   Text,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
+  Modal,
+  Animated,
+  Easing,
 } from "react-native";
 import styles from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
@@ -15,16 +19,42 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function JournalScreen() {
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false); // shows "Analyzing…" overlay
   const { user, loading: userLoading, error: userError } = useUser();
   const { journals, loading, error, addJournalEntry } = useJournals(
     user?.id,
     user?.accessToken
   );
 
-  const handleSaveEntry = (entryText) => {
-    if (entryText.trim()) {
-      addJournalEntry(entryText);
-      setAddEntryModalVisible(false);
+  const dotAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(dotAnim, {
+        toValue: 1,
+        duration: 1200,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
+  }, [dotAnim]);
+
+  const handleSaveEntry = async (entryText) => {
+    console.log("Save clicked");
+    const text = (entryText || "").trim();
+    if (!text) return;
+
+    setAddEntryModalVisible(false);
+
+    await new Promise((r) => setTimeout(r, 30));
+
+    setAnalyzing(true);
+
+    try {
+      await addJournalEntry(text);
+    } catch (e) {
+      console.warn("Failed to add journal entry:", e);
+    } finally {
+      setAnalyzing(false);
     }
   };
 
@@ -45,8 +75,9 @@ export default function JournalScreen() {
         <View style={styles.headerRow}>
           <Text style={styles.title}>Journal</Text>
           <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setAddEntryModalVisible(true)}>
+            style={[styles.addButton, analyzing && { opacity: 0.5 }]}
+            onPress={() => setAddEntryModalVisible(true)}
+            disabled={analyzing}>
             <Ionicons name="add" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -74,6 +105,82 @@ export default function JournalScreen() {
           onClose={() => setAddEntryModalVisible(false)}
           onSave={handleSaveEntry}
         />
+        <Modal
+          visible={analyzing}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => {}}>
+          <View style={styles.analyzingOverlayAbsolute} pointerEvents="auto">
+            <View style={styles.analyzingBox}>
+              <ActivityIndicator size="large" />
+              <Text style={styles.analyzingText}>Analyzing your entry…</Text>
+
+              <View style={styles.dotsRow}>
+                <Animated.View
+                  style={[
+                    styles.dot,
+                    {
+                      opacity: dotAnim.interpolate({
+                        inputRange: [0, 0.33, 1],
+                        outputRange: [1, 0.3, 1],
+                      }),
+                      transform: [
+                        {
+                          scale: dotAnim.interpolate({
+                            inputRange: [0, 0.33, 1],
+                            outputRange: [1, 0.85, 1],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
+                <Animated.View
+                  style={[
+                    styles.dot,
+                    {
+                      opacity: dotAnim.interpolate({
+                        inputRange: [0, 0.33, 0.66, 1],
+                        outputRange: [0.3, 1, 0.3, 0.3],
+                      }),
+                      transform: [
+                        {
+                          scale: dotAnim.interpolate({
+                            inputRange: [0, 0.33, 0.66, 1],
+                            outputRange: [0.85, 1, 0.85, 0.85],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
+                <Animated.View
+                  style={[
+                    styles.dot,
+                    {
+                      opacity: dotAnim.interpolate({
+                        inputRange: [0, 0.66, 1],
+                        outputRange: [0.3, 0.3, 1],
+                      }),
+                      transform: [
+                        {
+                          scale: dotAnim.interpolate({
+                            inputRange: [0, 0.66, 1],
+                            outputRange: [0.85, 0.85, 1],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                />
+              </View>
+
+              <Text style={styles.analyzingSubText}>
+                This takes a few seconds. We'll add it as soon as it's ready.
+              </Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     </SafeAreaView>
   );
