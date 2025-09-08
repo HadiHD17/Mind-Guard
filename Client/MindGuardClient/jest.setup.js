@@ -68,3 +68,5 @@ jest.mock("./Helpers/Storage", () => ({
   setUserData: jest.fn(() => Promise.resolve()),
   removeUserData: jest.fn(() => Promise.resolve()),
 }));
+
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));
