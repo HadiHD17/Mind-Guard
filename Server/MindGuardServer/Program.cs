@@ -67,6 +67,9 @@ builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
 builder.Services.AddScoped<MLService>();
 builder.Services.AddHttpClient<GeminiAnalyzerService>();
+builder.Services.Configure<N8nOptions>(builder.Configuration.GetSection("N8n"));
+builder.Services.AddHttpClient("n8n");
+
 
 var app = builder.Build();
 
