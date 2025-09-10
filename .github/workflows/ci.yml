@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: Client/MindGuardClient/package-lock.json
+
+      - name: Install frontend dependencies
+        run: |
+          cd Client/MindGuardClient
+          npm ci
+
+      - name: Run frontend tests
+        run: |
+          cd Client/MindGuardClient
+          npm test -- --watchAll=false --passWithNoTests
+
+      - name: Upload frontend coverage reports
+        uses: codecov/codecov-action@v4
+        if: success()
+        with:
+          file: ./Client/MindGuardClient/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+  backend-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start PostgreSQL for tests
+        run: |
+          docker run -d \
+            --name postgres-test \
+            -e POSTGRES_DB=mindguard \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=hadi17 \
+            -p 5432:5432 \
+            postgres:15-alpine
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            if docker exec postgres-test pg_isready -U postgres -h localhost -p 5432; then
+              echo "PostgreSQL is ready"
+              break
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 2
+          done
+
+      - name: Build backend application
+        run: |
+          docker build -t mindguard-backend ./Server/MindGuardServer
+
+      - name: Start backend service
+        run: |
+          docker run -d \
+            --name mindguard-backend \
+            --link postgres-test:postgres \
+            -e ASPNETCORE_ENVIRONMENT=Development \
+            -e ASPNETCORE_URLS=http://+:5224 \
+            -e ConnectionStrings__DefaultConnection="Host=postgres;Port=5432;Database=mindguard;Username=postgres;Password=hadi17" \
+            -e JwtConfig__Issuer=http://backend:5224/ \
+            -e JwtConfig__Audience=http://backend:5224/ \
+            -e JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk \
+            -e JwtConfig__TokenValidityMins=180 \
+            -p 5224:5224 \
+            mindguard-backend
+
+      - name: Wait for backend to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -f http://localhost:5224/health 2>/dev/null; then
+              echo "Backend is ready"
+              break
+            fi
+            echo "Waiting for backend... ($i/30)"
+            sleep 2
+          done
+
+      - name: Build and run backend tests
+        run: |
+          docker build -t mindguard-tests ./Server/MindGuardServer.Tests
+          docker run --rm \
+            --link postgres-test:postgres \
+            --link mindguard-backend:backend \
+            -e ConnectionStrings__DefaultConnection="Host=postgres;Port=5432;Database=mindguard;Username=postgres;Password=hadi17" \
+            mindguard-tests
+
+      - name: Clean up containers
+        if: always()
+        run: |
+          docker stop mindguard-backend postgres-test || true
+          docker rm mindguard-backend postgres-test || true
