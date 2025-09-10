@@ -1,0 +1,117 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mindguard-postgres
+    environment:
+      POSTGRES_DB: mindguard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hadi17
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mindguard-network
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: mindguard-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - mindguard-network
+    restart: unless-stopped
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+
+  backend:
+    build:
+      context: ./Server/MindGuardServer
+      dockerfile: Dockerfile
+    container_name: mindguard-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5224
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=mindguard;Username=postgres;Password=hadi17
+      - JwtConfig__Issuer=http://backend:5224/
+      - JwtConfig__Audience=http://backend:5224/
+      - JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk
+      - JwtConfig__TokenValidityMins=180
+      - AI__Ollama__BaseUrl=http://ollama:11434
+      - AI__Ollama__Model=phi3.5:3.8b-mini-instruct-q4_K_M
+      - AI__Ollama__Temperature=0.0
+    ports:
+      - "5224:5224"
+    depends_on:
+      - postgres
+      - ollama
+    networks:
+      - mindguard-network
+    restart: unless-stopped
+
+  # N8N Workflow Automation
+  n8n:
+    build:
+      context: ./Server/MindGuardServer
+      dockerfile: N8nDockerfile
+    container_name: mindguard-n8n
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=password
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - WEBHOOK_URL=http://localhost:5678/
+      - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+      - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
+      - N8N_DISABLE_NODES=@n8nio/n8n-nodes-playwright
+
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_USER=postgres
+      - DB_POSTGRESDB_PASSWORD=hadi17
+      - DB_POSTGRESDB_DATABASE=mindguard
+
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - backend
+      - postgres
+    networks:
+      - mindguard-network
+    restart: unless-stopped
+
+  tests:
+    build:
+      context: ./Server/MindGuardServer.Tests
+      dockerfile: Dockerfile
+    container_name: mindguard-tests
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=mindguard;Username=postgres;Password=hadi17
+    depends_on:
+      - postgres
+      - backend
+    networks:
+      - mindguard-network
+    profiles:
+      - testing
+
+volumes:
+  postgres_data:
+  ollama_data:
+  n8n_data:
+
+networks:
+  mindguard-network:
+    driver: bridge
