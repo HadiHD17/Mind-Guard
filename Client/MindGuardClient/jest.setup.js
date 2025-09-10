@@ -69,4 +69,5 @@ jest.mock("./Helpers/Storage", () => ({
   removeUserData: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));
+// Remove problematic mock that causes module resolution issues
+// jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));

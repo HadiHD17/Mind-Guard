@@ -15,6 +15,11 @@ services:
     networks:
       - mindguard-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mindguard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ollama:
     image: ollama/ollama:latest
@@ -48,11 +53,19 @@ services:
     ports:
       - "5224:5224"
     depends_on:
-      - postgres
-      - ollama
+      postgres:
+        condition: service_started
+      ollama:
+        condition: service_started
     networks:
       - mindguard-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 5224"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   # N8N Workflow Automation
   n8n:
@@ -73,14 +86,12 @@ services:
       - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
       - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
       - N8N_DISABLE_NODES=@n8nio/n8n-nodes-playwright
-
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_USER=postgres
       - DB_POSTGRESDB_PASSWORD=hadi17
       - DB_POSTGRESDB_DATABASE=mindguard
-
     ports:
       - "5678:5678"
     volumes:
@@ -94,18 +105,33 @@ services:
 
   tests:
     build:
-      context: ./Server/MindGuardServer.Tests
-      dockerfile: Dockerfile
+      context: ./Server
+      dockerfile: MindGuardServer.Tests/Dockerfile
     container_name: mindguard-tests
     environment:
+      - ASPNETCORE_ENVIRONMENT=Testing
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=mindguard;Username=postgres;Password=hadi17
+      - JwtConfig__Issuer=http://backend:5224/
+      - JwtConfig__Audience=http://backend:5224/
+      - JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk
+      - AI__Ollama__BaseUrl=http://ollama:11434
     depends_on:
-      - postgres
-      - backend
+      postgres:
+        condition: service_started
+      backend:
+        condition: service_started
+      ollama:
+        condition: service_started
     networks:
       - mindguard-network
     profiles:
       - testing
+    # Optional: Add healthcheck for postgres to ensure it's ready
+    healthcheck:
+      test: ["CMD", "dotnet", "test", "--no-build", "--logger", "trx"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   postgres_data:
