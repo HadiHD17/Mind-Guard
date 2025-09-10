@@ -68,6 +68,7 @@ builder.Services.AddScoped<PredictionService>();
 builder.Services.AddScoped<MLService>();
 builder.Services.AddHttpClient<GeminiAnalyzerService>();
 
+
 var app = builder.Build();
 
 _ = Task.Run(async () =>

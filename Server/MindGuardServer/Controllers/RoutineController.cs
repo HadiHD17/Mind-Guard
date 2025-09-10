@@ -84,10 +84,8 @@ namespace MindGuardServer.Controllers
             if (!result.Success)
                 return BadRequest(ApiResponse<object>.Error(result.Message));
 
-            // Map occurrence
             var occurrenceDTO = _mapper.Map<RoutineOccurrenceResponseDto>(result.Occurrence);
 
-            // Map routine including updated occurrences
             var routine = await _routineService.GetRoutineById(routineId);
             var routineDTO = _mapper.Map<RoutineResponseDto>(routine);
 
