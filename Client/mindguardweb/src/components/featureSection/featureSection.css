@@ -1,0 +1,13 @@
+.features {
+  padding: 24px 0 10px;
+}
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+}

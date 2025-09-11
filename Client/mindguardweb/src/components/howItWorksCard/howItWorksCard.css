@@ -1,31 +1,28 @@
-.feature-card {
+.hiw-card {
+  text-align: center;
   border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 18px;
   background: #fff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-.feature-card__icon {
+.hiw-card__step {
   width: 40px;
   height: 40px;
+  margin: 0 auto 10px;
+  border-radius: 999px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
+  font-weight: 800;
   background: var(--bg-soft);
   color: var(--brand);
-  margin-bottom: 12px;
-  font-size: 22px;
 }
-.feature-card__title {
+
+.hiw-card__title {
   font-weight: 800;
   margin-bottom: 6px;
 }
-.feature-card__text {
+.hiw-card__text {
   color: var(--muted);
   margin: 0;
 }
