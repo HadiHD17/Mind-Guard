@@ -28,14 +28,14 @@ namespace MindGuardServer.Services
     ///   }
     /// }
     /// </summary>
-    public class GeminiAnalyzerService
+    public class OllamaAnalyzerService
     {
         private readonly HttpClient _http;
         private readonly string _baseUrl;
         private readonly string _model;
         private readonly double _temperature;
 
-        public GeminiAnalyzerService(HttpClient http, IConfiguration config)
+        public OllamaAnalyzerService(HttpClient http, IConfiguration config)
         {
             _http = http;
             _baseUrl = config["AI:Ollama:BaseUrl"] ?? "http://localhost:11434";
@@ -54,10 +54,11 @@ namespace MindGuardServer.Services
             text ??= string.Empty;
             text = text?.Trim() ?? "";
             if (text.Length > 600) text = text[..600];
-            // ↓ tokens → faster
 
             var key = Hash(text);
             if (Cache.TryGetValue(key, out var cached)) return cached;
+
+            Console.WriteLine($"[AI] Starting analysis for text: {text[..Math.Min(50, text.Length)]}...");
 
             var system = @"You are a wellbeing DIARY AGENT.
 Return JSON ONLY as either:
@@ -73,7 +74,9 @@ If unsure, call the tool first. After any tool result, ALWAYS return a FINAL obj
                 new { role = "user",   content = $"Analyze this diary text (any language):\n{text}" }
             };
 
-            for (int step = 0; step < 2; step++)
+            try
+            {
+                for (int step = 0; step < 2; step++)
             {
                 var payload = new
                 {
@@ -83,13 +86,13 @@ If unsure, call the tool first. After any tool result, ALWAYS return a FINAL obj
                     keep_alive = "3h",
                     options = new
                     {
-                        temperature = _temperature,      // 0.0
-                        num_predict = 32,   // was 48
-                        num_ctx = 384,  // was 512
-                        top_k = 8,    // was 10
-                        top_p = 0.82, // was 0.85
-                        repeat_penalty = 1.05,
-                        num_thread = Environment.ProcessorCount,
+                        temperature = 0.1,  // Slightly higher for better JSON generation
+                        num_predict = 128,  // Increased for complete JSON responses
+                        num_ctx = 1024,     // Increased context window
+                        top_k = 20,         // More diverse token selection
+                        top_p = 0.9,        // Balanced probability
+                        repeat_penalty = 1.1,
+                        num_thread = Math.Min(Environment.ProcessorCount, 4), // Limit threads
                         stop = new[] { "}\r\n", "}\n", "}\r", "}\n\n", "}\r\n\r\n" }
                     },
 
@@ -102,14 +105,19 @@ If unsure, call the tool first. After any tool result, ALWAYS return a FINAL obj
                 resp.EnsureSuccessStatusCode();
 
                 var raw = await resp.Content.ReadAsStringAsync(ct);
+                Console.WriteLine($"[AI] Raw Ollama response: {raw}");
+
                 using var doc = JsonDocument.Parse(raw);
                 var content = doc.RootElement.GetProperty("message").GetProperty("content").GetString() ?? "";
+                Console.WriteLine($"[AI] Extracted content: {content}");
 
                 if (!TryParseAgentJson(content, out var agent))
                 {
+                    Console.WriteLine($"[AI] Initial JSON parsing failed, trying to extract JSON from content");
                     var recovered = ExtractFirstJsonObject(content);
                     if (recovered is null || !TryParseAgentJson(recovered, out agent))
                     {
+                        Console.WriteLine($"[AI] JSON extraction also failed, falling back to robust analysis");
                         var robust = await RobustAnalyzeToolAsync(text, ct);
                         Cache[key] = robust;
                         return robust;
@@ -122,7 +130,12 @@ If unsure, call the tool first. After any tool result, ALWAYS return a FINAL obj
                     var score = ClampScore(agent.SentimentScore ?? 0);
                     var final = PostProcess(text, new AiResult(mood, score));
                     Cache[key] = final;
+                    Console.WriteLine($"[AI] Analysis completed successfully: mood={mood}, score={score}");
                     return final;
+                }
+                else
+                {
+                    Console.WriteLine($"[AI] Agent returned non-final type: {agent.Type}");
                 }
 
                 if (agent.Type == "tool" && agent.Name == "analyzeJournal")
@@ -148,8 +161,15 @@ If unsure, call the tool first. After any tool result, ALWAYS return a FINAL obj
                 var fallback = await RobustAnalyzeToolAsync(text, ct);
                 Cache[key] = fallback;
                 return fallback;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[AI] Exception during analysis: {ex.Message}");
+                Console.WriteLine($"[AI] Exception stack trace: {ex.StackTrace}");
             }
 
+            Console.WriteLine($"[AI] Analysis failed, returning safe fallback");
             var safe = new AiResult("neutral", 0);
             Cache[key] = safe;
             return safe;

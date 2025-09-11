@@ -16,6 +16,9 @@ namespace MindGuardServer.Models.Domain
         public TimeSpan Reminder_Time { get; set; }
         [Required]
         public bool Synced_Calendar { get; set; }
+
+        public DateOnly? LastCompletedDate { get; set; }
+
         public virtual ICollection<Routine_Occurence> Occurence { get; set; }=new List<Routine_Occurence>();
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

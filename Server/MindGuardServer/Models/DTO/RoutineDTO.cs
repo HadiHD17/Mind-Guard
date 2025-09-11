@@ -44,10 +44,6 @@ namespace MindGuardServer.Models.DTO
         public bool Synced_Calendar { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public DateOnly? LastCompletedDate =>
-            Occurence
-                .Where(o => o.IsCompleted)
-                .OrderByDescending(o => o.Date)
-                .FirstOrDefault()?.Date;
+        public DateOnly? LastCompletedDate { get; set; }
     }
 }

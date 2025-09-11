@@ -58,9 +58,19 @@ namespace MindGuardServer.Controllers
         [HttpGet("UpcomingRoutine/{userId}")]
         public async Task<IActionResult> GetUpcomingRoutine(int userId)
         {
+            // Enable console output to see debug messages
+            Console.WriteLine($"API Called: UpcomingRoutine for user {userId}");
+
             var routine = await _routineService.GetUpcomingRoutine(userId);
+
             if (routine == null)
-                return NotFound(ApiResponse<object>.Error());
+            {
+                // Return more informative error
+                return NotFound(ApiResponse<object>.Error(
+                    message: "No upcoming routines found"
+                ));
+            }
+
             var responseDTO = _mapper.Map<RoutineResponseDto>(routine);
             return Ok(ApiResponse<RoutineResponseDto>.Success(responseDTO));
         }

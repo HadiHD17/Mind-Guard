@@ -66,7 +66,10 @@ builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
 builder.Services.AddScoped<MLService>();
-builder.Services.AddHttpClient<GeminiAnalyzerService>();
+builder.Services.AddHttpClient<OllamaAnalyzerService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(300); // 5 minutes timeout for AI analysis
+});
 
 
 var app = builder.Build();

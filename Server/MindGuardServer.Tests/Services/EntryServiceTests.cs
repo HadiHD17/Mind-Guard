@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MindGuardServer.Data;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Services;
+using Moq;
 using Xunit;
 
 namespace MindGuardServer.Tests.Services
@@ -132,6 +133,66 @@ namespace MindGuardServer.Tests.Services
 
             // Assert
             Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task AddEntry_ShouldAddEntrySuccessfully_WithNullAnalyzer()
+        {
+            // Arrange
+            var entry = new Journal_Entry
+            {
+                UserId = 1,
+                Content = "Test entry content",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            // Create service with null analyzer (simulates AI service failure)
+            var service = new EntryService(_context, null);
+
+            // Act
+            var result = await service.AddEntry(entry);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Test entry content", result.Content);
+            Assert.Equal(1, result.UserId);
+
+            // Verify entry was saved to database
+            var savedEntry = await _context.Journal_Entries.FindAsync(result.Id);
+            Assert.NotNull(savedEntry);
+            Assert.Equal("Test entry content", savedEntry.Content);
+            Assert.Equal("neutral", savedEntry.DetectedEmotion); // Default value when AI fails
+            Assert.Equal(0.0, savedEntry.SentimentScore); // Default value when AI fails
+        }
+
+        [Fact]
+        public async Task AddEntry_ShouldAddEntrySuccessfully_WithWorkingAnalyzer()
+        {
+            // Arrange - Mock the analyzer service
+            var mockAnalyzer = new Mock<GeminiAnalyzerService>(null, null);
+            mockAnalyzer
+                .Setup(x => x.AnalyzeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GeminiAnalyzerService.AiResult("happy", 4));
+
+            var entry = new Journal_Entry
+            {
+                UserId = 1,
+                Content = "I'm feeling great today!",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            var service = new EntryService(_context, mockAnalyzer.Object);
+
+            // Act
+            var result = await service.AddEntry(entry);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("I'm feeling great today!", result.Content);
+            Assert.Equal("happy", result.DetectedEmotion); // From AI analysis
+            Assert.Equal(4.0, result.SentimentScore); // From AI analysis
         }
 
         public void Dispose()
