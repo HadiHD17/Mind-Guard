@@ -39,7 +39,6 @@ export default function JournalScreen() {
   }, [dotAnim]);
 
   const handleSaveEntry = async (entryText) => {
-    console.log("Save clicked");
     const text = (entryText || "").trim();
     if (!text) return;
 

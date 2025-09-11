@@ -1,0 +1,37 @@
+.hero {
+  padding: 36px 0 10px;
+  text-align: center;
+}
+
+.hero__logo {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  margin: 0 auto 10px;
+}
+
+.hero__brand {
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+.hero__brand .light {
+  color: var(--brand);
+}
+
+.hero__tagline {
+  font-size: clamp(16px, 2.6vw, 24px);
+  color: #333;
+  margin: 4px 0 18px;
+}
+
+.hero__cta {
+  background: var(--brand);
+  color: #fff;
+  border: 0;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: default;
+  opacity: 0.95;
+}
