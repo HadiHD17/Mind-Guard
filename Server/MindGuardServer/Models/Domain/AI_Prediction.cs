@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace MindGuardServer.Models.Domain
 {
     public class AI_Prediction
