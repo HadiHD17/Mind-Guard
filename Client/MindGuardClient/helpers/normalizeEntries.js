@@ -1,5 +1,3 @@
-// Keep ONLY serializable values in Redux (no Date objects)
-
 export function normalizeEntries(raw = []) {
   const entries = raw.map((e) => {
     const iso =
@@ -11,7 +9,6 @@ export function normalizeEntries(raw = []) {
     const createdAtMs = new Date(iso).getTime();
 
     return {
-      // store ms (number) so Redux is happy
       createdAtMs,
       mood:
         e.detectedEmotion ||
@@ -23,12 +20,10 @@ export function normalizeEntries(raw = []) {
     };
   });
 
-  // ascending by time
   entries.sort((a, b) => a.createdAtMs - b.createdAtMs);
   return entries;
 }
 
-// filter last N days using timestamps
 export function lastNDays(entries, days = 7) {
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
   return entries.filter((e) => e.createdAtMs >= cutoff);

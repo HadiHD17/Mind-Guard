@@ -12,7 +12,7 @@ import TipCard from "../../Components/TipCard";
 import WeeklySummaryCard from "../../Components/WeeklySummaryCard";
 import useUser from "../../Hooks/useUser";
 import { useInsights } from "../../Hooks/useInsights";
-import { tipsFor } from "../../ml/tips";
+import { tipsFor } from "../../ml/tipsSeq";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 
 export default function InsightScreen() {
