@@ -10,10 +10,10 @@ namespace MindGuardServer.Services
     public class EntryService
     {
         private readonly AppDbContext _context;
-        private readonly OllamaAnalyzerService _ai;
+        private readonly GeminiAnalyzerService _ai;
         private static readonly TimeZoneInfo LebanonTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Beirut");
 
-        public EntryService(AppDbContext context, OllamaAnalyzerService ai)
+        public EntryService(AppDbContext context, GeminiAnalyzerService ai)
         {
             _context = context;
             _ai = ai;
@@ -51,7 +51,7 @@ namespace MindGuardServer.Services
             return entry;
         }
 
-        private async Task<OllamaAnalyzerService.AiResult?> AnalyzeWithTimeoutAsync(string content, CancellationToken ct = default)
+        private async Task<GeminiAnalyzerService.AiResult?> AnalyzeWithTimeoutAsync(string content, CancellationToken ct = default)
         {
             try
             {

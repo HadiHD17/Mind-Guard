@@ -65,14 +65,25 @@ builder.Services.AddScoped<RoutineService>();
 builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
-builder.Services.AddScoped<MLService>();
-builder.Services.AddHttpClient<OllamaAnalyzerService>(client =>
+builder.Services.AddScoped<OutcomeService>();
+builder.Services.AddHttpClient<GeminiAnalyzerService>(client =>
 {
-    client.Timeout = TimeSpan.FromSeconds(300); // 5 minutes timeout for AI analysis
+    client.Timeout = TimeSpan.FromSeconds(600); // Increased timeout to 10 minutes
 });
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var env = Environment.GetEnvironmentVariable("ENABLE_SEED");
+    if (string.Equals(env, "true", StringComparison.OrdinalIgnoreCase))
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await SeedJournalEntries.RunAsync(db);
+        Console.WriteLine("SeedJournalEntries: completed.");
+    }
+}
 
 _ = Task.Run(async () =>
 {

@@ -21,19 +21,6 @@ services:
       timeout: 5s
       retries: 5
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: mindguard-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    networks:
-      - mindguard-network
-    restart: unless-stopped
-    environment:
-      - OLLAMA_HOST=0.0.0.0
-
   backend:
     build:
       context: ./Server/MindGuardServer
@@ -47,15 +34,15 @@ services:
       - JwtConfig__Audience=http://backend:5224/
       - JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk
       - JwtConfig__TokenValidityMins=180
-      - AI__Ollama__BaseUrl=http://ollama:11434
-      - AI__Ollama__Model=phi3.5:3.8b-mini-instruct-q4_K_M
-      - AI__Ollama__Temperature=0.0
+      - AI__Provider=Gemini
+      - AI__Gemini__ApiKey=${GEMINI_API_KEY}
+      - AI__Gemini__Model=gemini-1.5-flash
+      - AI__Gemini__Temperature=0.0
+
     ports:
       - "5224:5224"
     depends_on:
       postgres:
-        condition: service_started
-      ollama:
         condition: service_started
     networks:
       - mindguard-network
@@ -114,13 +101,10 @@ services:
       - JwtConfig__Issuer=http://backend:5224/
       - JwtConfig__Audience=http://backend:5224/
       - JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk
-      - AI__Ollama__BaseUrl=http://ollama:11434
     depends_on:
       postgres:
         condition: service_started
       backend:
-        condition: service_started
-      ollama:
         condition: service_started
     networks:
       - mindguard-network
@@ -135,7 +119,6 @@ services:
 
 volumes:
   postgres_data:
-  ollama_data:
   n8n_data:
 
 networks:

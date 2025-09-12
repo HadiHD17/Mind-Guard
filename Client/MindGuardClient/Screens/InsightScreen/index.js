@@ -1,47 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { Text, SafeAreaView, ScrollView } from "react-native";
+import React from "react";
+import {
+  Text,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+  View,
+} from "react-native";
 import styles from "./insight.styles";
 import MoodRiskCard from "../../Components/MoodRiskCard";
 import TipCard from "../../Components/TipCard";
 import WeeklySummaryCard from "../../Components/WeeklySummaryCard";
-import { getUserData } from "../../Helpers/Storage";
-import api from "../../Api";
+import useUser from "../../Hooks/useUser";
+import { useInsights } from "../../Hooks/useInsights";
+import { tipsFor } from "../../ml/tips";
+import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 
 export default function InsightScreen() {
-  const [user, setUser] = useState(null);
-  const [entries, setEntries] = useState([]);
+  const { user } = useUser();
+  const { entries, risk, loading, error, onPredictNow } = useInsights(user);
 
-  useEffect(() => {
-    const load = async () => {
-      const u = await getUserData();
-      setUser(u);
-
-      if (u?.id) {
-        const res = await api.get(`/Entries/user/${u.id}`, {
-          headers: { Authorization: `Bearer ${u.token}` },
-        });
-        setEntries(res.data?.payload ?? []);
-      }
-    };
-    load();
-  }, []);
+  const moodForContext = entries?.[entries.length - 1]?.mood || "—";
+  const defaultTips = [
+    "Try 5 minutes of deep breathing",
+    "Take a short walk in nature",
+    "Journal your thoughts for 10 minutes",
+  ];
+  const recTips =
+    risk.label === "AT_RISK"
+      ? tipsFor("HIGH", moodForContext).slice(0, 3)
+      : tipsFor("LOW", moodForContext).slice(0, 3);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Welcome */}
-        <Text style={styles.welcome}>Welcome, {user ? user.fullName : ""}</Text>
-        {/* AI Insights */}
+        <Text style={styles.welcome}>Welcome, {user?.fullName || ""}</Text>
+
         <Text style={styles.sectionTitle}>AI Insights</Text>
-        <MoodRiskCard />
-        {/* Personalized Tips */}
+        <MoodRiskCard
+          riskLevel={risk.label === "AT_RISK" ? "HIGH" : "LOW"}
+          mood={moodForContext}
+          note={`Next 48h risk: ${(risk.prob * 100).toFixed(0)}%`}
+        />
+
+        <PrimaryButton
+          title={loading ? "Predicting..." : "Run Prediction"}
+          onPress={onPredictNow}
+          disabled={loading}
+          style={{ marginTop: 12 }}
+        />
+
         <Text style={styles.sectionTitle}>Personalized Tips</Text>
-        <TipCard text="🫁 Try 5 minutes of deep breathing exercises" />
-        <TipCard text="🌿 Take a short walk in nature" />
-        <TipCard text="📓 Write down your thoughts for 10 minutes" />
-        {/* Weekly Summary */}
+        <TipCard tips={recTips.length ? recTips : defaultTips} />
+
         <Text style={styles.sectionTitle}>Weekly Summary</Text>
         <WeeklySummaryCard entries={entries} />
+
+        {loading && (
+          <View style={{ marginTop: 12 }}>
+            <ActivityIndicator />
+          </View>
+        )}
+        {error && (
+          <Text style={{ color: "crimson", marginTop: 8 }}>
+            {String(error)}
+          </Text>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -45,5 +45,6 @@ namespace MindGuardServer.Controllers
             var responseDTO = _mapper.Map<AIPredictionResponseDto>(prediction);
             return Ok(ApiResponse<AIPredictionResponseDto>.Success(responseDTO));
         }
+
     }
 }
