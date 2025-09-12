@@ -5,7 +5,7 @@ module.exports = function (api) {
     presets: ["babel-preset-expo"],
     plugins: [
       // other plugins if you have them...
-      "react-native-reanimated/plugin", // must stay LAST
+      "react-native-worklets/plugin", // must stay LAST
     ],
   };
 };

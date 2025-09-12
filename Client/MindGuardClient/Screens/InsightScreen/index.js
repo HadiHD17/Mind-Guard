@@ -10,12 +10,15 @@ import api from "../../Api";
 import { loadRiskModel, predictRisk } from "../../ML/riskModel";
 import { getSentimentScore } from "../../ML/sentiment";
 import { tipsFor } from "../../ML/tips";
+import OutcomePrompt from "../../Components/OutcomePropmt";
+import { postOutcome } from "../../Helpers/Outcomes";
 
 export default function InsightScreen() {
   const [user, setUser] = useState(null);
   const [entries, setEntries] = useState([]);
   const [latestPred, setLatestPred] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showOutcome, setShowOutcome] = useState(false);
 
   const safeGet = async (path, token) => {
     try {
@@ -153,6 +156,32 @@ export default function InsightScreen() {
           title={loading ? "Predicting..." : "Run Prediction"}
           onPress={handlePredict}
           disabled={loading}
+        />
+
+        <Button
+          title="Report last 3 days outcome"
+          onPress={() => setShowOutcome(true)}
+        />
+
+        <OutcomePrompt
+          visible={showOutcome}
+          onClose={() => setShowOutcome(false)}
+          onSubmit={async ({ isCrisis, notes }) => {
+            try {
+              const saved = await postOutcome({ isCrisis, notes });
+              console.log("Outcome saved:", saved);
+              Alert.alert(
+                "Thanks",
+                isCrisis
+                  ? "We’re here for you. You’re not alone."
+                  : "Glad you were okay."
+              );
+              // (Optional) You can trigger retraining cron later; not needed now.
+            } catch (e) {
+              console.error(e);
+              Alert.alert("Error", e?.response?.data?.message || e.message);
+            }
+          }}
         />
 
         <Text style={styles.sectionTitle}>Personalized Tips</Text>
