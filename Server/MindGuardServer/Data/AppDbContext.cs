@@ -14,7 +14,6 @@ namespace MindGuardServer.Data
         public DbSet<Routine_Occurence> Routine_Occurunces { get; set; }
         public DbSet<AI_Prediction> AI_Predictions { get; set; }
         public DbSet<Weekly_Summary> Weekly_Summaries { get; set; }
-        public DbSet<Outcome> Outcomes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

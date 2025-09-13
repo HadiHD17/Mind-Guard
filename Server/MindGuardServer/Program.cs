@@ -65,7 +65,6 @@ builder.Services.AddScoped<RoutineService>();
 builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
-builder.Services.AddScoped<OutcomeService>();
 builder.Services.AddHttpClient<GeminiAnalyzerService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(600); // Increased timeout to 10 minutes
