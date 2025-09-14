@@ -43,15 +43,6 @@ namespace MindGuardServer.Mappings
             CreateMap<WeeklySummaryCreateDto, Weekly_Summary>();
             CreateMap<Weekly_Summary, WeeklySummaryResponseDto>();
 
-            //Outcome
-            CreateMap<OutcomeCreateDto, Outcome>()
-                .ForMember(d => d.Id, o => o.Ignore())
-                .ForMember(d => d.UserId, o => o.Ignore())         
-                .ForMember(d => d.CreatedAt, o => o.Ignore())
-                .ForMember(d => d.UpdatedAt, o => o.Ignore())
-                .ForMember(d => d.OccurredAt, o => o.Ignore());    
-
-            CreateMap<Outcome, OutcomeResponseDto>();
         
 
     }

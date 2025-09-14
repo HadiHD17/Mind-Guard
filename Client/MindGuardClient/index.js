@@ -1,3 +1,5 @@
+import * as WebBrowser from "expo-web-browser";
+WebBrowser.maybeCompleteAuthSession();
 import { registerRootComponent } from "expo";
 import React from "react";
 import { Provider } from "react-redux";

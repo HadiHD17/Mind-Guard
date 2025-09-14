@@ -11,7 +11,6 @@ namespace MindGuardServer.Services
     {
         private readonly AppDbContext _context;
         private readonly GeminiAnalyzerService _ai;
-        private static readonly TimeZoneInfo LebanonTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Beirut");
 
         public EntryService(AppDbContext context, GeminiAnalyzerService ai)
         {
@@ -19,17 +18,8 @@ namespace MindGuardServer.Services
             _ai = ai;
         }
 
-        private DateTime ConvertToLebanonTime(DateTime utcTime)
-        {
-            // Store as UTC in database, convert to Lebanon time when needed
-            return utcTime; // Keep as UTC for PostgreSQL compatibility
-        }
 
-        public DateTime GetLebanonTime(DateTime utcTime)
-        {
-            // Convert UTC to Lebanon time for display purposes
-            return TimeZoneInfo.ConvertTimeFromUtc(utcTime, LebanonTimeZone);
-        }
+
 
         public async Task<Journal_Entry> AddEntry(Journal_Entry entry, CancellationToken ct = default)
         {
