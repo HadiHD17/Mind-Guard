@@ -1,7 +1,9 @@
 {
   "expo": {
     "name": "MindGuard",
-    "slug": "MindGuard",
+    "slug": "mindguard",
+    "scheme": "mindguard",
+    "owner": "hadi17",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -13,7 +15,8 @@
       "backgroundColor": "#80C6DA"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hadi.mindguard"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,11 +24,21 @@
         "backgroundColor": "#80C6DA"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.MindGuardClient"
+      "package": "com.hadi.mindguard"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": [
+      "expo-font",
+      "expo-localization",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "MindGuard needs calendar access to add your routines."
+        }
+      ],
+      "expo-secure-store"
+    ]
   }
 }

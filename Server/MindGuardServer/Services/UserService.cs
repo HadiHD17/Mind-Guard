@@ -11,17 +11,13 @@ namespace MindGuardServer.Services
     public class UserService
     {
         private readonly AppDbContext _context;
-        private static readonly TimeZoneInfo LebanonTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Beirut");
 
         public UserService(AppDbContext context)
         {
             _context = context;
         }
 
-        private DateTime ConvertToLebanonTime(DateTime utcTime)
-        {
-            return TimeZoneInfo.ConvertTimeFromUtc(utcTime, LebanonTimeZone);
-        }
+
 
         public async Task<User> GetUserById(int id)
         {
@@ -46,7 +42,7 @@ namespace MindGuardServer.Services
                 existinguser.PhoneNumber = user.PhoneNumber;
             existinguser.IsDark = user.IsDark;
             existinguser.Calendar_sync_enabled = user.Calendar_sync_enabled;
-            existinguser.UpdatedAt = ConvertToLebanonTime(DateTime.UtcNow);
+            existinguser.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
             return existinguser;

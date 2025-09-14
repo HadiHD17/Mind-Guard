@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import styles from "./Routine.Styles";
 import AddRoutineModal from "../../Components/RoutineModal";
 import useUser from "../../Hooks/useUser";
 import useRoutine from "../../Hooks/useRoutine";
+import useDeviceCalendarSync from "../../Hooks/useDeviceCalendarSync";
 
 export default function RoutineScreen({ navigation }) {
   const [AddRoutineModalVisible, setAddRoutineModalVisible] = useState(false);
@@ -26,6 +27,11 @@ export default function RoutineScreen({ navigation }) {
     handleUpdateRoutineDays,
     handleAddRoutine,
   } = useRoutine(user?.id, user?.accessToken);
+
+  useDeviceCalendarSync({
+    enabled: !!user?.calendar_sync_enabled,
+    routines,
+  });
 
   return (
     <SafeAreaView style={styles.container}>
