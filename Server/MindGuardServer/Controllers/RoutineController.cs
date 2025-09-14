@@ -47,7 +47,7 @@ namespace MindGuardServer.Controllers
         [HttpGet("UserRoutine/{userId}")]
         public async Task<IActionResult> GetRoutinesByUserId(int userId)
         {
-            var routines = await _routineService.GetRoutinesByUserId(userId); // ensure occurrences are included
+            var routines = await _routineService.GetRoutinesByUserId(userId); 
             if (routines == null)
                 return NotFound(ApiResponse<object>.Error());
 
@@ -58,8 +58,6 @@ namespace MindGuardServer.Controllers
         [HttpGet("UpcomingRoutine/{userId}")]
         public async Task<IActionResult> GetUpcomingRoutine(int userId)
         {
-            // Enable console output to see debug messages
-            Console.WriteLine($"API Called: UpcomingRoutine for user {userId}");
 
             var routine = await _routineService.GetUpcomingRoutine(userId);
 
