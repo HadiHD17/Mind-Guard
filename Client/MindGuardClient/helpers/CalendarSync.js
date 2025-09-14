@@ -3,8 +3,8 @@ import * as Calendar from "expo-calendar";
 import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const STORE_KEY = "mg_calendar"; // chosen writable calendarId
-const EVENT_MAP_KEY = "mg_calendar_event_map_v3"; // routineId -> {mode, ...}
+const STORE_KEY = "mg_calendar";
+const EVENT_MAP_KEY = "mg_calendar_event_map_v3";
 const DEFAULT_DURATION_MIN = 15;
 const APP_CALENDAR_NAME = "MindGuard";
 
@@ -22,7 +22,7 @@ function addMinutes(date, mins) {
   return new Date(date.getTime() + mins * 60 * 1000);
 }
 
-function nextDateMatchingDow(start, targetDow /* 0..6 */) {
+function nextDateMatchingDow(start, targetDow) {
   const res = new Date(start);
   for (let i = 0; i < 8; i++) {
     if (res.getDay() === targetDow) return res;
@@ -40,7 +40,6 @@ function toLocalISO(dt) {
 
 async function ensurePermissions() {
   const { status, granted } = await Calendar.requestCalendarPermissionsAsync();
-  console.log("[calendar][perm] status:", status, "granted:", granted);
   if (status !== "granted") throw new Error("Calendar permission not granted");
 }
 
@@ -51,12 +50,6 @@ async function getPreferredCalendarId() {
       const cals = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
       const found = cals.find((c) => c.id === stored && c.allowsModifications);
       if (found) {
-        console.log(
-          "[calendar] using stored calendar:",
-          found.id,
-          found.title,
-          found.source?.name
-        );
         return stored;
       }
     } catch {}
@@ -66,19 +59,11 @@ async function getPreferredCalendarId() {
     Calendar.EntityTypes.EVENT
   );
   const writable = calendars.filter((c) => c.allowsModifications);
-  console.log(
-    "[calendar] writable calendars:",
-    writable.map((c) => ({ id: c.id, title: c.title, source: c.source?.name }))
-  );
 
   const mindGuard = writable.find((c) => c.title === APP_CALENDAR_NAME);
   if (mindGuard) {
     await AsyncStorage.setItem(STORE_KEY, mindGuard.id);
-    console.log(
-      "[calendar] using existing MindGuard calendar:",
-      mindGuard.id,
-      mindGuard.title
-    );
+
     return mindGuard.id;
   }
 
@@ -87,7 +72,6 @@ async function getPreferredCalendarId() {
   );
   if (gmail) {
     await AsyncStorage.setItem(STORE_KEY, gmail.id);
-    console.log("[calendar] using Gmail calendar:", gmail.id, gmail.title);
     return gmail.id;
   }
 
@@ -96,18 +80,13 @@ async function getPreferredCalendarId() {
   );
   if (icloud) {
     await AsyncStorage.setItem(STORE_KEY, icloud.id);
-    console.log("[calendar] using iCloud calendar:", icloud.id, icloud.title);
     return icloud.id;
   }
 
   const anyWritable = writable[0];
   if (anyWritable) {
     await AsyncStorage.setItem(STORE_KEY, anyWritable.id);
-    console.log(
-      "[calendar] using first writable calendar:",
-      anyWritable.id,
-      anyWritable.title
-    );
+
     return anyWritable.id;
   }
 
@@ -117,7 +96,6 @@ async function getPreferredCalendarId() {
 async function getEventMap() {
   const raw = await AsyncStorage.getItem(EVENT_MAP_KEY);
   const m = raw ? JSON.parse(raw) : {};
-  // migrate legacy string → single
   for (const k of Object.keys(m)) {
     const v = m[k];
     if (typeof v === "string") m[k] = { mode: "single", eventId: v };
@@ -131,7 +109,7 @@ async function saveEventMap(map) {
   await AsyncStorage.setItem(EVENT_MAP_KEY, JSON.stringify(map));
 }
 
-function buildRecurrenceAndroid(r /* single-day series */) {
+function buildRecurrenceAndroid(r) {
   const rule = {
     frequency:
       r.frequency === "daily"
@@ -160,14 +138,6 @@ export async function upsertRoutineEvent(routine) {
   const map = await getEventMap();
   const existing = map[routine.id];
 
-  console.log("[calendar] upsert start:", {
-    routineId: routine.id,
-    freq: routine.frequency,
-    daysOfWeek: routine.daysOfWeek,
-    time: routine.time,
-    tz: timeZone,
-  });
-
   if (
     Platform.OS === "ios" &&
     routine.frequency === "weekly" &&
@@ -182,10 +152,6 @@ export async function upsertRoutineEvent(routine) {
         await Calendar.deleteEventAsync(existing.eventId, {
           futureEvents: true,
         });
-        console.log(
-          "[calendar][iOS weekly/multi] deleted legacy single:",
-          existing.eventId
-        );
       } catch (e) {
         console.log(
           "[calendar][iOS weekly/multi] delete legacy single failed:",
@@ -218,15 +184,6 @@ export async function upsertRoutineEvent(routine) {
 
       const existingId = prevByDay[dow];
 
-      console.log("[calendar][iOS weekly/multi] upsert:", {
-        routineId: routine.id,
-        calendarId,
-        dow,
-        startISO: toLocalISO(start),
-        startDOW: start.getDay(),
-        updatingExisting: !!existingId,
-      });
-
       let eventId;
       if (existingId) {
         await Calendar.updateEventAsync(existingId, eventData, {
@@ -245,10 +202,6 @@ export async function upsertRoutineEvent(routine) {
           await Calendar.deleteEventAsync(prevByDay[prevDow], {
             futureEvents: true,
           });
-          console.log(
-            "[calendar][iOS weekly/multi] removed unselected day:",
-            prevDow
-          );
         } catch (e) {
           console.log(
             "[calendar][iOS weekly/multi] remove day failed:",
@@ -263,7 +216,6 @@ export async function upsertRoutineEvent(routine) {
     newMap[routine.id] = { mode: "multi", byDay: nextByDay, calendarId };
     await saveEventMap(newMap);
 
-    console.log("[calendar][iOS weekly/multi] OK →", nextByDay);
     return nextByDay;
   }
 
@@ -295,15 +247,6 @@ export async function upsertRoutineEvent(routine) {
 
       const existingId = prevByDay[dow];
 
-      console.log("[calendar][android weekly/multi] upsert:", {
-        routineId: routine.id,
-        calendarId,
-        dow,
-        startISO: toLocalISO(start),
-        startDOW: start.getDay(),
-        updatingExisting: !!existingId,
-      });
-
       let eventId;
       if (existingId) {
         await Calendar.updateEventAsync(existingId, eventData, {
@@ -322,10 +265,6 @@ export async function upsertRoutineEvent(routine) {
           await Calendar.deleteEventAsync(prevByDay[prevDow], {
             futureEvents: true,
           });
-          console.log(
-            "[calendar][android weekly/multi] removed unselected day:",
-            prevDow
-          );
         } catch (e) {
           console.log(
             "[calendar][android weekly/multi] remove day failed:",
@@ -340,7 +279,6 @@ export async function upsertRoutineEvent(routine) {
     newMap[routine.id] = { mode: "multi", byDay: nextByDay, calendarId };
     await saveEventMap(newMap);
 
-    console.log("[calendar][android weekly/multi] OK →", nextByDay);
     return nextByDay;
   }
 
@@ -380,16 +318,6 @@ export async function upsertRoutineEvent(routine) {
       ? existing
       : null;
 
-  console.log("[calendar] upsert(single):", {
-    routineId: routine.id,
-    calendarId,
-    existingId,
-    startISO: toLocalISO(start),
-    startDOW: start.getDay(),
-    recurrenceRule,
-    title: routine.title,
-  });
-
   let eventId;
   if (existingId) {
     await Calendar.updateEventAsync(existingId, eventData, {
@@ -403,7 +331,6 @@ export async function upsertRoutineEvent(routine) {
   const newMap = await getEventMap();
   newMap[routine.id] = { mode: "single", eventId, calendarId };
   await saveEventMap(newMap);
-  console.log("[calendar] upsert(single) OK →", eventId);
   return eventId;
 }
 
@@ -412,7 +339,6 @@ export async function deleteRoutineEvent(routineId) {
   const map = await getEventMap();
   const entry = map[routineId];
   if (!entry) {
-    console.log("[calendar] delete: nothing stored for routine", routineId);
     return;
   }
 
@@ -421,7 +347,6 @@ export async function deleteRoutineEvent(routineId) {
       for (const [dow, id] of Object.entries(entry.byDay)) {
         try {
           await Calendar.deleteEventAsync(id, { futureEvents: true });
-          console.log("[calendar] deleted event (multi) dow:", dow, "id:", id);
         } catch (e) {
           console.log(
             "[calendar] delete failed (multi) dow:",
@@ -434,10 +359,8 @@ export async function deleteRoutineEvent(routineId) {
       }
     } else if (entry.mode === "single" && entry.eventId) {
       await Calendar.deleteEventAsync(entry.eventId, { futureEvents: true });
-      console.log("[calendar] deleted event (single):", entry.eventId);
     } else if (typeof entry === "string") {
       await Calendar.deleteEventAsync(entry, { futureEvents: true });
-      console.log("[calendar] deleted legacy string event:", entry);
     }
   } finally {
     delete map[routineId];
@@ -454,7 +377,6 @@ export async function disableCalendarSyncAndCleanup() {
       for (const id of Object.values(entry.byDay)) {
         try {
           await Calendar.deleteEventAsync(id, { futureEvents: true });
-          console.log("[calendar] cleanup deleted (multi):", id);
         } catch (e) {
           console.log(
             "[calendar] cleanup failed (multi):",
@@ -466,7 +388,6 @@ export async function disableCalendarSyncAndCleanup() {
     } else if (entry?.mode === "single" && entry.eventId) {
       try {
         await Calendar.deleteEventAsync(entry.eventId, { futureEvents: true });
-        console.log("[calendar] cleanup deleted (single):", entry.eventId);
       } catch (e) {
         console.log(
           "[calendar] cleanup failed (single):",
@@ -477,7 +398,6 @@ export async function disableCalendarSyncAndCleanup() {
     } else if (typeof entry === "string") {
       try {
         await Calendar.deleteEventAsync(entry, { futureEvents: true });
-        console.log("[calendar] cleanup deleted (legacy):", entry);
       } catch (e) {
         console.log(
           "[calendar] cleanup failed (legacy):",
@@ -488,9 +408,4 @@ export async function disableCalendarSyncAndCleanup() {
     }
   }
   await AsyncStorage.multiRemove([STORE_KEY, EVENT_MAP_KEY]);
-  console.log(
-    "[calendar] cleanup complete; cleared keys",
-    STORE_KEY,
-    EVENT_MAP_KEY
-  );
 }
