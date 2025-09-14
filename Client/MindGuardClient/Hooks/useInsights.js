@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loadEntriesAndPredict,
-  predictNow,
-} from "../Redux/Slices/insightSlice";
+import { loadEntriesAndPredict } from "../Redux/Slices/insightSlice";
 
 export function useInsights(user) {
   const dispatch = useDispatch();
@@ -20,9 +17,5 @@ export function useInsights(user) {
     }
   }, [user?.id, user?.accessToken, dispatch]);
 
-  const onPredictNow = () => {
-    dispatch(predictNow({ entries }));
-  };
-
-  return { entries, risk, loading, error, onPredictNow };
+  return { entries, risk, loading, error };
 }

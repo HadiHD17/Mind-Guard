@@ -34,13 +34,15 @@ namespace MindGuardServer.Controllers
         }
 
         [HttpPut("UpdateAccount/{id}")]
-        public async Task<IActionResult> UpdateAccount(int id, [FromBody]UserUpdateDto updateduser)
+        public async Task<IActionResult> UpdateAccount(int id, [FromBody] UserUpdateDto updateduser)
         {
-            var user = _mapper.Map<User>(updateduser);
-            var u = await _userService.UpdateUser(id, user);
+            var u = await _userService.UpdateUser(id, updateduser);
+            if (u == null) return NotFound(ApiResponse<object>.Error());
+
             var responseDTO = _mapper.Map<UserResponseDto>(u);
             return Ok(ApiResponse<UserResponseDto>.Success(responseDTO));
         }
+
 
         [HttpPut("UpdatePassword/{id}")]
         public async Task<IActionResult> UpdatePassword(int id,[FromBody]UpdatePasswordDto dto)

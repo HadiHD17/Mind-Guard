@@ -13,11 +13,10 @@ import WeeklySummaryCard from "../../Components/WeeklySummaryCard";
 import useUser from "../../Hooks/useUser";
 import { useInsights } from "../../Hooks/useInsights";
 import { tipsFor } from "../../ml/tipsSeq";
-import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 
 export default function InsightScreen() {
   const { user } = useUser();
-  const { entries, risk, loading, error, onPredictNow } = useInsights(user);
+  const { entries, risk, loading, error } = useInsights(user);
 
   const moodForContext = entries?.[entries.length - 1]?.mood || "—";
   const defaultTips = [
@@ -40,13 +39,6 @@ export default function InsightScreen() {
           riskLevel={risk.label === "AT_RISK" ? "HIGH" : "LOW"}
           mood={moodForContext}
           note={`Next 48h risk: ${(risk.prob * 100).toFixed(0)}%`}
-        />
-
-        <PrimaryButton
-          title={loading ? "Predicting..." : "Run Prediction"}
-          onPress={onPredictNow}
-          disabled={loading}
-          style={{ marginTop: 12 }}
         />
 
         <Text style={styles.sectionTitle}>Personalized Tips</Text>

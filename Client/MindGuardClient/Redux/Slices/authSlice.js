@@ -42,33 +42,43 @@ export const register = createAsyncThunk(
 export const updateAccount = createAsyncThunk(
   "auth/updateAccount",
   async (
-    { fullName, email, phone, userId, accessToken },
+    {
+      userId,
+      accessToken,
+      fullName,
+      email,
+      phone,
+      isDark,
+      calendar_sync_enabled,
+    },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.put(
-        `/User/UpdateAccount/${userId}`,
-        { fullName, email, phoneNumber: phone },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const payload = {};
+      if (typeof fullName !== "undefined") payload.fullName = fullName;
+      if (typeof email !== "undefined") payload.email = email;
+      if (typeof phone !== "undefined") payload.phoneNumber = phone;
+      if (typeof isDark !== "undefined") payload.isDark = isDark;
+      if (typeof calendar_sync_enabled !== "undefined")
+        payload.calendar_sync_enabled = calendar_sync_enabled;
 
-      const updatedUser = {
-        ...response.data.payload,
-        accessToken,
-        userId,
-      };
+      const res = await api.put(`/User/UpdateAccount/${userId}`, payload, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      const serverUser = res.data?.payload;
+
+      const updatedUser = { ...serverUser, accessToken, id: userId };
 
       await AsyncStorage.setItem("@user_data", JSON.stringify(updatedUser));
-
       return updatedUser;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to update account"
-      );
+      const msg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to update account";
+      return rejectWithValue(msg);
     }
   }
 );

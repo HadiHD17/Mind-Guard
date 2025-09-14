@@ -15,6 +15,7 @@ import ProfileCard from "../../Components/ProfileCard";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
 import useUser from "../../Hooks/useUser";
+import useTogglePrefs from "../../Hooks/useTogglePrefs";
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -30,6 +31,15 @@ export default function ProfileScreen({ navigation }) {
     dispatch(logout());
     navigation.replace("Landing");
   };
+
+  const {
+    isDark,
+    calendarSyncEnabled,
+    toggleDark,
+    toggleCalendar,
+    pendingDark,
+    pendingCalendar,
+  } = useTogglePrefs();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -52,11 +62,20 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.cardTitle}>Preferences</Text>
             <View style={styles.preferenceRow}>
               <Text style={styles.cardSubtitle}>Dark Mode</Text>
-              <Switch value={user.isDark} onValueChange={true} />
+              <Switch
+                value={isDark}
+                onValueChange={toggleDark}
+                disabled={pendingDark || userLoading}
+              />
             </View>
+
             <View style={styles.preferenceRow}>
               <Text style={styles.cardSubtitle}>Calendar Syncing</Text>
-              <Switch value={user.calendar_sync_enabled} onValueChange={true} />
+              <Switch
+                value={calendarSyncEnabled}
+                onValueChange={toggleCalendar}
+                disabled={pendingCalendar || userLoading}
+              />
             </View>
           </View>
         </ProfileCard>
