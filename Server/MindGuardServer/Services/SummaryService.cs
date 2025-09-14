@@ -35,24 +35,20 @@ namespace MindGuardServer.Services
         {
             var oneWeekAgo = DateTime.UtcNow.AddDays(-7);
 
-            // Get all moods + journal emotions using existing MoodService
             var allMoods = await _moodService.GetAllMoods(userId);
             var lastWeekMoods = allMoods.Where(m => m.Date >= oneWeekAgo).ToList();
 
             if (!lastWeekMoods.Any())
                 return null;
 
-            // Calculate most frequent mood
             var mostFrequentMood = lastWeekMoods
                 .GroupBy(m => m.Mood_Label)
                 .OrderByDescending(g => g.Count())
                 .First()
                 .Key;
 
-            // For simplicity, we use count as avg sentiment; replace with numeric mapping if needed
             var avgSentiment = lastWeekMoods.Count;
 
-            // Create Weekly_Summary record
             var summary = new Weekly_Summary
             {
                 UserId = userId,
