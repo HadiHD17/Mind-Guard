@@ -82,7 +82,7 @@ using (var scope = app.Services.CreateScope())
     if (string.Equals(env, "true", StringComparison.OrdinalIgnoreCase))
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await SeedJournalEntries.RunAsync(db);
+        await BulkSeedJournalEntries.RunAsync(db);
         Console.WriteLine("SeedJournalEntries: completed.");
     }
 }

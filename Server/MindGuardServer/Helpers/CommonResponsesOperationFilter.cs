@@ -13,8 +13,6 @@ public class CommonResponsesOperationFilter : IOperationFilter
 
         Add("400", "Bad Request");
         Add("401", "Unauthorized");
-        Add("403", "Forbidden");
         Add("404", "Not Found");
-        Add("500", "Internal Server Error");
     }
 }

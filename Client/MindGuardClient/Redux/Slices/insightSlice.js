@@ -3,7 +3,7 @@ import api from "../../Api";
 import { normalizeEntries, lastNDays } from "../../Helpers/normalizeEntries";
 import { loadSeqModel, predictSeqRisk } from "../../ml/riskSeq";
 
-const THRESHOLD = 0.55;
+const THRESHOLD = 0.6;
 
 export const loadEntriesAndPredict = createAsyncThunk(
   "insights/loadEntriesAndPredict",
