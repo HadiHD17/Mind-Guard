@@ -31,8 +31,6 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("Bearer", jwt);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwt, Array.Empty<string>() } });
 
-    c.OperationFilter<CommonResponsesOperationFilter>();
-
     c.EnableAnnotations();
 });
 
