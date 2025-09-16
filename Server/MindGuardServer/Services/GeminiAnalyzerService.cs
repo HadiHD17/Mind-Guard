@@ -7,31 +7,11 @@ using System.Text;
 
 namespace MindGuardServer.Services
 {
-    /// <summary>
-    /// Diary analyzer (Gemini).
-    /// - Strict JSON Mode with responseSchema (stable output)
-    /// - Heuristic ensemble + anti-neutral bias
-    /// - Small in-memory cache for duplicates
-    ///
-    /// Public API unchanged:
-    ///   record AiResult(string Mood, int SentimentScore);
-    ///   Task<AiResult?> AnalyzeAsync(string text, CancellationToken ct = default)
-    ///
-    /// Configuration (appsettings.json or env):
-    /// "AI": {
-    ///   "Provider": "Gemini",
-    ///   "Gemini": { "ApiKey": "<key>", "Model": "gemini-1.5-flash", "Temperature": 0.0 }
-    /// }
-    /// Environment overrides:
-    ///   AI__Provider=Gemini
-    ///   AI__Gemini__ApiKey=...
-    ///   AI__Gemini__Model=gemini-1.5-flash
-    ///   AI__Gemini__Temperature=0.0
-    /// </summary>
+
     public class GeminiAnalyzerService
     {
         private readonly HttpClient _http;
-        private readonly string _model;            // e.g., gemini-1.5-flash or gemini-1.5-pro
+        private readonly string _model;            
         private readonly string _geminiApiKey;
         private readonly double _temperature;
 
@@ -40,12 +20,10 @@ namespace MindGuardServer.Services
             _http = http;
             _http.Timeout = TimeSpan.FromSeconds(15);
 
-            // Read Gemini config (env vars override appsettings)
             _model = config["AI:Gemini:Model"] ?? "gemini-1.5-flash";
             _geminiApiKey = config["AI:Gemini:ApiKey"] ?? "";
             _temperature = double.TryParse(config["AI:Gemini:Temperature"], out var t) ? t : 0.0;
 
-            Console.WriteLine($"[AI] Provider=Gemini, Model={_model}, KeySet={!string.IsNullOrWhiteSpace(_geminiApiKey)}");
         }
 
         public record AiResult(string Mood, int SentimentScore);
@@ -68,7 +46,6 @@ namespace MindGuardServer.Services
                 var robust = await RobustAnalyzeToolAsync(text, ct);
                 var final = PostProcess(text, robust);
                 Cache[key] = final;
-                Console.WriteLine($"[AI] Final: mood={final.Mood}, score={final.SentimentScore}");
                 return final;
             }
             catch (Exception ex)
@@ -90,10 +67,7 @@ namespace MindGuardServer.Services
             return PostProcess(text, combined);
         }
 
-        /// <summary>
-        /// Calls Gemini (generateContent) in JSON Mode with a responseSchema that forces:
-        /// { "mood": AllowedMoods, "sentiment_score": -5..5 }
-        /// </summary>
+
         private async Task<(string mood, int score)> RunAnalyzeToolAsync(string text, CancellationToken ct)
         {
             text = (text ?? "").Trim();
@@ -319,34 +293,6 @@ Any language input; output labels must be English.";
                 if (text.Contains(w)) hits++;
             }
             return hits;
-        }
-
-        private static bool LooksLikeJson(string s) =>
-            !string.IsNullOrWhiteSpace(s) && s.TrimStart().StartsWith("{") && s.TrimEnd().EndsWith("}");
-
-        // Balanced-brace extractor (kept for future flexibility; not needed in JSON Mode path)
-        private static string? ExtractFirstJsonObject(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return null;
-            int start = -1, depth = 0;
-            for (int i = 0; i < text.Length; i++)
-            {
-                char c = text[i];
-                if (c == '{')
-                {
-                    if (depth == 0) start = i;
-                    depth++;
-                }
-                else if (c == '}')
-                {
-                    if (depth > 0)
-                    {
-                        depth--;
-                        if (depth == 0 && start >= 0) return text.Substring(start, i - start + 1);
-                    }
-                }
-            }
-            return null;
         }
 
         private static string Hash(string input)

@@ -23,17 +23,13 @@ namespace MindGuardServer.Services
 
         public async Task<Journal_Entry> AddEntry(Journal_Entry entry, CancellationToken ct = default)
         {
-            // Set dates as UTC for database compatibility
             var now = DateTime.UtcNow;
             entry.CreatedAt = now;
             entry.UpdatedAt = now;
 
-            // Try to analyze the entry with AI, but don't fail if it times out
             var analysis = await AnalyzeWithTimeoutAsync(entry.Content, ct);
 
-            // Fallbacks to keep DB constraints happy
             entry.DetectedEmotion = analysis?.Mood ?? "neutral";
-            // If Sentiment_Score is string in your model, save normalized string:
             entry.SentimentScore = (analysis?.SentimentScore ?? 1.0);
 
             _context.Journal_Entries.Add(entry);
@@ -45,20 +41,17 @@ namespace MindGuardServer.Services
         {
             try
             {
-                // Create a linked cancellation token that will cancel after 60 seconds
                 using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-                cts.CancelAfter(TimeSpan.FromSeconds(60)); // 60 second timeout for AI analysis
+                cts.CancelAfter(TimeSpan.FromSeconds(60)); 
 
                 return await _ai.AnalyzeAsync(content, cts.Token);
             }
             catch (TaskCanceledException)
             {
-                // AI analysis timed out, return null to use fallback values
                 return null;
             }
             catch (Exception)
             {
-                // Any other error with AI analysis, return null to use fallback values
                 return null;
             }
         }

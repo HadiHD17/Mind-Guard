@@ -10,10 +10,7 @@ using MindGuardServer.Data;
 
 namespace MindGuardServer.Services
 {
-    /// <summary>
-    /// Runs a weekly job to generate summaries for all users.
-    /// Uses Cronos to schedule (default: every Monday 00:05 UTC).
-    /// </summary>
+ 
     public class WeeklySummaryScheduler : BackgroundService
     {
         private readonly IServiceProvider _services;
@@ -29,11 +26,9 @@ namespace MindGuardServer.Services
 
             var cron = config["WeeklySummary:Cron"];
 
-            // Decide which CronFormat to use based on field count
             var parts = (cron ?? "").Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var format = parts.Length == 6 ? CronFormat.IncludeSeconds : CronFormat.Standard;
 
-            // Default to Monday 00:05 UTC if not provided
             var expr = string.IsNullOrWhiteSpace(cron) ? "0 5 0 * * 1" : cron;
 
             _cron = CronExpression.Parse(expr, format);
@@ -71,7 +66,7 @@ namespace MindGuardServer.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "[WeeklySummaryScheduler] loop error. Will retry in 1 minute.");
-                    try { await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken); } catch { /* ignore */ }
+                    try { await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken); } catch { }
                 }
             }
 

@@ -4,7 +4,7 @@
     {
         public string Status { get; set; }
         public T Payload { get; set; }
-        public string? Message { get; set; }  // optional message
+        public string? Message { get; set; } 
 
         public ApiResponse(string status, T payload, string? message = null)
         {

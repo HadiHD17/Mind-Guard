@@ -77,7 +77,6 @@ export default function useDeviceCalendarSync({ enabled, routines }) {
           if (!r) continue;
           try {
             const ev = mapRoutineToCalendarEvent(r);
-            console.log("[calendar-sync] create routine", r.id, ev);
             await upsertRoutineEvent(ev);
           } catch (e) {
             console.warn("[calendar-sync] create failed", id, e?.message || e);
@@ -89,7 +88,6 @@ export default function useDeviceCalendarSync({ enabled, routines }) {
           if (!r) continue;
           try {
             const ev = mapRoutineToCalendarEvent(r);
-            console.log("[calendar-sync] update routine", r.id, ev);
             await upsertRoutineEvent(ev);
           } catch (e) {
             console.warn("[calendar-sync] update failed", id, e?.message || e);
