@@ -26,6 +26,14 @@ module.exports = {
     "^(.*)/Helpers/CalendarSync$": "<rootDir>/__mocks__/calendar-sync.js",
     "^Helpers/CalendarSync$": "<rootDir>/__mocks__/calendar-sync.js",
 
+    // ✅ Insights / ML
+    "^(.*)/ml/riskSeq$": "<rootDir>/__mocks__/risk-seq.js",
+    "^ml/riskSeq$": "<rootDir>/__mocks__/risk-seq.js",
+
+    // ✅ Calendar helpers
+    "^(.*)/Helpers/RoutineMapper$": "<rootDir>/__mocks__/routine-mapper.js",
+    "^Helpers/RoutineMapper$": "<rootDir>/__mocks__/routine-mapper.js",
+
     // ✅ Api (relative OR absolute)
     "^(.*)/Api$": "<rootDir>/__mocks__/api.js",
     "^Api$": "<rootDir>/__mocks__/api.js",
