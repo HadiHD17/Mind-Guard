@@ -19,6 +19,12 @@ module.exports = {
     "^(.*)/Helpers/MoodHelpers$": "<rootDir>/__mocks__/mood-helpers.js",
     "^Helpers/Storage$": "<rootDir>/__mocks__/storage-helpers.js",
     "^Helpers/MoodHelpers$": "<rootDir>/__mocks__/mood-helpers.js",
+    // ✅ Helpers (more)
+    "^(.*)/Helpers/normalizeEntries$":
+      "<rootDir>/__mocks__/normalize-entries.js",
+    "^Helpers/normalizeEntries$": "<rootDir>/__mocks__/normalize-entries.js",
+    "^(.*)/Helpers/CalendarSync$": "<rootDir>/__mocks__/calendar-sync.js",
+    "^Helpers/CalendarSync$": "<rootDir>/__mocks__/calendar-sync.js",
 
     // ✅ Api (relative OR absolute)
     "^(.*)/Api$": "<rootDir>/__mocks__/api.js",
