@@ -11,15 +11,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-  "jest": {
-    "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(expo|@expo|react-native|@react-native|react-native-gesture-handler|react-native-reanimated|@react-native-async-storage/async-storage)/)"
-    ]
-  },
+
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
     "@react-native-async-storage/async-storage": "2.2.0",
