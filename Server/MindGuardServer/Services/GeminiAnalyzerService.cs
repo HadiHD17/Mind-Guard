@@ -1,9 +1,10 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace MindGuardServer.Services
 {
@@ -11,19 +12,32 @@ namespace MindGuardServer.Services
     public class GeminiAnalyzerService
     {
         private readonly HttpClient _http;
-        private readonly string _model;            
+        private readonly string _model;
         private readonly string _geminiApiKey;
         private readonly double _temperature;
 
-        public GeminiAnalyzerService(HttpClient http, IConfiguration config)
+        public bool IsConfigured => !string.IsNullOrWhiteSpace(_geminiApiKey);
+
+        public GeminiAnalyzerService(HttpClient http, IConfiguration? config)
         {
-            _http = http;
+            _http = http ?? throw new ArgumentNullException(nameof(http));
             _http.Timeout = TimeSpan.FromSeconds(15);
 
-            _model = config["AI:Gemini:Model"] ?? "gemini-1.5-flash";
-            _geminiApiKey = config["AI:Gemini:ApiKey"] ?? "";
-            _temperature = double.TryParse(config["AI:Gemini:Temperature"], out var t) ? t : 0.0;
+            _model = config?["AI:Gemini:Model"] ?? "gemini-1.5-flash";
+            _geminiApiKey = config?["AI:Gemini:ApiKey"] ?? string.Empty;
 
+            if (double.TryParse(
+                    config?["AI:Gemini:Temperature"],
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out var t))
+            {
+                _temperature = t;
+            }
+            else
+            {
+                _temperature = 0.0;
+            }
         }
 
         public record AiResult(string Mood, int SentimentScore);
@@ -34,6 +48,7 @@ namespace MindGuardServer.Services
 
         public virtual async Task<AiResult?> AnalyzeAsync(string text, CancellationToken ct = default)
         {
+            if (!IsConfigured) return null;
             text ??= string.Empty;
             text = text.Trim();
             if (text.Length > 600) text = text[..600];

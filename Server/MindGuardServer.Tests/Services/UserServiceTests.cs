@@ -121,7 +121,7 @@ namespace MindGuardServer.Tests
         }
 
         [Fact]
-        public async Task UpdatePassword_ShouldReturnFalse_WhenCurrentPasswordIsIncorrect()
+        public async Task UpdatePassword_ShouldThrowException_WhenCurrentPasswordIsIncorrect()
         {
             var dto = new UpdatePasswordDto
             {
@@ -130,10 +130,9 @@ namespace MindGuardServer.Tests
                 ConfirmNewPassword = "NewPassword123!"
             };
 
-            var result = await _userService.UpdatePassword(1, dto);
-
-            Assert.False(result);
+            await Assert.ThrowsAsync<Exception>(() => _userService.UpdatePassword(1, dto));
         }
+
 
         [Fact]
         public async Task UpdatePassword_ShouldReturnFalse_WhenUserDoesNotExist()

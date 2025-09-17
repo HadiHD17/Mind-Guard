@@ -1,6 +1,28 @@
+// jest.setup.js
+
+// 1) Gesture Handler setup (if installed)
+try {
+  require("react-native-gesture-handler/jestSetup");
+} catch {}
+
+// 2) Testing Library matchers
 require("@testing-library/jest-native/extend-expect");
 
-// Mock Redux store
+// 3) Reanimated + NativeAnimated mocks (prevents crashes/warnings)
+jest.mock("react-native-reanimated", () =>
+  require("react-native-reanimated/mock")
+);
+jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));
+
+// 4) AsyncStorage mock
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+}));
+
+// 5) react-redux hooks
 const mockStore = {
   getState: jest.fn(() => ({
     user: { user: null, loading: false, error: null },
@@ -12,24 +34,25 @@ const mockStore = {
   dispatch: jest.fn(),
   subscribe: jest.fn(),
 };
-
-// Mock react-redux hooks
 jest.mock("react-redux", () => ({
-  useSelector: jest.fn((selector) => selector(mockStore.getState())),
+  useSelector: jest.fn((sel) => sel(mockStore.getState())),
   useDispatch: jest.fn(() => mockStore.dispatch),
   Provider: ({ children }) => children,
-  connect: () => (component) => component,
+  connect: () => (c) => c,
 }));
 
-// Mock AsyncStorage
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  getItem: jest.fn(() => Promise.resolve(null)),
-  setItem: jest.fn(() => Promise.resolve()),
-  removeItem: jest.fn(() => Promise.resolve()),
-  clear: jest.fn(() => Promise.resolve()),
+// 6) React Navigation (basic mock)
+jest.mock("@react-navigation/native", () => ({
+  ...jest.requireActual("@react-navigation/native"),
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    replace: jest.fn(),
+    goBack: jest.fn(),
+  }),
+  useRoute: () => ({ params: {} }),
 }));
 
-// Mock API
+// 7) App-specific mocks
 jest.mock("./Api", () => ({
   get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
   post: jest.fn(() =>
@@ -39,35 +62,13 @@ jest.mock("./Api", () => ({
   delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
 }));
 
-// Mock navigation
-jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({
-    navigate: jest.fn(),
-    replace: jest.fn(),
-    goBack: jest.fn(),
-  }),
-  useRoute: () => ({
-    params: {},
-  }),
-}));
-
-// Mock helper functions
 jest.mock("./Helpers/MoodHelpers", () => ({
-  moodToEmoji: {
-    happy: "😊",
-    sad: "😢",
-    angry: "😠",
-    neutral: "😐",
-  },
-  getDayOfWeek: jest.fn((date) => "Mon"),
+  moodToEmoji: { happy: "😊", sad: "😢", angry: "😠", neutral: "😐" },
+  getDayOfWeek: jest.fn(() => "Mon"),
 }));
 
-// Mock storage helpers
 jest.mock("./Helpers/Storage", () => ({
   getUserData: jest.fn(() => Promise.resolve(null)),
   setUserData: jest.fn(() => Promise.resolve()),
   removeUserData: jest.fn(() => Promise.resolve()),
 }));
-
-// Remove problematic mock that causes module resolution issues
-// jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));
