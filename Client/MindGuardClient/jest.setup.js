@@ -9,10 +9,23 @@ try {
 require("@testing-library/jest-native/extend-expect");
 
 // 3) Reanimated + NativeAnimated mocks (prevents crashes/warnings)
+// Reanimated mock
 jest.mock("react-native-reanimated", () =>
   require("react-native-reanimated/mock")
 );
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper", () => ({}));
+
+// NativeAnimatedHelper moved/doesn't exist in newer RN — mock it only if present.
+try {
+  // if the module can be resolved, mock it to a no-op
+  require.resolve("react-native/Libraries/Animated/NativeAnimatedHelper");
+  // use doMock because the name is dynamic (not a string literal at parse time)
+  jest.doMock(
+    "react-native/Libraries/Animated/NativeAnimatedHelper",
+    () => ({})
+  );
+} catch {
+  // nothing to do — on newer RN the module isn't there and that's fine
+}
 
 // 4) AsyncStorage mock
 jest.mock("@react-native-async-storage/async-storage", () => ({
