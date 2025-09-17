@@ -1,8 +1,6 @@
 // jest.setup.js
 
-// jest.setup.js
-
-// 1) RNGH setup (optional)
+// 1) RNGH setup
 try {
   require("react-native-gesture-handler/jestSetup");
 } catch {}
@@ -63,29 +61,12 @@ jest.mock("@react-navigation/native", () => ({
   useRoute: () => ({ params: {} }),
 }));
 
-// 8) App-specific mocks via aliases (NOT relative paths)
-try {
-  jest.mock("Api", () => ({
-    get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
-    post: jest.fn(() =>
-      Promise.resolve({ data: { status: "success", payload: {} } })
-    ),
-    put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-    delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-  }));
-} catch {}
-
-try {
-  jest.mock("Helpers/MoodHelpers", () => ({
-    moodToEmoji: { happy: "😊", sad: "😢", angry: "😠", neutral: "😐" },
-    getDayOfWeek: jest.fn(() => "Mon"),
-  }));
-} catch {}
-
-try {
-  jest.mock("Helpers/Storage", () => ({
-    getUserData: jest.fn(() => Promise.resolve(null)),
-    setUserData: jest.fn(() => Promise.resolve()),
-    removeUserData: jest.fn(() => Promise.resolve()),
-  }));
-} catch {}
+// 8) API mock (kept)
+jest.mock("Api", () => ({
+  get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
+  post: jest.fn(() =>
+    Promise.resolve({ data: { status: "success", payload: {} } })
+  ),
+  put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+  delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+}));
