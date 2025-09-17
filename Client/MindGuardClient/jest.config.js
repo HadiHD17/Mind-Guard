@@ -34,6 +34,10 @@ module.exports = {
     "^(.*)/Helpers/RoutineMapper$": "<rootDir>/__mocks__/routine-mapper.js",
     "^Helpers/RoutineMapper$": "<rootDir>/__mocks__/routine-mapper.js",
 
+    // ✅ ML tips helper
+    "^(.*)/ml/tipsSeq$": "<rootDir>/__mocks__/tips-seq.js",
+    "^ml/tipsSeq$": "<rootDir>/__mocks__/tips-seq.js",
+
     // ✅ Api (relative OR absolute)
     "^(.*)/Api$": "<rootDir>/__mocks__/api.js",
     "^Api$": "<rootDir>/__mocks__/api.js",
