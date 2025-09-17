@@ -43,7 +43,7 @@ services:
       - "5224:5224"
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
     networks:
       - mindguard-network
     restart: unless-stopped
@@ -103,9 +103,9 @@ services:
       - JwtConfig__Key=u5hR8Jd7q2Xf1Zs3oVw9yKt4BpL6nGmHcJ2rS8dXv5Qf1AzM0eN9lYp3tWq7UjRk
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
       backend:
-        condition: service_started
+        condition: service_healthy
     networks:
       - mindguard-network
     profiles:
