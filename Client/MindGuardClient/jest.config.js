@@ -14,13 +14,17 @@ module.exports = {
     "@react-native-async-storage/async-storage":
       "<rootDir>/__mocks__/async-storage.js",
 
-    // ✅ map relative OR absolute imports for Helpers
+    // ✅ Helpers (relative OR absolute)
     "^(.*)/Helpers/Storage$": "<rootDir>/__mocks__/storage-helpers.js",
     "^(.*)/Helpers/MoodHelpers$": "<rootDir>/__mocks__/mood-helpers.js",
     "^Helpers/Storage$": "<rootDir>/__mocks__/storage-helpers.js",
     "^Helpers/MoodHelpers$": "<rootDir>/__mocks__/mood-helpers.js",
 
-    // aliases
+    // ✅ Api (relative OR absolute)
+    "^(.*)/Api$": "<rootDir>/__mocks__/api.js",
+    "^Api$": "<rootDir>/__mocks__/api.js",
+
+    // aliases if you use @/...
     "^@/(.*)$": "<rootDir>/$1",
   },
 

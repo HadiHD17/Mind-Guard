@@ -61,12 +61,12 @@ jest.mock("@react-navigation/native", () => ({
   useRoute: () => ({ params: {} }),
 }));
 
-// 8) API mock (kept)
-jest.mock("Api", () => ({
-  get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
-  post: jest.fn(() =>
-    Promise.resolve({ data: { status: "success", payload: {} } })
-  ),
-  put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-  delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-}));
+// // 8) API mock (kept)
+// jest.mock("Api", () => ({
+//   get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
+//   post: jest.fn(() =>
+//     Promise.resolve({ data: { status: "success", payload: {} } })
+//   ),
+//   put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+//   delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+// }));
