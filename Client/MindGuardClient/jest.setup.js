@@ -1,33 +1,28 @@
 // jest.setup.js
 
-// 1) Gesture Handler setup (if installed)
+// jest.setup.js
+
+// 1) RNGH setup (optional)
 try {
   require("react-native-gesture-handler/jestSetup");
 } catch {}
 
-// 2) Testing Library matchers
+// 2) Testing Library
 require("@testing-library/jest-native/extend-expect");
 
-// 3) Reanimated + NativeAnimated mocks (prevents crashes/warnings)
-// Reanimated mock
+// 3) Reanimated + NativeAnimated
 jest.mock("react-native-reanimated", () =>
   require("react-native-reanimated/mock")
 );
-
-// NativeAnimatedHelper moved/doesn't exist in newer RN — mock it only if present.
 try {
-  // if the module can be resolved, mock it to a no-op
   require.resolve("react-native/Libraries/Animated/NativeAnimatedHelper");
-  // use doMock because the name is dynamic (not a string literal at parse time)
   jest.doMock(
     "react-native/Libraries/Animated/NativeAnimatedHelper",
     () => ({})
   );
-} catch {
-  // nothing to do — on newer RN the module isn't there and that's fine
-}
+} catch {}
 
-// 4) AsyncStorage mock
+// 4) AsyncStorage
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
   setItem: jest.fn(() => Promise.resolve()),
@@ -35,7 +30,10 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   clear: jest.fn(() => Promise.resolve()),
 }));
 
-// 5) react-redux hooks
+// 5) Expo GL
+jest.mock("expo-gl", () => ({}));
+
+// 6) Redux hooks
 const mockStore = {
   getState: jest.fn(() => ({
     user: { user: null, loading: false, error: null },
@@ -54,7 +52,7 @@ jest.mock("react-redux", () => ({
   connect: () => (c) => c,
 }));
 
-// 6) React Navigation (basic mock)
+// 7) Navigation
 jest.mock("@react-navigation/native", () => ({
   ...jest.requireActual("@react-navigation/native"),
   useNavigation: () => ({
@@ -65,23 +63,29 @@ jest.mock("@react-navigation/native", () => ({
   useRoute: () => ({ params: {} }),
 }));
 
-// 7) App-specific mocks
-jest.mock("./Api", () => ({
-  get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
-  post: jest.fn(() =>
-    Promise.resolve({ data: { status: "success", payload: {} } })
-  ),
-  put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-  delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
-}));
+// 8) App-specific mocks via aliases (NOT relative paths)
+try {
+  jest.mock("Api", () => ({
+    get: jest.fn(() => Promise.resolve({ data: { payload: [] } })),
+    post: jest.fn(() =>
+      Promise.resolve({ data: { status: "success", payload: {} } })
+    ),
+    put: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+    delete: jest.fn(() => Promise.resolve({ data: { payload: {} } })),
+  }));
+} catch {}
 
-jest.mock("./Helpers/MoodHelpers", () => ({
-  moodToEmoji: { happy: "😊", sad: "😢", angry: "😠", neutral: "😐" },
-  getDayOfWeek: jest.fn(() => "Mon"),
-}));
+try {
+  jest.mock("Helpers/MoodHelpers", () => ({
+    moodToEmoji: { happy: "😊", sad: "😢", angry: "😠", neutral: "😐" },
+    getDayOfWeek: jest.fn(() => "Mon"),
+  }));
+} catch {}
 
-jest.mock("./Helpers/Storage", () => ({
-  getUserData: jest.fn(() => Promise.resolve(null)),
-  setUserData: jest.fn(() => Promise.resolve()),
-  removeUserData: jest.fn(() => Promise.resolve()),
-}));
+try {
+  jest.mock("Helpers/Storage", () => ({
+    getUserData: jest.fn(() => Promise.resolve(null)),
+    setUserData: jest.fn(() => Promise.resolve()),
+    removeUserData: jest.fn(() => Promise.resolve()),
+  }));
+} catch {}
