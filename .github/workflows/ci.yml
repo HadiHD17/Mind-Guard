@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Client/MindGuardClient
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: Client/MindGuardClient/package-lock.json
+
+      - name: Install deps
+        working-directory: Client/MindGuardClient
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+
+      - name: Upload coverage
+        if: success()
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./Client/MindGuardClient/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  backend:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_PROFILES: testing
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build images (backend, tests, n8n if needed)
+        run: |
+          docker compose -f docker-compose.yml build --pull
+
+      - name: Start DB + backend (detached)
+        run: |
+          docker compose -f docker-compose.yml up -d postgres
+          # wait for postgres health
+          for i in {1..30}; do
+            status=$(docker inspect -f '{{.State.Health.Status}}' mindguard-postgres || echo starting)
+            [ "$status" = "healthy" ] && break
+            echo "postgres health: $status"; sleep 2
+          done
+          docker compose -f docker-compose.yml up -d backend
+          # wait for backend health
+          for i in {1..30}; do
+            status=$(docker inspect -f '{{.State.Health.Status}}' mindguard-backend || echo starting)
+            [ "$status" = "healthy" ] && break
+            echo "backend health: $status"; sleep 2
+          done
+
+      - name: Run backend tests (container)
+        run: |
+          docker compose -f docker-compose.yml run --rm tests
+
+      - name: Tear down
+        if: always()
+        run: |
+          docker compose -f docker-compose.yml down -v --remove-orphans

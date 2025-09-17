@@ -1,0 +1,9 @@
+FROM n8nio/n8n:latest
+
+RUN mkdir -p /home/node/.n8n/nodes/node_modules/n8n-nodes-playwright/dist/nodes/browsers && \
+    chown -R node:node /home/node/.n8n && \
+    chmod -R 755 /home/node/.n8n
+
+USER node
+
+EXPOSE 5678

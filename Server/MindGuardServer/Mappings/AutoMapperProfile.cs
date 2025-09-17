@@ -28,6 +28,7 @@ namespace MindGuardServer.Mappings
             CreateMap<RoutineUpdateDto, Routine>();
             CreateMap<Routine, RoutineResponseDto>();
 
+
             //Occurence
             CreateMap<RoutineOccurrenceCreateDto, Routine_Occurence>();
             CreateMap<RoutineOccurrenceUpdateDto, Routine_Occurence>();
@@ -42,6 +43,8 @@ namespace MindGuardServer.Mappings
             CreateMap<WeeklySummaryCreateDto, Weekly_Summary>();
             CreateMap<Weekly_Summary, WeeklySummaryResponseDto>();
 
-        }
+        
+
+    }
     }
 }

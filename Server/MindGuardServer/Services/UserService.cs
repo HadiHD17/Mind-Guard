@@ -4,16 +4,20 @@ using MindGuardServer.Data;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
+using System;
 
 namespace MindGuardServer.Services
 {
     public class UserService
     {
         private readonly AppDbContext _context;
+
         public UserService(AppDbContext context)
         {
             _context = context;
         }
+
+
 
         public async Task<User> GetUserById(int id)
         {
@@ -24,24 +28,30 @@ namespace MindGuardServer.Services
             }
             return user;
         }
-        public async Task<User> UpdateUser(int id, User user)
+        public async Task<User?> UpdateUser(int id, UserUpdateDto dto)
         {
-            var existinguser = await _context.Users.FindAsync(id);
-            if (existinguser == null) 
-            {
-                return null;
-            }
-            existinguser.FullName = user.FullName;
-            if (!string.IsNullOrWhiteSpace(user.Email))
-                existinguser.Email = user.Email;
-            if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
-                existinguser.PhoneNumber = user.PhoneNumber;
-            existinguser.IsDark = user.IsDark;
-            existinguser.Calendar_sync_enabled = user.Calendar_sync_enabled;
-            existinguser.UpdatedAt = DateTime.UtcNow;
+            var existing = await _context.Users.FindAsync(id);
+            if (existing == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(dto.FullName))
+                existing.FullName = dto.FullName;
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+                existing.Email = dto.Email;
+
+            if (!string.IsNullOrWhiteSpace(dto.PhoneNumber))
+                existing.PhoneNumber = dto.PhoneNumber;
+
+            if (dto.IsDark.HasValue)
+                existing.IsDark = dto.IsDark.Value;
+
+            if (dto.Calendar_sync_enabled.HasValue)
+                existing.Calendar_sync_enabled = dto.Calendar_sync_enabled.Value;
+
+            existing.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return existinguser;
+            return existing;
         }
 
         public async Task<bool> UpdatePassword(int id, UpdatePasswordDto dto)

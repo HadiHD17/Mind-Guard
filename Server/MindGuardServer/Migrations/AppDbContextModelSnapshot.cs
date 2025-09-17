@@ -141,6 +141,9 @@ namespace MindGuardServer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateOnly?>("LastCompletedDate")
+                        .HasColumnType("date");
+
                     b.Property<TimeSpan>("Reminder_Time")
                         .HasColumnType("interval");
 
@@ -201,6 +204,9 @@ namespace MindGuardServer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("DriveInboxEnabled")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -210,6 +216,10 @@ namespace MindGuardServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("GoogleDriveFolderId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<bool>("IsDark")
                         .HasColumnType("boolean");
@@ -236,13 +246,14 @@ namespace MindGuardServer.Migrations
                         {
                             Id = -1,
                             Calendar_sync_enabled = true,
-                            CreatedAt = new DateTime(2025, 8, 25, 11, 36, 45, 985, DateTimeKind.Utc).AddTicks(8619),
+                            CreatedAt = new DateTime(2025, 9, 16, 18, 25, 57, 145, DateTimeKind.Utc).AddTicks(9006),
+                            DriveInboxEnabled = true,
                             Email = "hadi@gmail.com",
                             FullName = "Hadi Haidar",
                             IsDark = true,
-                            Password = "AQAAAAIAAYagAAAAEOOsH2uM/HogIrV9tfG3rvvOPIUkC+nstEFw4ntsPmXnqAtEg7+jSkSwjOyvpzJ8WQ==",
+                            Password = "AQAAAAIAAYagAAAAEJInaczGLUFOUKOtQ0cH3K2MrSRoyeArOZw2/2HuK10G8Hjts0C3AWNTWQu8aDzU0A==",
                             PhoneNumber = "81918422",
-                            UpdatedAt = new DateTime(2025, 8, 25, 11, 36, 45, 985, DateTimeKind.Utc).AddTicks(8626)
+                            UpdatedAt = new DateTime(2025, 9, 16, 18, 25, 57, 145, DateTimeKind.Utc).AddTicks(9017)
                         });
                 });
 
@@ -330,13 +341,11 @@ namespace MindGuardServer.Migrations
 
             modelBuilder.Entity("MindGuardServer.Models.Domain.Routine_Occurence", b =>
                 {
-                    b.HasOne("MindGuardServer.Models.Domain.Routine", "Routine")
+                    b.HasOne("MindGuardServer.Models.Domain.Routine", null)
                         .WithMany("Occurence")
                         .HasForeignKey("RoutineID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Routine");
                 });
 
             modelBuilder.Entity("MindGuardServer.Models.Domain.Weekly_Summary", b =>

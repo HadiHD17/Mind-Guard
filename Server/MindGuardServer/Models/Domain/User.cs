@@ -34,11 +34,19 @@ namespace MindGuardServer.Models.Domain
         [Required]
         public bool Calendar_sync_enabled { get; set; } = true;
 
+        [StringLength(128)]
+        public string? GoogleDriveFolderId { get; set; }
+
+        [DefaultValue(true)]
+        public bool DriveInboxEnabled { get; set; } = true;
+
         public virtual ICollection<Journal_Entry> Journal { get; set; } = new List<Journal_Entry>();
         public virtual ICollection<Mood_Checkin> Mood { get; set; } = new List<Mood_Checkin>();
         public virtual ICollection<Routine> Routine { get; set; } = new List<Routine>();
         public virtual ICollection<AI_Prediction> Prediction { get; set; } = new List<AI_Prediction>();
         public virtual ICollection<Weekly_Summary> Summary { get; set; } = new List<Weekly_Summary>();
+
+
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

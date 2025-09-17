@@ -32,7 +32,7 @@ namespace MindGuardServer.Services
             var issuer = _configuration["JwtConfig:Issuer"];
             var audience = _configuration["JwtConfig:Audience"];
             var key = _configuration["JwtConfig:Key"];
-            var tokenValidityMins = _configuration.GetValue<int>("JwtConfig:TokenValidityMins");
+            var tokenValidityMins = int.Parse(_configuration["JwtConfig:TokenValidityMins"]);
             var tokenExpiryTimeStamp = DateTime.UtcNow.AddMinutes(tokenValidityMins); 
 
             var tokenDescriptor = new SecurityTokenDescriptor

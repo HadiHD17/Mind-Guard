@@ -6,45 +6,62 @@ using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [Produces("application/json")]
     public class SummaryController : ControllerBase
     {
         private readonly SummaryService _summaryservice;
         private readonly IMapper _mapper;
 
-        public SummaryController(SummaryService summaryService,IMapper mapper)
+        public SummaryController(SummaryService summaryService, IMapper mapper)
         {
             _summaryservice = summaryService;
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddSummary([FromBody]WeeklySummaryCreateDto summary)
+        [HttpPost("generate/{userId}")]
+        [SwaggerOperation(Summary = "Generate weekly summary", Description = "Generates a weekly summary from this week’s logs for the specified user.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Weekly summary generated.", typeof(ApiResponse<WeeklySummaryResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid user id or no logs found for this week.", typeof(ApiResponse<object>))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Missing or invalid JWT.", typeof(ApiResponse<object>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "User not found.", typeof(ApiResponse<object>))]
+        public async Task<IActionResult> GenerateSummary(int userId)
         {
-            var s = _mapper.Map<Weekly_Summary>(summary);
-            await _summaryservice.AddSummary(s);
-            if (s == null)
-                return NotFound(ApiResponse<object>.Error());
+            if (userId <= 0)
+                return BadRequest(ApiResponse<object>.Error("Invalid user id."));
 
-            var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(s);
-            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
+            var summary = await _summaryservice.GenerateWeeklySummary(userId);
+            if (summary == null)
+                return BadRequest(ApiResponse<object>.Error("No logs found for this week."));
+
+            var dto = _mapper.Map<WeeklySummaryResponseDto>(summary);
+            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(dto));
         }
 
-        [HttpGet("{userid}")]
-        public async Task<IActionResult> GetSummaryByUserId(int userid)
+        [HttpGet("latest/{userid}")]
+        [SwaggerOperation(Summary = "Get latest weekly summary", Description = "Returns the most recent weekly summary for the specified user.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Latest weekly summary retrieved.", typeof(ApiResponse<WeeklySummaryResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid user id.", typeof(ApiResponse<object>))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "Missing or invalid JWT.", typeof(ApiResponse<object>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "No weekly summaries found for this user.", typeof(ApiResponse<object>))]
+        public async Task<IActionResult> GetLatestSummary(int userid)
         {
+            if (userid <= 0)
+                return BadRequest(ApiResponse<object>.Error("Invalid user id."));
+
             var summaries = await _summaryservice.GetSummaryByUserId(userid);
-            if (summaries == null)
-                return NotFound(ApiResponse<object>.Error());
+            if (summaries == null || !summaries.Any())
+                return NotFound(ApiResponse<object>.Error("No weekly summaries found."));
 
-            var responseDTO = _mapper.Map<WeeklySummaryResponseDto>(summaries);
-            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(responseDTO));
+            var latest = summaries.OrderByDescending(s => s.CreatedAt).First();
+            var dto = _mapper.Map<WeeklySummaryResponseDto>(latest);
+            return Ok(ApiResponse<WeeklySummaryResponseDto>.Success(dto));
         }
-
     }
 }

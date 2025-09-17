@@ -7,7 +7,6 @@ namespace MindGuardServer.Models.Domain
         [Key]
         public int Id { get; set; }
         public int RoutineID {  get; set; }
-        public virtual Routine Routine { get; set; }
         [Required]
         public DateOnly Date { get; set; }
         [Required]

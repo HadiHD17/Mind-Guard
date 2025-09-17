@@ -6,36 +6,36 @@ using Microsoft.OpenApi.Models;
 using MindGuardServer.Data;
 using MindGuardServer.Mappings;
 using MindGuardServer.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(c =>
 {
-    var jwtSecurityScheme = new OpenApiSecurityScheme
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MindGuard API", Version = "v1" });
+
+    var jwt = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Description = "Enter your Jwt Access Token",
-        Reference = new OpenApiReference
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
+        Description = "Enter your JWT access token",
+        Reference = new OpenApiReference { Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme }
     };
-    options.AddSecurityDefinition("Bearer", jwtSecurityScheme);
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {jwtSecurityScheme, Array.Empty<string>() }
-    });
+    c.AddSecurityDefinition("Bearer", jwt);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwt, Array.Empty<string>() } });
+
+    c.EnableAnnotations();
 });
+
+
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddAuthentication(options =>
@@ -65,16 +65,35 @@ builder.Services.AddScoped<RoutineService>();
 builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<MoodService>();
 builder.Services.AddScoped<PredictionService>();
-builder.Services.AddScoped<MLService>();
-builder.Services.AddHttpClient<GeminiAnalyzerService>();
+builder.Services.AddHostedService<WeeklySummaryScheduler>();
+builder.Services.AddHttpClient<GeminiAnalyzerService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(600); 
+});
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using (var scope = app.Services.CreateScope())
+{
+    var env = Environment.GetEnvironmentVariable("ENABLE_SEED");
+    if (string.Equals(env, "true", StringComparison.OrdinalIgnoreCase))
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await BulkSeedJournalEntries.RunAsync(db);
+        Console.WriteLine("SeedJournalEntries: completed.");
+    }
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MindGuard API v1");
+        c.RoutePrefix = "swagger"; 
+    });
 }
 
 app.UseHttpsRedirection();
@@ -84,3 +103,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
