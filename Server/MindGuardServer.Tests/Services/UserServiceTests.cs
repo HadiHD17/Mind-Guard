@@ -6,7 +6,6 @@ using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using MindGuardServer.Services;
-using Moq;
 using Xunit;
 
 namespace MindGuardServer.Tests
@@ -18,19 +17,14 @@ namespace MindGuardServer.Tests
 
         public UserServiceTests()
         {
-            // Setup an in-memory database for testing
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // isolate each run
                 .Options;
 
             _dbContext = new AppDbContext(options);
             _userService = new UserService(_dbContext);
 
-            // Ensure the database is created
-            _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
-
-            // Seed some data for the tests
             SeedDatabase();
         }
 
@@ -56,37 +50,27 @@ namespace MindGuardServer.Tests
         [Fact]
         public async Task GetUserById_ShouldReturnUser_WhenUserExists()
         {
-            // Arrange
             var userId = 1;
 
-            // Act
             var result = await _userService.GetUserById(userId);
 
-            // Assert
             Assert.NotNull(result);
-            Assert.Equal(userId, result.Id);
+            Assert.Equal(userId, result!.Id);
             Assert.Equal("Test User", result.FullName);
         }
 
         [Fact]
         public async Task GetUserById_ShouldReturnNull_WhenUserDoesNotExist()
         {
-            // Arrange
-            var userId = 2;
-
-            // Act
-            var result = await _userService.GetUserById(userId);
-
-            // Assert
+            var result = await _userService.GetUserById(999);
             Assert.Null(result);
         }
 
         [Fact]
         public async Task UpdateUser_ShouldReturnUpdatedUser_WhenUserExists()
         {
-            // Arrange
             var userId = 1;
-            var updatedUser = new User
+            var updateDto = new UserUpdateDto
             {
                 FullName = "Updated User",
                 Email = "updated@test.com",
@@ -95,22 +79,20 @@ namespace MindGuardServer.Tests
                 Calendar_sync_enabled = false
             };
 
-            // Act
-            var result = await _userService.UpdateUser(userId, updatedUser);
+            var result = await _userService.UpdateUser(userId, updateDto);
 
-            // Assert
             Assert.NotNull(result);
-            Assert.Equal("Updated User", result.FullName);
+            Assert.Equal("Updated User", result!.FullName);
             Assert.Equal("updated@test.com", result.Email);
             Assert.Equal("0987654321", result.PhoneNumber);
+            Assert.False(result.IsDark);
+            Assert.False(result.Calendar_sync_enabled);
         }
 
         [Fact]
         public async Task UpdateUser_ShouldReturnNull_WhenUserDoesNotExist()
         {
-            // Arrange
-            var userId = 2;
-            var updatedUser = new User
+            var updateDto = new UserUpdateDto
             {
                 FullName = "Updated User",
                 Email = "updated@test.com",
@@ -119,61 +101,52 @@ namespace MindGuardServer.Tests
                 Calendar_sync_enabled = false
             };
 
-            // Act
-            var result = await _userService.UpdateUser(userId, updatedUser);
-
-            // Assert
+            var result = await _userService.UpdateUser(999, updateDto);
             Assert.Null(result);
         }
 
         [Fact]
         public async Task UpdatePassword_ShouldReturnTrue_WhenPasswordIsUpdated()
         {
-            // Arrange
-            var userId = 1;
             var dto = new UpdatePasswordDto
             {
                 CurrentPassword = "Password123!",
-                NewPassword = "NewPassword123!"
+                NewPassword = "NewPassword123!",
+                ConfirmNewPassword = "NewPassword123!"
             };
 
-            // Act
-            var result = await _userService.UpdatePassword(userId, dto);
+            var result = await _userService.UpdatePassword(1, dto);
 
-            // Assert
             Assert.True(result);
         }
 
         [Fact]
-        public async Task UpdatePassword_ShouldThrowException_WhenCurrentPasswordIsIncorrect()
+        public async Task UpdatePassword_ShouldReturnFalse_WhenCurrentPasswordIsIncorrect()
         {
-            // Arrange
-            var userId = 1;
             var dto = new UpdatePasswordDto
             {
                 CurrentPassword = "WrongPassword123!",
-                NewPassword = "NewPassword123!"
+                NewPassword = "NewPassword123!",
+                ConfirmNewPassword = "NewPassword123!"
             };
 
-            // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _userService.UpdatePassword(userId, dto));
+            var result = await _userService.UpdatePassword(1, dto);
+
+            Assert.False(result);
         }
 
         [Fact]
         public async Task UpdatePassword_ShouldReturnFalse_WhenUserDoesNotExist()
         {
-            // Arrange
-            var userId = 2;
             var dto = new UpdatePasswordDto
             {
                 CurrentPassword = "Password123!",
-                NewPassword = "NewPassword123!"
+                NewPassword = "NewPassword123!",
+                ConfirmNewPassword = "NewPassword123!"
             };
 
-            // Act
-            var result = await _userService.UpdatePassword(userId, dto);
+            var result = await _userService.UpdatePassword(999, dto);
 
-            // Assert
             Assert.False(result);
         }
     }

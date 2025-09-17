@@ -22,7 +22,8 @@ jobs:
           cache-dependency-path: Client/MindGuardClient/package-lock.json
 
       - name: Install deps
-        run: npm ci
+        working-directory: Client/MindGuardClient
+        run: npm ci --legacy-peer-deps
 
       - name: Run tests
         run: npm test -- --watchAll=false --passWithNoTests
