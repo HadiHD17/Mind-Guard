@@ -1,7 +1,92 @@
-.vs/
+# =========================
+# .NET / C# / Visual Studio
+# =========================
+
+# Build results
 bin/
 obj/
+out/
+
+# Visual Studio files
+.vs/
 *.user
 *.suo
-*.vsidx
-*.vscode/
+*.cache
+*.pdb
+*.mdb
+*.log
+*.ilk
+*.iobj
+*.idb
+*.DS_Store
+*.VC.db
+*.VC.VC.opendb
+
+# Rider IDE
+.idea/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET / Entity Framework
+appsettings.Development.json
+appsettings.Local.json
+
+# =========================
+# Node / React Native / Expo
+# =========================
+
+# Node modules
+node_modules/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+web-build/
+
+# Expo credentials and caches
+.expo-cache/
+.expo/android/
+.expo/ios/
+.expo/web/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Metro bundler cache
+.cache/
+
+# =========================
+# PostgreSQL / database
+# =========================
+
+# Ignore local database dumps if any
+*.sql
+*.dump
+
+# =========================
+# OS / system files
+# =========================
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Environment files
+# =========================
+
+.env
+.env.local
+.env.*.local

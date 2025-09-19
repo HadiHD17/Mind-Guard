@@ -1,0 +1,17 @@
+**/bin
+**/obj
+**/out
+**/.vs
+**/.vscode
+**/node_modules
+**/coverage
+**/*.user
+**/*.tmp
+**/Dockerfile*
+**/docker-compose*
+**/.git
+**/.gitignore
+**/README.md
+**/docs
+**/.dockerignore
+

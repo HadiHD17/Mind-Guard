@@ -1,0 +1,18 @@
+.hiw {
+  padding: 6px 0 30px;
+}
+.hiw__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.hiw__grid--mini .hiw-card__step {
+  background: var(--brand);
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .hiw__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,42 +1,44 @@
 {
   "expo": {
-    "name": "MindGuardClient",
-    "slug": "MindGuardClient",
+    "name": "MindGuard",
+    "slug": "mindguard",
+    "scheme": "mindguard",
+    "owner": "hadi17",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "mindguardclient",
-    "userInterfaceStyle": "automatic",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#80C6DA"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hadi.mindguard"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#80C6DA"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.hadi.mindguard"
     },
     "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      "expo-font",
+      "expo-localization",
       [
-        "expo-splash-screen",
+        "expo-calendar",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "calendarPermission": "MindGuard needs calendar access to add your routines."
         }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+      ],
+      "expo-secure-store"
+    ]
   }
 }
