@@ -50,15 +50,15 @@
 
 ### User Screens (Mobile)
 
-| Landing screen                                          | Login screen                              | Register screen                             |
-| ------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
-| ![Landing](./readme/demo/LandingPage.jpg)               | ![Login](./readme/demo/LoginPage.jpg)     | ![Register](./readme/demo/RegisterPage.jpg) |
-| Home screen                                             | Journal and Insight Screens               | Mood Map screen                             |
-| -----------------------------------------               | -------------------------------------     | ----------------------------------------    |
-| ![Home](./readme/demo/HomePage.jpg)                     | ![AI and ML](./readme/demo/AI_ML.mp4)     | ![Map](./readme/demo/MapPage.jpg)           |
-| Routine screen                                          | Profile screen                            |
-| -----------------------------------------               | -------------------------------------     |
-| ![Calendar syncing](./readme/demo/Calendar_syncing.mp4) | ![Profile](./readme/demo/ProfilePage.jpg) |
+| Landing screen      | Login screen         | Register screen    |
+| ------------------- | -------------------- | ------------------ |
+|![Landing](./readme/demo/LandingPage.jpg)|![Login](./readme/demo/LoginPage.jpg)|![Register](./readme/demo/RegisterPage.jpg)|
+| Home screen    | Journal and Insight Screens| Mood Map screen  |
+| ---------------| ----------------------     | -------------    |
+| ![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.mp4)|![Map](./readme/demo/MapPage.jpg)|
+| Routine screen | Profile screen   |
+| -------------  | ---------------- |
+|![Calendar syncing](./readme/demo/Calendar_syncing.mp4)|![Profile](./readme/demo/ProfilePage.jpg)|
 
 ### Admin Screens (Web)
 
@@ -68,11 +68,9 @@
 
 ### Automation Workflow
 
-| N8N Workflow                             |     | N8N Workflow |
-| ---------------------------------------- | --- | ------------ |
-| ![Workflow](./readme/demo/N8N.png)       |
-| ----------------------------------       |
-| ![Workflow](./readme/demo/N8N_Email.jpg) |
+| N8N Workflow                       | N8N Workflow                             |
+| ---------------------------------- | ---------------------------------------- |
+| ![Workflow](./readme/demo/N8N.png) | ![Workflow](./readme/demo/N8N_Email.jpg) |
 
 ### MLFlow
 
@@ -99,11 +97,9 @@
 
 ### Testing
 
-| Test Case                           |     | Test Case |
-| ----------------------------------- | --- | --------- |
-| ![Test](./readme/demo/Testing1.png) |
-| ----------------------------------- |
-| ![Test](./readme/demo/Testing2.png) |
+| Test Case                           | Test Case                           |
+| ----------------------------------- | ----------------------------------- |
+| ![Test](./readme/demo/Testing1.png) | ![Test](./readme/demo/Testing2.png) |
 
 ### Linear
 
