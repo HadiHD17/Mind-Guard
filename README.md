@@ -53,11 +53,9 @@
 | Landing screen      | Login screen         | Register screen    |
 | ------------------- | -------------------- | ------------------ |
 |![Landing](./readme/demo/LandingPage.jpg)|![Login](./readme/demo/LoginPage.jpg)|![Register](./readme/demo/RegisterPage.jpg)|
-| Home screen    | Journal and Insight Screens| Mood Map screen  |
-| ---------------| ----------------------     | -------------    |
-| ![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.mp4)|![Map](./readme/demo/MapPage.jpg)|
-| Routine screen | Profile screen   |
-| -------------  | ---------------- |
+|Home screen                        |Journal and Insight Screens          |Mood Map screen                  |
+|![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.mp4)|![Map](./readme/demo/MapPage.jpg)|
+| Routine screen                                        | Profile screen                          |
 |![Calendar syncing](./readme/demo/Calendar_syncing.mp4)|![Profile](./readme/demo/ProfilePage.jpg)|
 
 ### Admin Screens (Web)
