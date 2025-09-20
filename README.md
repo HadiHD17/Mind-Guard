@@ -50,44 +50,78 @@
 
 ### User Screens (Mobile)
 
-| Landing screen                            | Login screen                            | Register screen                          |
-| ----------------------------------------- | --------------------------------------- | ---------------------------------------- |
-| ![Landing](./readme/demo/LandingPage.jpg) | ![fsdaf](./readme/demo/LoginPage.jpg)   | ![fsdaf](./readme/demo/RegisterPage.jpg) |
-| Home screen                               | Journal screen                          | Insight screen                           |
-| ----------------------------------------- | -------------------------------------   | ---------------------------------------- |
-| ![Landing](./readme/demo/HomePage.jpg)    | ![fsdaf](./readme/demo/JournalPage.jpg) | ![fsdaf](./readme/demo/InsightsPage.jpg) |
-| Mood Map screen                           | Routine screen                          | Profile screen                           |
-| ----------------------------------------- | -------------------------------------   | ---------------------------------------- |
-| ![Landing](./readme/demo/MapPage.jpg)     | ![fsdaf](./readme/demo/RoutinePage.jpg) | ![fsdaf](./readme/demo/ProfilePage.jpg)  |
+| Landing screen                                          | Login screen                              | Register screen                             |
+| ------------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| ![Landing](./readme/demo/LandingPage.jpg)               | ![Login](./readme/demo/LoginPage.jpg)     | ![Register](./readme/demo/RegisterPage.jpg) |
+| Home screen                                             | Journal and Insight Screens               | Mood Map screen                             |
+| -----------------------------------------               | -------------------------------------     | ----------------------------------------    |
+| ![Home](./readme/demo/HomePage.jpg)                     | ![AI and ML](./readme/demo/AI_ML.mp4)     | ![Map](./readme/demo/MapPage.jpg)           |
+| Routine screen                                          | Profile screen                            |
+| -----------------------------------------               | -------------------------------------     |
+| ![Calendar syncing](./readme/demo/Calendar_syncing.mp4) | ![Profile](./readme/demo/ProfilePage.jpg) |
 
 ### Admin Screens (Web)
 
-| Login screen                            | Register screen                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Landing screen                          |
+| --------------------------------------- |
+| ![Landing](./readme/demo/1440x1024.png) |
+
+### Automation Workflow
+
+| N8N Workflow                             |     | N8N Workflow |
+| ---------------------------------------- | --- | ------------ |
+| ![Workflow](./readme/demo/N8N.png)       |
+| ----------------------------------       |
+| ![Workflow](./readme/demo/N8N_Email.jpg) |
+
+### MLFlow
+
+| MLFlow UI                                |
+| ---------------------------------------- |
+| ![MLFlow](./readme/demo/MLFlow_demo.mp4) |
 
 <br><br>
 
 <!-- Development & Testing -->
 <img src="./readme/title6.svg"/>
 
-### Add Title Here
+### Services
 
-| Services                                | Validation                            | Testing                               |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Service                               |
+| ------------------------------------- |
+| ![Service](./readme/demo/Service.png) |
+
+### Validation
+
+| Validation                                  |
+| ------------------------------------------- |
+| ![Validation](./readme/demo/Validation.png) |
+
+### Testing
+
+| Test Case                           |     | Test Case |
+| ----------------------------------- | --- | --------- |
+| ![Test](./readme/demo/Testing1.png) |
+| ----------------------------------- |
+| ![Test](./readme/demo/Testing2.png) |
+
+### Linear
+
+| Linear Workflow                             |
+| ------------------------------------------- |
+| ![Linear](./readme/demo/LinearWorkflow.png) |
 
 <br><br>
 
 <!-- Deployment -->
 <img src="./readme/title7.svg"/>
 
-### Add Title Here
+### Swagger
 
-- Description here.
+- Testing Apis responses using swagger and ensuring their optimization.
 
-| Postman API 1                           | Postman API 2                         | Postman API 3                         |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Swagger APIS                               | Swagger Docs                               |
+| ------------------------------------------ | ------------------------------------------ |
+| ![Swagger](./readme/demo/swagger_apis.png) | ![Swagger](./readme/demo/swagger_docs.png) |
 
 <br><br>
