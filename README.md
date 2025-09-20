@@ -62,7 +62,7 @@
 
 | Landing screen                          |
 | --------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) |
+| ![Landing](./readme/demo/Landing.gif) |
 
 ### Automation Workflow
 
