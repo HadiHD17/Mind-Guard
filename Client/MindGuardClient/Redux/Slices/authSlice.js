@@ -138,7 +138,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       AsyncStorage.removeItem("@user_data");
-      delete api.defaults.headers.common.Authorization;
+      // delete api.defaults.headers.common.Authorization;
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
@@ -157,7 +157,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.token = action.payload.accessToken;
-        api.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
+        // api.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -173,7 +173,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.token = action.payload.accessToken;
-        api.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
+        // api.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
