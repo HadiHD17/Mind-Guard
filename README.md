@@ -30,19 +30,20 @@
 
 ### The Journey of the Sexy Features
 
-- Seamless Calendar Syncing: The platform integrates with personal calendars to align daily schedules with mood predictions, helping users plan activities at times when they are most likely to feel energized and focused.
+- **Seamless Calendar Syncing:** The platform integrates with personal calendars to align daily schedules with mood predictions, helping users plan activities at times when they are most likely to feel energized and focused.
 
-- End-to-End MLflow Tracking: Every machine learning experiment, model version, and deployment is automatically tracked with MLflow, ensuring reproducibility, transparency, and continuous improvement of predictive insights.
+- **End-to-End MLflow Tracking:** Every machine learning experiment, model version, and deployment is automatically tracked with MLflow, ensuring reproducibility, transparency, and continuous improvement of predictive insights.
 
-- Autonomous AI Agent: A robust AI agent analyzes journal entries and behavioral signals, delivering real-time mood assessments, personalized recommendations, and early risk detection for better mental health management.
+- **Autonomous AI Agent:** A robust AI agent analyzes journal entries and behavioral signals, delivering real-time mood assessments, personalized recommendations, and early risk detection for better mental health management.
 
-- Predictive ML Modeling: Advanced machine learning models process historical mood and habit data to forecast emotional states up to 48 hours ahead, empowering users with foresight into their mental well-being.
+- **Predictive ML Modeling:** Advanced machine learning models process historical mood and habit data to forecast emotional states up to 48 hours ahead, empowering users with foresight into their mental well-being.
 
-- Automated n8n Workflows: Integrated with n8n, the system automates data pipelines and report generation—streamlining routine tasks, sending timely alerts, and connecting MindGuard to external services with minimal effort.
+- **Automated n8n Workflows:** Integrated with n8n, the system automates data pipelines and report generation—streamlining routine tasks, sending timely alerts, and connecting MindGuard to external services with minimal effort.
 
 ### Feature Diagram
 
 <img src="./readme/demo/Feature Diagram.png"/>
+
 <br><br>
 
 <!-- Demo -->
@@ -50,31 +51,35 @@
 
 ### User Screens (Mobile)
 
-| Landing screen      | Login screen         | Register screen    |
-| ------------------- | -------------------- | ------------------ |
-|![Landing](./readme/demo/LandingPage.jpg)|![Login](./readme/demo/LoginPage.jpg)|![Register](./readme/demo/RegisterPage.jpg)|
-|Home screen                        |Journal and Insight Screens          |Mood Map screen                  |
-|![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.mp4)|![Map](./readme/demo/MapPage.jpg)|
-| Routine screen                                        | Profile screen                          |
-|![Calendar syncing](./readme/demo/Calendar_syncing.mp4)|![Profile](./readme/demo/ProfilePage.jpg)|
+| Landing screen | Login screen | Register screen |
+| --- | --- | --- |
+| ![Landing](./readme/demo/LandingPage.jpg) | ![Login](./readme/demo/LoginPage.jpg) | ![Register](./readme/demo/RegisterPage.jpg) |
+
+| Home screen | Journal & Insight (video) | Mood Map screen |
+| --- | --- | --- |
+| ![Home](./readme/demo/HomePage.jpg) | <video src="./readme/demo/AI_ML.mp4" controls playsinline muted loop width="320" poster="./readme/demo/AI_ML_poster.jpg">Your browser does not support the video tag.</video> | ![Map](./readme/demo/MapPage.jpg) |
+
+| Routine (video) | Profile screen |
+| --- | --- |
+| <video src="./readme/demo/Calendar_syncing.mp4" controls playsinline muted loop width="320" poster="./readme/demo/Calendar_syncing_poster.jpg">Your browser does not support the video tag.</video> | ![Profile](./readme/demo/ProfilePage.jpg) |
 
 ### Admin Screens (Web)
 
-| Landing screen                          |
-| --------------------------------------- |
+| Landing screen |
+| --- |
 | ![Landing](./readme/demo/1440x1024.png) |
 
 ### Automation Workflow
 
-| N8N Workflow                       | N8N Workflow                             |
-| ---------------------------------- | ---------------------------------------- |
+| N8N Workflow | N8N Workflow |
+| --- | --- |
 | ![Workflow](./readme/demo/N8N.png) | ![Workflow](./readme/demo/N8N_Email.jpg) |
 
-### MLFlow
+### MLflow
 
-| MLFlow UI                                |
-| ---------------------------------------- |
-| ![MLFlow](./readme/demo/MLFlow_demo.mp4) |
+| MLflow UI |
+| --- |
+| <video src="./readme/demo/MLFlow_demo.mp4" controls playsinline muted loop width="480" poster="./readme/demo/MLFlow_demo_poster.jpg">Your browser does not support the video tag.</video> |
 
 <br><br>
 
@@ -83,26 +88,26 @@
 
 ### Services
 
-| Service                               |
-| ------------------------------------- |
+| Service |
+| --- |
 | ![Service](./readme/demo/Service.png) |
 
 ### Validation
 
-| Validation                                  |
-| ------------------------------------------- |
+| Validation |
+| --- |
 | ![Validation](./readme/demo/Validation.png) |
 
 ### Testing
 
-| Test Case                           | Test Case                           |
-| ----------------------------------- | ----------------------------------- |
+| Test Case | Test Case |
+| --- | --- |
 | ![Test](./readme/demo/Testing1.png) | ![Test](./readme/demo/Testing2.png) |
 
 ### Linear
 
-| Linear Workflow                             |
-| ------------------------------------------- |
+| Linear Workflow |
+| --- |
 | ![Linear](./readme/demo/LinearWorkflow.png) |
 
 <br><br>
@@ -112,10 +117,8 @@
 
 ### Swagger
 
-- Testing Apis responses using swagger and ensuring their optimization.
+- Testing API responses using Swagger and ensuring their optimization.
 
-| Swagger APIS                               | Swagger Docs                               |
-| ------------------------------------------ | ------------------------------------------ |
+| Swagger APIs | Swagger Docs |
+| --- | --- |
 | ![Swagger](./readme/demo/swagger_apis.png) | ![Swagger](./readme/demo/swagger_docs.png) |
-
-<br><br>
