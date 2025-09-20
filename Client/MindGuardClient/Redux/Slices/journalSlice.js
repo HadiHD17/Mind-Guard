@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../Api";
 
+const byCreatedAtDesc = (a, b) =>
+  new Date(b.createdAt || b.created_at) - new Date(a.createdAt || a.created_at);
+
 export const getJournals = createAsyncThunk(
   "journal/getJournals",
   async ({ userId, accessToken }, { rejectWithValue }) => {
@@ -58,7 +61,7 @@ const journalSlice = createSlice({
         state.error = null;
       })
       .addCase(getJournals.fulfilled, (state, action) => {
-        state.journals = action.payload;
+        state.journals = [...(action.payload ?? [])].sort(byCreatedAtDesc);
         state.loading = false;
       })
       .addCase(getJournals.rejected, (state, action) => {
@@ -72,7 +75,11 @@ const journalSlice = createSlice({
         state.error = null;
       })
       .addCase(saveJournal.fulfilled, (state, action) => {
-        state.journals.push(action.payload);
+        if (action.payload) {
+          state.journals = [action.payload, ...state.journals].sort(
+            byCreatedAtDesc
+          );
+        }
         state.loading = false;
       })
       .addCase(saveJournal.rejected, (state, action) => {

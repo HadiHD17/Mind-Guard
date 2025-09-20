@@ -18,7 +18,7 @@ namespace MindGuardServer.Tests.Services
         public RoutineServiceTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid())  // Unique name for each test
+                .UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid())  
                 .Options;
 
             _context = new AppDbContext(options);
@@ -51,7 +51,6 @@ namespace MindGuardServer.Tests.Services
         [Fact]
         public async Task GetRoutinesByUserId_ShouldReturnRoutines()
         {
-            // Arrange: Add routines one by one to ensure proper tracking
             var routine1 = new Routine
             {
                 UserId = 1,
@@ -78,13 +77,10 @@ namespace MindGuardServer.Tests.Services
             _context.Routines.Add(routine2);
             await _context.SaveChangesAsync();
 
-            // Clear change tracker to ensure we read from database
             _context.ChangeTracker.Clear();
 
-            // Act: Get the routines by UserId
             var result = await _routineService.GetRoutinesByUserId(1);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count());
         }
@@ -92,7 +88,6 @@ namespace MindGuardServer.Tests.Services
         [Fact]
         public async Task MarkAsCompleteAsync_ShouldMarkRoutineAsCompleted()
         {
-            // Arrange: Create and save routine first to get ID
             var routine = new Routine
             {
                 UserId = 1,
@@ -109,7 +104,7 @@ namespace MindGuardServer.Tests.Services
 
             var occurrence = new Routine_Occurence
             {
-                RoutineID = routine.Id, // Use the actual ID from saved routine
+                RoutineID = routine.Id, 
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 IsCompleted = false,
                 CompletedAt = DateTime.UtcNow
@@ -118,10 +113,8 @@ namespace MindGuardServer.Tests.Services
             _context.Routine_Occurunces.Add(occurrence);
             await _context.SaveChangesAsync();
 
-            // Act: Mark routine as complete
             var result = await _routineService.MarkAsCompleteAsync(routine.Id);
 
-            // Assert
             Assert.True(result.Success);
             Assert.Equal("Marked as complete", result.Message);
             Assert.True(result.Occurrence.IsCompleted);
@@ -130,7 +123,6 @@ namespace MindGuardServer.Tests.Services
         [Fact]
         public async Task MarkAsCompleteAsync_ShouldReturnAlreadyCompletedMessage_WhenCompletedToday()
         {
-            // Arrange: Create and save routine first to get ID
             var routine = new Routine
             {
                 UserId = 1,
@@ -145,25 +137,21 @@ namespace MindGuardServer.Tests.Services
             _context.Routines.Add(routine);
             await _context.SaveChangesAsync();
 
-            // Create occurrence with the correct routine ID
             var occurrence = new Routine_Occurence
             {
-                RoutineID = routine.Id, // Use the actual ID from saved routine
+                RoutineID = routine.Id,
                 Date = DateOnly.FromDateTime(DateTime.Now),
-                IsCompleted = true, // Already completed
+                IsCompleted = true, 
                 CompletedAt = DateTime.UtcNow
             };
 
             _context.Routine_Occurunces.Add(occurrence);
             await _context.SaveChangesAsync();
 
-            // Clear change tracker to ensure fresh database read
             _context.ChangeTracker.Clear();
 
-            // Act: Try to mark the routine as complete again
             var result = await _routineService.MarkAsCompleteAsync(routine.Id);
 
-            // Assert
             Assert.False(result.Success);
             Assert.Equal("Already completed today", result.Message);
         }
