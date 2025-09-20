@@ -61,7 +61,13 @@ const initialState = {
 const moodSlice = createSlice({
   name: "mood",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMoods: (state) => {
+      state.moods = [];
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getMoods.pending, (state) => {
@@ -93,5 +99,5 @@ const moodSlice = createSlice({
       });
   },
 });
-
+export const { clearMoods } = moodSlice.actions;
 export default moodSlice.reducer;

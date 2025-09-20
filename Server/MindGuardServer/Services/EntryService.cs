@@ -54,7 +54,7 @@ namespace MindGuardServer.Services
         }
 
         public Task<List<Journal_Entry>> GetEntryByUserId(int userid) =>
-            _context.Journal_Entries.Where(e => e.UserId == userid).ToListAsync();
+            _context.Journal_Entries.Where(e => e.UserId == userid).OrderByDescending(e=>e.CreatedAt).ToListAsync();
 
         public Task<Journal_Entry?> GetEntryById(int id) =>
             _context.Journal_Entries.FindAsync(id).AsTask();

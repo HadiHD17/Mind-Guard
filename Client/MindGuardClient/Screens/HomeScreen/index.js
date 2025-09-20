@@ -31,12 +31,6 @@ export default function HomeScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.welcomeText}>Welcome, {user?.fullName}</Text>
 
-        {userError && (
-          <Text style={styles.errorText}>
-            Error loading user data: {userError}
-          </Text>
-        )}
-
         <Text style={styles.questionText}>How Are You Feeling Today?</Text>
 
         <View style={styles.feelingCardsRow}>

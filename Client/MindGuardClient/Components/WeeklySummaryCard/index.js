@@ -54,7 +54,6 @@ export default function WeeklySummaryCard({ entries }) {
     return (
       <View style={styles.card}>
         <Text style={styles.row}>Couldn’t load weekly summary.</Text>
-        <Text style={[styles.row, { opacity: 0.7 }]}>{err}</Text>
       </View>
     );
   }

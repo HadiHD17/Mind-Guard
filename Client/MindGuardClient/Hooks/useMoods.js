@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMoods, logMood } from "../Redux/Slices/moodSlice";
+import { getMoods, logMood, clearMoods } from "../Redux/Slices/moodSlice";
 import { moodToEmoji, getDayOfWeek } from "../Helpers/MoodHelpers";
 
 export default function useMoods(userId) {
@@ -12,6 +12,9 @@ export default function useMoods(userId) {
   useEffect(() => {
     if (userId) {
       dispatch(getMoods(userId));
+    } else {
+      dispatch(clearMoods());
+      setUniqueMoodsByDay([]);
     }
   }, [userId, dispatch]);
 

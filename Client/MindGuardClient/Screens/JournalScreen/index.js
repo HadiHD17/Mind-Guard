@@ -64,13 +64,6 @@ export default function JournalScreen() {
           Welcome, {user ? user.fullName : ""}
         </Text>
 
-        {userError && (
-          <Text style={styles.errorText}>
-            Error loading user data: {userError}
-          </Text>
-        )}
-        {error && <Text style={styles.errorText}>{error}</Text>}
-
         <View style={styles.headerRow}>
           <Text style={styles.title}>Journal</Text>
           <TouchableOpacity
