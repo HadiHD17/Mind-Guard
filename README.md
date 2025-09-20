@@ -17,11 +17,11 @@
 
 ### ER Diagram
 
-- <img src="./readme/demo/ER diagram.png/>
+- <img src="./readme/demo/ER diagram.png"/>
 
 ### Component Diagram
 
-- <img src="./readme/demo/Component Diagram.png/>
+- <img src="./readme/demo/Component Diagram.png"/>
 
 <br><br>
 
@@ -42,7 +42,7 @@
 
 ### Feature Diagram
 
-<img src="./readme/demo/Feature Diagram.png/>
+<img src="./readme/demo/Feature Diagram.png"/>
 <br><br>
 
 <!-- Demo -->
