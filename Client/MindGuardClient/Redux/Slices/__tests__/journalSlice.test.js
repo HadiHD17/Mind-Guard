@@ -67,7 +67,7 @@ describe("journalSlice", () => {
       expect(state.journals[0]).toEqual(journalEntry);
     });
 
-    it("should handle saveJournal.fulfilled with existing journals", () => {
+    it("should handle saveJournal.fulfilled with existing journals (newest first)", () => {
       const stateWithJournals = {
         journals: [{ id: "1", content: "First entry", date: "2023-01-01" }],
         loading: false,
@@ -84,7 +84,8 @@ describe("journalSlice", () => {
 
       expect(state.loading).toBe(false);
       expect(state.journals).toHaveLength(2);
-      expect(state.journals[1]).toEqual(newJournal);
+      expect(state.journals[0]).toEqual(newJournal);
+      expect(state.journals[1]).toEqual({ id: "1", content: "First entry", date: "2023-01-01" });    
     });
 
     it("should handle saveJournal.rejected", () => {
