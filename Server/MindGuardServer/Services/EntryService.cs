@@ -12,7 +12,7 @@ namespace MindGuardServer.Services
         public EntryService(AppDbContext context, GeminiAnalyzerService? ai = null)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _ai = ai; // may be null in tests
+            _ai = ai;
         }
 
         public async Task<Journal_Entry?> AddEntry(Journal_Entry entry, CancellationToken ct = default)
@@ -35,7 +35,6 @@ namespace MindGuardServer.Services
 
         private async Task<GeminiAnalyzerService.AiResult?> AnalyzeWithTimeoutAsync(string content, CancellationToken ct = default)
         {
-            // If analyzer is missing or not configured, skip cleanly (fixes the “null analyzer” test)
             if (_ai is null || !_ai.IsConfigured) return null;
 
             try
@@ -55,7 +54,7 @@ namespace MindGuardServer.Services
         }
 
         public Task<List<Journal_Entry>> GetEntryByUserId(int userid) =>
-            _context.Journal_Entries.Where(e => e.UserId == userid).ToListAsync();
+            _context.Journal_Entries.Where(e => e.UserId == userid).OrderByDescending(e=>e.CreatedAt).ToListAsync();
 
         public Task<Journal_Entry?> GetEntryById(int id) =>
             _context.Journal_Entries.FindAsync(id).AsTask();

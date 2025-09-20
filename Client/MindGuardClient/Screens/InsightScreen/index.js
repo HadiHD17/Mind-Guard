@@ -52,11 +52,6 @@ export default function InsightScreen() {
             <ActivityIndicator />
           </View>
         )}
-        {error && (
-          <Text style={{ color: "crimson", marginTop: 8 }}>
-            {String(error)}
-          </Text>
-        )}
       </ScrollView>
     </SafeAreaView>
   );

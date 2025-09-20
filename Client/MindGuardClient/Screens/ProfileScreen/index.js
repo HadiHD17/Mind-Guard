@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { logout, setUser } from "../../Redux/Slices/authSlice";
+import { clearUser } from "../../Redux/Slices/userSlice";
 import styles from "./profile.styles";
 import ProfileCard from "../../Components/ProfileCard";
 import EditAccountModal from "../../Components/EditModal";
@@ -29,7 +30,11 @@ export default function ProfileScreen({ navigation }) {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigation.replace("Landing");
+    dispatch(clearUser());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Landing" }],
+    });
   };
 
   const {

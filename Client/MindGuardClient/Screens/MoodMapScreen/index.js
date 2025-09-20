@@ -20,7 +20,6 @@ export default function MoodMapScreen({ navigation }) {
   } = useMoodMap();
 
   if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>{error}</Text>;
 
   return (
     <SafeAreaView style={styles.container}>

@@ -7,6 +7,7 @@ import {
   handleMarkComplete,
   handleUpdateDays,
   addRoutine,
+  clearRoutines,
 } from "../Redux/Slices/routineSlice";
 
 export default function useRoutine(userId, accessToken) {
@@ -18,6 +19,8 @@ export default function useRoutine(userId, accessToken) {
   useEffect(() => {
     if (userId && accessToken) {
       dispatch(loadRoutines({ userId, accessToken }));
+    } else {
+      dispatch(clearRoutines());
     }
   }, [userId, accessToken, dispatch]);
 

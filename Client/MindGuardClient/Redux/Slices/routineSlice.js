@@ -129,7 +129,14 @@ const initialState = {
 const routineSlice = createSlice({
   name: "routine",
   initialState,
-  reducers: {},
+  reducers: {
+    clearRoutines: (state) => {
+      state.routines = [];
+      state.routine = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getRoutine.pending, (state) => {
@@ -217,5 +224,5 @@ const routineSlice = createSlice({
       });
   },
 });
-
+export const { clearRoutines } = routineSlice.actions;
 export default routineSlice.reducer;
