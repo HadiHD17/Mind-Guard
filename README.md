@@ -105,6 +105,12 @@
 | ------------------------------------------- |
 | ![Linear](./readme/demo/LinearWorkflow.png) |
 
+### Pull Requests
+
+| Frontend CI                                 |Backend CI                        |
+| ------------------------------------------- |-------------------------------   |
+| ![Frontend](./readme/demo/CI1.png)          |![Backend](./readme/demo/CI2.png) |
+
 <br><br>
 
 <!-- Deployment -->
