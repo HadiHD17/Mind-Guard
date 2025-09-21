@@ -39,6 +39,7 @@ const mockStore = {
     mood: { moods: [], loading: false, error: null },
     journal: { journals: [], loading: false, error: null },
     routine: { routines: [], loading: false, error: null },
+    theme: { mode: "system", effective: "light" },
   })),
   dispatch: jest.fn(),
   subscribe: jest.fn(),

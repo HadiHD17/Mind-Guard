@@ -48,3 +48,4 @@ export default themeSlice.reducer;
 // Selectors
 export const selectTheme = (state) => state.theme.effective; // "light" | "dark"
 export const selectThemeMode = (state) => state.theme.mode; // "system" | "light" | "dark"
+
