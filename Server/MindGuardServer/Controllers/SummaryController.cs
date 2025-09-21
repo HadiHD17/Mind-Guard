@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
@@ -16,10 +16,10 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class SummaryController : ControllerBase
     {
-        private readonly SummaryService _summaryservice;
+        private readonly ISummaryService _summaryservice;
         private readonly IMapper _mapper;
 
-        public SummaryController(SummaryService summaryService, IMapper mapper)
+        public SummaryController(ISummaryService summaryService, IMapper mapper)
         {
             _summaryservice = summaryService;
             _mapper = mapper;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
@@ -16,10 +16,10 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class RoutineController : ControllerBase
     {
-        private readonly RoutineService _routineService;
+        private readonly IRoutineService _routineService;
         private readonly IMapper _mapper;
 
-        public RoutineController(RoutineService routineService, IMapper mapper)
+        public RoutineController(IRoutineService routineService, IMapper mapper)
         {
             _routineService = routineService;
             _mapper = mapper;

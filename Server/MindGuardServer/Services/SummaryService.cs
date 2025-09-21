@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MindGuardServer.Data;
 using MindGuardServer.Models.Domain;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
-    public class SummaryService
+    public class SummaryService : ISummaryService
     {
         private readonly AppDbContext _context;
-        private readonly MoodService _moodService;
+        private readonly IMoodService _moodService;
 
-        public SummaryService(AppDbContext context, MoodService moodService)
+        public SummaryService(AppDbContext context, IMoodService moodService)
         {
             _context = context;
             _moodService = moodService;

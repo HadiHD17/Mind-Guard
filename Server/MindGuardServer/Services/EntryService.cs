@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MindGuardServer.Data;
 using MindGuardServer.Models.Domain;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
-    public class EntryService
+    public class EntryService : IEntryService
     {
         private readonly AppDbContext _context;
-        private readonly GeminiAnalyzerService? _ai;
+        private readonly IGeminiAnalyzerService? _ai;
 
-        public EntryService(AppDbContext context, GeminiAnalyzerService? ai = null)
+        public EntryService(AppDbContext context, IGeminiAnalyzerService? ai = null)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _ai = ai;

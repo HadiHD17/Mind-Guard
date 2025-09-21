@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using MindGuardServer.Data;
 using MindGuardServer.Mappings;
 using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,18 +59,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<EntryService>();
-builder.Services.AddScoped<RoutineService>();
-builder.Services.AddScoped<SummaryService>();
-builder.Services.AddScoped<MoodService>();
-builder.Services.AddScoped<PredictionService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEntryService, EntryService>();
+builder.Services.AddScoped<IRoutineService, RoutineService>();
+builder.Services.AddScoped<ISummaryService, SummaryService>();
+builder.Services.AddScoped<IMoodService, MoodService>();
+builder.Services.AddScoped<IPredictionService, PredictionService>();
 builder.Services.AddHostedService<WeeklySummaryScheduler>();
 builder.Services.AddHttpClient<GeminiAnalyzerService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(600); 
 });
+builder.Services.AddScoped<IGeminiAnalyzerService>(provider => 
+    provider.GetRequiredService<GeminiAnalyzerService>());
 
 
 var app = builder.Build();

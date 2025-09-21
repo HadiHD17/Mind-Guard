@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
@@ -16,10 +16,10 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class PredictionController : ControllerBase
     {
-        private readonly PredictionService _predictionService;
+        private readonly IPredictionService _predictionService;
         private readonly IMapper _mapper;
 
-        public PredictionController(PredictionService predictionService, IMapper mapper)
+        public PredictionController(IPredictionService predictionService, IMapper mapper)
         {
             _mapper = mapper;
             _predictionService = predictionService;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using static MindGuardServer.Services.MoodService;
 
@@ -17,10 +17,10 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class MoodController : ControllerBase
     {
-        private readonly MoodService _moodService;
+        private readonly IMoodService _moodService;
         private readonly IMapper _mapper;
 
-        public MoodController(MoodService moodService, IMapper mapper)
+        public MoodController(IMoodService moodService, IMapper mapper)
         {
             _moodService = moodService;
             _mapper = mapper;
