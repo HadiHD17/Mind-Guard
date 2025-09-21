@@ -7,10 +7,11 @@ using MindGuardServer.Helpers;
 using MindGuardServer.Models.DTO;
 using System.IdentityModel.Tokens.Jwt;
 using MindGuardServer.Models.Domain;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private readonly AppDbContext _dbContext;
         private readonly IConfiguration _configuration;

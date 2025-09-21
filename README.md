@@ -50,19 +50,23 @@
 
 ### User Screens (Mobile)
 
-| Landing screen      | Login screen         | Register screen    |
-| ------------------- | -------------------- | ------------------ |
-|![Landing](./readme/demo/LandingPage.jpg)|![Login](./readme/demo/LoginPage.jpg)|![Register](./readme/demo/RegisterPage.jpg)|
-|Home screen                        |Journal and Insight Screens          |Mood Map screen                  |
-|![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.gif)|![Map](./readme/demo/MapPage.jpg)|
-| Routine screen                                        | Profile screen                          |
-|![Calendar syncing](./readme/demo/Calendar_syncing.gif)|![Profile](./readme/demo/ProfilePage.jpg)|
+| Landing screen                            | Login screen                          | Register screen                             |
+| ----------------------------------------- | ------------------------------------- | ------------------------------------------- |
+| ![Landing](./readme/demo/LandingPage.jpg) | ![Login](./readme/demo/LoginPage.jpg) | ![Register](./readme/demo/RegisterPage.jpg) |
+
+| Home screen                         | Journal and Insight Screens           | Mood Map screen                   |
+| ----------------------------------- | ------------------------------------- | --------------------------------- |
+| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI_ML.gif) | ![Map](./readme/demo/MapPage.jpg) |
+
+| Routine screen                                          | Profile screen                            |
+| ------------------------------------------------------- | ----------------------------------------- |
+| ![Calendar syncing](./readme/demo/Calendar_syncing.gif) | ![Profile](./readme/demo/ProfilePage.jpg) |
 
 ### Admin Screens (Web)
 
-| Landing screen                          |
-| --------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) |
+| Landing screen                        |
+| ------------------------------------- |
+| ![Landing](./readme/demo/Landing.gif) |
 
 ### Automation Workflow
 
@@ -107,9 +111,9 @@
 
 ### Pull Requests
 
-| Frontend CI                                 |Backend CI                        |
-| ------------------------------------------- |-------------------------------   |
-| ![Frontend](./readme/demo/CI1.png)          |![Backend](./readme/demo/CI2.png) |
+| Frontend CI                        | Backend CI                        |
+| ---------------------------------- | --------------------------------- |
+| ![Frontend](./readme/demo/CI1.png) | ![Backend](./readme/demo/CI2.png) |
 
 <br><br>
 
@@ -123,5 +127,11 @@
 | Swagger APIS                               | Swagger Docs                               |
 | ------------------------------------------ | ------------------------------------------ |
 | ![Swagger](./readme/demo/swagger_apis.png) | ![Swagger](./readme/demo/swagger_docs.png) |
+
+### Deployment Map
+
+| Deployment Map                                 |
+| ---------------------------------------------- |
+| ![Map](./readme/demo/Deployment%20Diagram.png) |
 
 <br><br>

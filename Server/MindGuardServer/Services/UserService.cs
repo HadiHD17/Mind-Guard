@@ -5,10 +5,11 @@ using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
 using System;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly AppDbContext _context;
 

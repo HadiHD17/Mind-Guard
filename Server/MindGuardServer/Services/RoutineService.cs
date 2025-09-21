@@ -2,10 +2,11 @@
 using MindGuardServer.Data;
 using MindGuardServer.Models.Domain;
 using System.Globalization;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
-        public class RoutineService
+        public class RoutineService : IRoutineService
         {
         private readonly AppDbContext _context;
         private static readonly TimeZoneInfo LebanonTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Beirut");

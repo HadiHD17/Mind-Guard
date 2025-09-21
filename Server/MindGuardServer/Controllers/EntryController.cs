@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Helpers;
 using MindGuardServer.Models.Domain;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
@@ -16,9 +16,9 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class EntryController : ControllerBase
     {
-        private readonly EntryService _entryservice;
+        private readonly IEntryService _entryservice;
         private readonly IMapper _mapper;
-        public EntryController(EntryService entryservice, IMapper mapper)
+        public EntryController(IEntryService entryservice, IMapper mapper)
         {
             _entryservice = entryservice;
             _mapper = mapper;

@@ -5,11 +5,12 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using MindGuardServer.Services.Interfaces;
 
 namespace MindGuardServer.Services
 {
 
-    public class GeminiAnalyzerService
+    public class GeminiAnalyzerService : IGeminiAnalyzerService
     {
         private readonly HttpClient _http;
         private readonly string _model;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MindGuardServer.Models.DTO;
-using MindGuardServer.Services;
+using MindGuardServer.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindGuardServer.Controllers
@@ -11,9 +11,9 @@ namespace MindGuardServer.Controllers
     [Produces("application/json")]
     public class AuthController : ControllerBase
     {
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
 
-        public AuthController(JwtService jwtService)
+        public AuthController(IJwtService jwtService)
         {
             _jwtService = jwtService;
         }
