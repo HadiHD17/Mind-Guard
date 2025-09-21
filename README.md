@@ -115,11 +115,6 @@
 | ---------------------------------- | --------------------------------- |
 | ![Frontend](./readme/demo/CI1.png) | ![Backend](./readme/demo/CI2.png) |
 
-<br><br>
-
-<!-- Deployment -->
-<img src="./readme/title7.svg"/>
-
 ### Swagger
 
 - Testing Apis responses using swagger and ensuring their optimization.
@@ -127,6 +122,11 @@
 | Swagger APIS                               | Swagger Docs                               |
 | ------------------------------------------ | ------------------------------------------ |
 | ![Swagger](./readme/demo/swagger_apis.png) | ![Swagger](./readme/demo/swagger_docs.png) |
+
+<br><br>
+
+<!-- Deployment -->
+<img src="./readme/title7.svg"/>
 
 ### Deployment Map
 
