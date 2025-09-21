@@ -50,19 +50,23 @@
 
 ### User Screens (Mobile)
 
-| Landing screen      | Login screen         | Register screen    |
-| ------------------- | -------------------- | ------------------ |
+| Landing screen                          | Login screen                        | Register screen    |
+| ------------------------------------    | ----------------------------------- | ------------------ |
 |![Landing](./readme/demo/LandingPage.jpg)|![Login](./readme/demo/LoginPage.jpg)|![Register](./readme/demo/RegisterPage.jpg)|
+
 |Home screen                        |Journal and Insight Screens          |Mood Map screen                  |
+|---------------------------------- |-----------------------------------  |---------------------------------|
 |![Home](./readme/demo/HomePage.jpg)|![AI and ML](./readme/demo/AI_ML.gif)|![Map](./readme/demo/MapPage.jpg)|
+
 | Routine screen                                        | Profile screen                          |
+|---------------------------------------------------    |---------------------------------------- |
 |![Calendar syncing](./readme/demo/Calendar_syncing.gif)|![Profile](./readme/demo/ProfilePage.jpg)|
 
 ### Admin Screens (Web)
 
 | Landing screen                          |
 | --------------------------------------- |
-| ![Landing](./readme/demo/Landing.gif) |
+| ![Landing](./readme/demo/Landing.gif)   |
 
 ### Automation Workflow
 
