@@ -7,15 +7,19 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import styles from "./EditPasswordModal.Styles";
+import { createEditPasswordModalStyles } from "./EditPasswordModal.Styles";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
 import useUser from "../../Hooks/useUser";
+import { useTheme } from "../../Theme/useTheme";
 import useEditAccount from "../../Hooks/useEditAccount";
 
 export default function EditPasswordModal({ visible, onClose, onSave }) {
+  const { theme } = useTheme();
+  const styles = createEditPasswordModalStyles(theme);
+
   const [password, setPassword] = useState("");
   const [newpassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,7 +68,7 @@ export default function EditPasswordModal({ visible, onClose, onSave }) {
           <View style={styles.header}>
             <Text style={styles.title}>Edit Password</Text>
             <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={24} color="#1E3A5F" />
+              <Ionicons name="close" size={24} color={theme.text} />
             </TouchableOpacity>
           </View>
 

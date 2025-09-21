@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from "./MoodTrend.Styles";
+import { createMoodTrendStyles } from "./MoodTrend.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function MoodTrendCard({
   title,
@@ -8,6 +9,8 @@ export default function MoodTrendCard({
   onRightPress,
   moods,
 }) {
+  const { theme } = useTheme();
+  const styles = createMoodTrendStyles(theme);
   return (
     <View style={styles.card}>
       <View style={styles.header}>

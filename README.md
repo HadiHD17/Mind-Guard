@@ -58,9 +58,9 @@
 | ----------------------------------- | ------------------------------------- | --------------------------------- |
 | ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI_ML.gif) | ![Map](./readme/demo/MapPage.jpg) |
 
-| Routine screen                                          | Profile screen                            |
-| ------------------------------------------------------- | ----------------------------------------- |
-| ![Calendar syncing](./readme/demo/Calendar_syncing.gif) | ![Profile](./readme/demo/ProfilePage.jpg) |
+| Routine screen                                          | Profile screen                            | Dark Mode                           |
+| ------------------------------------------------------- | ----------------------------------------- | ----------------------------------- |
+| ![Calendar syncing](./readme/demo/Calendar_syncing.gif) | ![Profile](./readme/demo/ProfilePage.jpg) | ![Dark](./readme/demo/darkmode.gif) |
 
 ### Admin Screens (Web)
 

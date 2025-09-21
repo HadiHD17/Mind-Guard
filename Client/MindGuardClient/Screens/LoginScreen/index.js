@@ -8,13 +8,17 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import styles from "./Login.Styles";
+import { createLoginStyles } from "./Login.Styles";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import { useSelector } from "react-redux";
 import useLogin from "../../Hooks/useLogin";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function LoginScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createLoginStyles(theme);
+
   const { loading, error } = useSelector((state) => state.auth);
 
   const {

@@ -10,14 +10,17 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import styles from "./journal.styles";
+import { createJournalStyles } from "./journal.styles";
 import JournalCard from "../../Components/EntryCard";
 import AddEntryModal from "../../Components/EntryModal";
 import useUser from "../../Hooks/useUser";
 import useJournals from "../../Hooks/useJournals";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function JournalScreen() {
+  const { theme } = useTheme();
+  const styles = createJournalStyles(theme);
   const [AddEntryModalVisible, setAddEntryModalVisible] = useState(false);
   const [analyzing, setAnalyzing] = useState(false); // shows "Analyzing…" overlay
   const { user, loading: userLoading, error: userError } = useUser();

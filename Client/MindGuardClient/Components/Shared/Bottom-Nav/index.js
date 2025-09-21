@@ -1,13 +1,16 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import styles from "./bottom-nav.styles";
+import { createBottomNavStyles } from "./bottom-nav.styles";
 import { routes } from "../../../Routes/AppRoutes";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "../../../Theme/useTheme";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNav() {
+  const { theme } = useTheme();
+  const styles = createBottomNavStyles(theme);
   const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
@@ -34,8 +37,8 @@ export default function BottomNav() {
             />
           );
         },
-        tabBarActiveTintColor: "orange",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.textMuted,
         tabBarStyle: {
           ...styles.tabBar,
           paddingBottom: insets.bottom + 10,

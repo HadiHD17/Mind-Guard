@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from "./UpcomingRoutineCard.Styles";
+import { createUpcomingRoutineCardStyles } from "./UpcomingRoutineCard.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function UpcomingRoutineCard({
   title,
@@ -8,6 +9,8 @@ export default function UpcomingRoutineCard({
   onRightPress,
   subtitle,
 }) {
+  const { theme } = useTheme();
+  const styles = createUpcomingRoutineCardStyles(theme);
   return (
     <View style={styles.card}>
       <View style={styles.header}>

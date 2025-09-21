@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
-import styles from "./TipCard.Styles";
+import { createTipCardStyles } from "./TipCard.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function TipCard({ tips }) {
+  const { theme } = useTheme();
+  const styles = createTipCardStyles(theme);
   // Accept either a single string or an array
   const list = Array.isArray(tips) ? tips : tips ? [tips] : [];
 

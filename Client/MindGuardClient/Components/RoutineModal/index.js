@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "./RoutineModal.Styles";
+import { createRoutineModalStyles } from "./RoutineModal.Styles";
 import Input from "../Shared/Input";
 import PrimaryButton from "../Shared/Button/primaryindex";
 import SecondaryButton from "../Shared/Button/secondaryindex";
 import Week from "../Week";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function AddRoutineModal({ visible, onClose, onCreate }) {
+  const { theme } = useTheme();
+  const styles = createRoutineModalStyles(theme);
+
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);
@@ -46,7 +50,7 @@ export default function AddRoutineModal({ visible, onClose, onCreate }) {
           <View style={styles.header}>
             <Text style={styles.title}>Create Routine</Text>
             <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={24} color="#000" />
+              <Ionicons name="close" size={24} color={theme.text} />
             </TouchableOpacity>
           </View>
 

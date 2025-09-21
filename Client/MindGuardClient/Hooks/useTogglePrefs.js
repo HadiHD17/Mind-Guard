@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, updateAccount } from "../Redux/Slices/authSlice";
+import { syncUserThemePreference } from "../Theme/themeBootstrap";
 
 export default function useTogglePrefs() {
   const dispatch = useDispatch();
@@ -39,6 +40,11 @@ export default function useTogglePrefs() {
             ...patch,
           })
         ).unwrap();
+
+        // Sync theme preference with Redux theme state
+        if (field === "isDark") {
+          syncUserThemePreference(nextValue);
+        }
       } catch (err) {
         dispatch(setUser(prevUser));
         console.log("Update failed", String(err?.message || err));

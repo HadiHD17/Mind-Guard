@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, ScrollView } from "react-native";
 import FeelingCard from "../../Components/FeelingCard";
-import styles from "./home.styles";
+import { createHomeStyles } from "./home.styles";
 import MoodTrendCard from "../../Components/MoodTrendCard";
 import UpcomingRoutineCard from "../../Components/UpcomingRoutineCard";
 import LogMoodModal from "../../Components/LogMood";
 import useUser from "../../Hooks/useUser";
 import useMoods from "../../Hooks/useMoods";
 import useRoutine from "../../Hooks/useRoutine";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function HomeScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createHomeStyles(theme);
+
   const { user, loading: userLoading, error: userError } = useUser();
   const {
     moods,
@@ -36,13 +40,13 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.feelingCardsRow}>
           <FeelingCard
             title="Add Journal Entry"
-            bgColor="#80C6DA"
+            bgColor={theme.primary}
             textColor="#fff"
             onPress={() => navigation.navigate("Journal")}
           />
           <FeelingCard
             title="Log Mood"
-            bgColor="#1E3A5F"
+            bgColor={theme.primaryDark}
             textColor="#fff"
             onPress={() => setLogMoodVisible(true)}
           />

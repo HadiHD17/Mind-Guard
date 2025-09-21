@@ -4,11 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import StatsCard from "../../Components/StatsCard";
-import styles from "./MoodMap.Styles";
+import { createMoodMapStyles } from "./MoodMap.Styles";
 import useMoodMap from "../../Hooks/useMoodMap";
 import { getMostCommonMood, getCurrentStreak } from "../../Helpers/MoodHelpers";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function MoodMapScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createMoodMapStyles(theme);
   const {
     journals,
     loading,
@@ -26,7 +29,7 @@ export default function MoodMapScreen({ navigation }) {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Ionicons name="arrow-back" size={24} color={theme.text} />
         </TouchableOpacity>
         <Text style={styles.title}>Mood Map</Text>
       </View>
@@ -36,8 +39,26 @@ export default function MoodMapScreen({ navigation }) {
         onDayPress={handleDayPress}
         style={styles.calendar}
         theme={{
-          todayTextColor: "#4CAF50",
-          arrowColor: "#000",
+          backgroundColor: theme.surface,
+          calendarBackground: theme.surface,
+          textSectionTitleColor: theme.text,
+          selectedDayBackgroundColor: theme.primary,
+          selectedDayTextColor: "#ffffff",
+          todayTextColor: theme.success,
+          dayTextColor: theme.text,
+          textDisabledColor: theme.textMuted,
+          dotColor: theme.primary,
+          selectedDotColor: "#ffffff",
+          arrowColor: theme.text,
+          disabledArrowColor: theme.textMuted,
+          monthTextColor: theme.text,
+          indicatorColor: theme.primary,
+          textDayFontWeight: "300",
+          textMonthFontWeight: "bold",
+          textDayHeaderFontWeight: "300",
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 13,
         }}
       />
 

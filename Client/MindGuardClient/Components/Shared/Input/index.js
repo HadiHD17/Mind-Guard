@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
-import styles from "./input.styles";
+import { createInputStyles } from "./input.styles";
+import { useTheme } from "../../../Theme/useTheme";
 
 export default function Input({
   label,
@@ -11,13 +12,15 @@ export default function Input({
   style,
   ...props
 }) {
+  const { theme } = useTheme();
+  const styles = createInputStyles(theme);
   return (
     <View style={[styles.container, style]}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        placeholderTextColor="rgba(36,36,36,0.6)"
+        placeholderTextColor={theme.textMuted}
         value={value}
         secureTextEntry={secureTextEntry}
         onChangeText={onChangeText}

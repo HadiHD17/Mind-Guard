@@ -8,13 +8,17 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import RoutineCard from "../../Components/RoutineCard";
-import styles from "./Routine.Styles";
+import { createRoutineStyles } from "./Routine.Styles";
 import AddRoutineModal from "../../Components/RoutineModal";
 import useUser from "../../Hooks/useUser";
 import useRoutine from "../../Hooks/useRoutine";
 import useDeviceCalendarSync from "../../Hooks/useDeviceCalendarSync";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function RoutineScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createRoutineStyles(theme);
+
   const [AddRoutineModalVisible, setAddRoutineModalVisible] = useState(false);
   const { user } = useUser();
   const {
@@ -39,7 +43,7 @@ export default function RoutineScreen({ navigation }) {
         <View style={styles.headerLeft}>
           <TouchableOpacity
             onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}>
-            <Ionicons name="arrow-back" size={24} color="#000" />
+            <Ionicons name="arrow-back" size={24} color={theme.text} />
           </TouchableOpacity>
           <Text style={styles.title}>Routines</Text>
         </View>

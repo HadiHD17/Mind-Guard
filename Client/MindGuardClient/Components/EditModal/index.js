@@ -7,12 +7,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import styles from "./EditModal.Styles";
+import { createEditModalStyles } from "./EditModal.Styles";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
 import useUser from "../../Hooks/useUser";
+import { useTheme } from "../../Theme/useTheme";
 import useEditAccount from "../../Hooks/useEditAccount";
 
 export default function EditAccountModal({
@@ -21,6 +22,9 @@ export default function EditAccountModal({
   onSave,
   initialData,
 }) {
+  const { theme } = useTheme();
+  const styles = createEditModalStyles(theme);
+
   const [name, setName] = useState(initialData?.name || "");
   const [email, setEmail] = useState(initialData?.email || "");
   const [phone, setPhone] = useState(initialData?.phone || "");
@@ -72,7 +76,7 @@ export default function EditAccountModal({
           <View style={styles.header}>
             <Text style={styles.title}>Edit Account</Text>
             <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={24} color="#1E3A5F" />
+              <Ionicons name="close" size={24} color={theme.text} />
             </TouchableOpacity>
           </View>
 

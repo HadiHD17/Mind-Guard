@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import styles from "./WeeklySummaryCard.Styles";
+import { createWeeklySummaryCardStyles } from "./WeeklySummaryCard.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 import { moodToEmoji } from "../../Helpers/MoodHelpers";
 import { getUserData } from "../../Helpers/Storage";
 import api from "../../Api";
 
 export default function WeeklySummaryCard({ entries }) {
+  const { theme } = useTheme();
+  const styles = createWeeklySummaryCardStyles(theme);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
   const [summary, setSummary] = useState(null);

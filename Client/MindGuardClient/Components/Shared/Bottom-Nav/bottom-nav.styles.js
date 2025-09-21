@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
-export default StyleSheet.create({
-  tabBar: {
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "#D3D3D3",
-    height: 60,
-  },
-});
+export const createBottomNavStyles = (theme) =>
+  StyleSheet.create({
+    tabBar: {
+      backgroundColor: theme.surface,
+      borderTopWidth: 1,
+      borderTopColor: theme.border,
+      height: 60,
+    },
+  });

@@ -1,7 +1,8 @@
 // Components/Week.js
 import React from "react";
 import { Text, TouchableOpacity, ScrollView } from "react-native";
-import styles from "./Week.Styles";
+import { createWeekStyles } from "./Week.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -10,6 +11,8 @@ export default function Week({
   setSelectedDays,
   readOnly = false,
 }) {
+  const { theme } = useTheme();
+  const styles = createWeekStyles(theme);
   const toggleDay = (day) => {
     if (readOnly) return;
     if (selectedDays.includes(day)) {

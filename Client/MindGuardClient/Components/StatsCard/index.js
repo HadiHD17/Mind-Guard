@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text } from "react-native";
-import styles from "./StatsCard.Styles";
+import { createStatsCardStyles } from "./StatsCard.Styles";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function StatsCard({
   mostCommonMood,
   currentStreak,
   totalEntries,
 }) {
+  const { theme } = useTheme();
+  const styles = createStatsCardStyles(theme);
   return (
     <View style={styles.card}>
       <Text style={styles.label}>

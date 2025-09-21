@@ -1,11 +1,13 @@
-// LandingScreen.js
 import React from "react";
 import { View, Text, Image } from "react-native";
-import styles from "./Landing.Styles";
+import { createLandingStyles } from "./Landing.Styles";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
 import SecondaryButton from "../../Components/Shared/Button/secondaryindex";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function LandingScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createLandingStyles(theme);
   return (
     <View style={styles.container}>
       <Image

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Modal, View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "./EntryModal.Styles";
+import { createEntryModalStyles } from "./EntryModal.Styles";
 import PrimaryButton from "../Shared/Button/primaryindex";
 import SecondaryButton from "../Shared/Button/secondaryindex";
 import useJournals from "../../Hooks/useJournals";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function AddEntryModal({ visible, onClose, onSave }) {
+  const { theme } = useTheme();
+  const styles = createEntryModalStyles(theme);
   const [entryText, setEntryText] = useState("");
   const { addJournalEntry } = useJournals();
 

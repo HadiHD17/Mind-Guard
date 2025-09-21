@@ -11,14 +11,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { logout, setUser } from "../../Redux/Slices/authSlice";
 import { clearUser } from "../../Redux/Slices/userSlice";
-import styles from "./profile.styles";
+import { createProfileStyles } from "./profile.styles";
 import ProfileCard from "../../Components/ProfileCard";
 import EditAccountModal from "../../Components/EditModal";
 import EditPasswordModal from "../../Components/EditPasswordModal";
 import useUser from "../../Hooks/useUser";
 import useTogglePrefs from "../../Hooks/useTogglePrefs";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function ProfileScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createProfileStyles(theme);
+
   const dispatch = useDispatch();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editPasswordVisible, setEditPasswordVisible] = useState(false);

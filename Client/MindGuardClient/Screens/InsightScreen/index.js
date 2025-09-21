@@ -6,15 +6,19 @@ import {
   ActivityIndicator,
   View,
 } from "react-native";
-import styles from "./insight.styles";
+import { createInsightStyles } from "./insight.styles";
 import MoodRiskCard from "../../Components/MoodRiskCard";
 import TipCard from "../../Components/TipCard";
 import WeeklySummaryCard from "../../Components/WeeklySummaryCard";
 import useUser from "../../Hooks/useUser";
 import { useInsights } from "../../Hooks/useInsights";
 import { tipsFor } from "../../ml/tipsSeq";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function InsightScreen() {
+  const { theme } = useTheme();
+  const styles = createInsightStyles(theme);
+
   const { user } = useUser();
   const { entries, risk, loading, error } = useInsights(user);
 

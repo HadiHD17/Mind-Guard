@@ -9,10 +9,13 @@ import {
 } from "react-native";
 import Input from "../../Components/Shared/Input";
 import PrimaryButton from "../../Components/Shared/Button/primaryindex";
-import styles from "./Register.Styles";
+import { createRegisterStyles } from "./Register.Styles";
 import useRegister from "../../Hooks/useRegister";
+import { useTheme } from "../../Theme/useTheme";
 
 export default function RegisterScreen({ navigation }) {
+  const { theme } = useTheme();
+  const styles = createRegisterStyles(theme);
   const {
     fullName,
     setFullName,
