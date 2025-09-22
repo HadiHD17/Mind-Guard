@@ -145,15 +145,15 @@
 
 ### ML Dataset
 
-Our dataset was built from two sources: publicly available mood-annotated text corpora and realistic journal-like entries generated in the app. Each entry contains a mood label (from 11 moods such as anxiety, stress, happy, calm, etc.), a sentiment score, and timestamps.
+Our dataset was built from two sources: publicly available mood annotated text corpora and realistic journal like entries generated in the app. Each entry contains a mood label (from 11 moods such as anxiety, stress, happy, calm, etc.), a sentiment score, and timestamps.
 
 We created two versions of the dataset:
 
 Tabular dataset (V1): Predicts risk level (LOW, MEDIUM, HIGH) based on a single mood and sentiment score. This provided a simple baseline.
 
-Sequence dataset (V2): Uses the past 7 days of moods and sentiment scores to predict if the next 48 hours are at risk or OK. This reflects real-life mood tracking more closely.
+Sequence dataset (V2): Uses the past 7 days of moods and sentiment scores to predict if the next 48 hours are at risk or OK. This reflects real life mood tracking more closely.
 
-To ensure balance, class weighting was applied during training. Importantly, no personal data or raw journal text is used — only mood categories and numeric sentiment scores. Labels are derived from proxy rules, so results should be seen as supportive insights rather than medical advice.
+To ensure balance, class weighting was applied during training. Importantly, no personal data or raw journal text is used only mood categories and numeric sentiment scores. Labels are derived from proxy rules, so results should be seen as supportive insights rather than medical advice.
 
 ### ML Metrics
 
@@ -170,8 +170,8 @@ To ensure balance, class weighting was applied during training. Importantly, no 
 
 ### Deployment Map
 
-| Deployment Map                                 |
-| ---------------------------------------------- |
-| ![Map](./readme/demo/Deployment%20Diagram.png) |
+| Deployment Map                          |
+| --------------------------------------- |
+| ![Map](./readme/demo/Deploymentmap.jpg) |
 
 <br><br>
