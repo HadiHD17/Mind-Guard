@@ -17,6 +17,8 @@
 
 ### ER Diagram
 
+<a href="https://app.eraser.io/workspace/KwPAEJ6ihtTdqEIWptbE?origin=share">Eraser Link</a>
+
 - <img src="./readme/demo/ER diagram.png"/>
 
 ### Component Diagram
