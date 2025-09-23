@@ -56,9 +56,9 @@
 | ----------------------------------------- | ------------------------------------- | ------------------------------------------- |
 | ![Landing](./readme/demo/LandingPage.jpg) | ![Login](./readme/demo/LoginPage.jpg) | ![Register](./readme/demo/RegisterPage.jpg) |
 
-| Home screen                         | Journal and Insight Screens           | Mood Map screen                   |
-| ----------------------------------- | ------------------------------------- | --------------------------------- |
-| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI_ML.gif) | ![Map](./readme/demo/MapPage.jpg) |
+| Home screen                         | Journal and Insight Screens            | Mood Map screen                   |
+| ----------------------------------- | -------------------------------------- | --------------------------------- |
+| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/output.gif) | ![Map](./readme/demo/MapPage.jpg) |
 
 | Routine screen                                          | Profile screen                            | Dark Mode                           |
 | ------------------------------------------------------- | ----------------------------------------- | ----------------------------------- |
