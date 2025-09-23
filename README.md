@@ -19,11 +19,11 @@
 
 <a href="https://app.eraser.io/workspace/KwPAEJ6ihtTdqEIWptbE?origin=share">Eraser Link</a>
 
-- <img src="./readme/demo/ER diagram.png"/>
+<img src="./readme/demo/ER diagram.png"/>
 
 ### Component Diagram
 
-- <img src="./readme/demo/Component Diagram.png"/>
+<img src="./readme/demo/Component Diagram.png"/>
 
 <br><br>
 
@@ -117,6 +117,71 @@
 | ---------------------------------- | --------------------------------- |
 | ![Frontend](./readme/demo/CI1.png) | ![Backend](./readme/demo/CI2.png) |
 
+### AI Agent – Process Flow
+
+1. **User Writing** – The user writes a diary note describing their feelings.
+2. **Memory Check** – The system checks whether this entry has been analyzed before.
+3. **AI Analysis** – The text is sent to Gemini, requesting only two outputs:
+   - Mood (e.g., happy, sad, stressed).
+   - Sentiment score (–5 very negative → +5 very positive).
+4. **Validation** – Gemini’s response is validated for clarity and consistency.
+5. **Common Sense Adjustment** – The system scans for strong keywords (e.g., “panic”, “joy”) and adjusts the mood if necessary.
+6. **Final Decision** – Combines AI prediction and keyword check to produce the final result.
+7. **Result Returned** – A clean output is shown:
+   - Mood: Stressed
+   - Score: –3
+
+### ML Dataset
+
+Our dataset combines **public corpora** (mood annotated texts) with **synthetic but realistic entries** generated through app journaling simulations.
+
+**Steps followed to build the dataset:**
+
+1. **Data Collection** – Gathered mood-labelled text samples and generated journal-style entries to simulate real usage.
+2. **Cleaning** – Removed duplicates, normalized casing, and stripped special characters.
+3. **Feature Engineering** – Extracted two key signals:
+   - Mood category (one of 11 moods: anxiety, stress, happy, calm, etc.).
+   - Sentiment score (–5 to +5).
+4. **Versioning**:
+   - **Tabular Dataset (V1):** Single-entry prediction of LOW/MEDIUM/HIGH risk.
+   - **Sequence Dataset (V2):** Past 7 days → predict next 48h as AT_RISK or OK.
+5. **Balancing** – Applied class weighting during training to handle label imbalance.
+
+⚠️ _Note: No personal or raw journal text is used only mood categories, sentiment scores, and timestamps. Labels are derived from proxy rules. This ensures privacy and ethical use of data._
+
+<img src="./readme/demo/Dataset.png"/>
+
+### 📊 ML Metrics
+
+We evaluated our **sequence based mood risk prediction model** on a held out test set.
+
+- **Accuracy:** ~69%
+- **F1 Score:** ~67%
+- **Loss:** 0.56
+
+**Confusion Matrix Highlights**
+
+- **TN = 205** → Non risk days correctly predicted as safe.
+- **FP = 21** → Safe days incorrectly flagged as risk.
+- **FN = 165** → Risk days incorrectly predicted as safe.
+
+> **Insight:** The model performs fairly well (~69% accuracy) but shows higher false negatives (missed risk days). This will be improved in the next iterations through more balanced training data, threshold tuning, and enhanced feature engineering.
+
+#### Metrics Visualizations
+
+| Metrics 1                               | Metrics 2                               |
+| --------------------------------------- | --------------------------------------- |
+| ![Metrics1](./readme/demo/metrics1.png) | ![Metrics2](./readme/demo/metrics2.png) |
+
+| Metrics 3                               |
+| --------------------------------------- |
+| ![Metrics3](./readme/demo/metrics3.png) |
+
+<br><br>
+
+<!-- Deployment -->
+<img src="./readme/title7.svg"/>
+
 ### Swagger
 
 - Testing Apis responses using swagger and ensuring their optimization.
@@ -124,49 +189,6 @@
 | Swagger APIS                               | Swagger Docs                               |
 | ------------------------------------------ | ------------------------------------------ |
 | ![Swagger](./readme/demo/swagger_apis.png) | ![Swagger](./readme/demo/swagger_docs.png) |
-
-### AI Agent
-
-- Writing – The user writes a diary note about how they feel.
-
-- Check Memory – The system sees if it already analyzed this note before.
-
-- Ask AI – It sends the text to Gemini, asking only for the mood (happy, sad, stressed, etc.) and a score from –5 (very negative) to +5 (very positive).
-
-- Double-Check – The system makes sure Gemini’s answer is clear and valid.
-
-- Common Sense Scan – It also looks for strong words (like “panic” or “joy”) to adjust the mood if needed.
-
-- Final Choice – It combines Gemini’s answer and the common sense check to be extra accurate.
-
-- Result – The system gives back a simple answer, like:
-  → Mood: Stressed
-  → Score: –3
-
-### ML Dataset
-
-Our dataset was built from two sources: publicly available mood annotated text corpora and realistic journal like entries generated in the app. Each entry contains a mood label (from 11 moods such as anxiety, stress, happy, calm, etc.), a sentiment score, and timestamps.
-
-We created two versions of the dataset:
-
-Tabular dataset (V1): Predicts risk level (LOW, MEDIUM, HIGH) based on a single mood and sentiment score. This provided a simple baseline.
-
-Sequence dataset (V2): Uses the past 7 days of moods and sentiment scores to predict if the next 48 hours are at risk or OK. This reflects real life mood tracking more closely.
-
-To ensure balance, class weighting was applied during training. Importantly, no personal data or raw journal text is used only mood categories and numeric sentiment scores. Labels are derived from proxy rules, so results should be seen as supportive insights rather than medical advice.
-
-### ML Metrics
-
-| ML Metrics                              |
-| --------------------------------------- |
-| ![Metrics](./readme/demo/MLmetric1.png) |
-| ![Metrics](./readme/demo/MLmetric2.png) |
-| ![Metrics](./readme/demo/MLmetric3.png) |
-
-<br><br>
-
-<!-- Deployment -->
-<img src="./readme/title7.svg"/>
 
 ### Deployment Map
 
