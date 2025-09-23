@@ -56,19 +56,19 @@
 | ----------------------------------------- | ------------------------------------- | ------------------------------------------- |
 | ![Landing](./readme/demo/LandingPage.jpg) | ![Login](./readme/demo/LoginPage.jpg) | ![Register](./readme/demo/RegisterPage.jpg) |
 
-| Home screen                         | Journal and Insight Screens           | Mood Map screen                   |
-| ----------------------------------- | ------------------------------------- | --------------------------------- |
-| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI_ML.gif) | ![Map](./readme/demo/MapPage.jpg) |
+| Home screen                         | Journal and Insight Screens        | Mood Map screen                   |
+| ----------------------------------- | ---------------------------------- | --------------------------------- |
+| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI.gif) | ![Map](./readme/demo/MapPage.jpg) |
 
-| Routine screen                                          | Profile screen                            | Dark Mode                           |
-| ------------------------------------------------------- | ----------------------------------------- | ----------------------------------- |
-| ![Calendar syncing](./readme/demo/Calendar_syncing.gif) | ![Profile](./readme/demo/ProfilePage.jpg) | ![Dark](./readme/demo/darkmode.gif) |
+| Routine screen                                  | Profile screen                            | Dark Mode                       |
+| ----------------------------------------------- | ----------------------------------------- | ------------------------------- |
+| ![Calendar syncing](./readme/demo/Calendar.gif) | ![Profile](./readme/demo/ProfilePage.jpg) | ![Dark](./readme/demo/dark.gif) |
 
 ### Admin Screens (Web)
 
 | Landing screen                        |
 | ------------------------------------- |
-| ![Landing](./readme/demo/Landing.gif) |
+| ![Landing](./readme/demo/landing.gif) |
 
 ### Automation Workflow
 
@@ -169,13 +169,13 @@ We evaluated our **sequence based mood risk prediction model** on a held out tes
 
 #### Metrics Visualizations
 
-| Metrics 1                               | Metrics 2                               |
-| --------------------------------------- | --------------------------------------- |
-| ![Metrics1](./readme/demo/metrics1.png) | ![Metrics2](./readme/demo/metrics2.png) |
+| Metrics 1                                | Metrics 2                                |
+| ---------------------------------------- | ---------------------------------------- |
+| ![Metrics1](./readme/demo/MLmetric1.png) | ![Metrics2](./readme/demo/MLmetric2.png) |
 
-| Metrics 3                               |
-| --------------------------------------- |
-| ![Metrics3](./readme/demo/metrics3.png) |
+| Metrics 3                                |
+| ---------------------------------------- |
+| ![Metrics3](./readme/demo/MLmetric3.png) |
 
 <br><br>
 
