@@ -56,19 +56,19 @@
 | ----------------------------------------- | ------------------------------------- | ------------------------------------------- |
 | ![Landing](./readme/demo/LandingPage.jpg) | ![Login](./readme/demo/LoginPage.jpg) | ![Register](./readme/demo/RegisterPage.jpg) |
 
-| Home screen                         | Journal and Insight Screens              | Mood Map screen                   |
-| ----------------------------------- | ---------------------------------------- | --------------------------------- |
-| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI-small.gif) | ![Map](./readme/demo/MapPage.jpg) |
+| Home screen                         | Journal and Insight Screens        | Mood Map screen                   |
+| ----------------------------------- | ---------------------------------- | --------------------------------- |
+| ![Home](./readme/demo/HomePage.jpg) | ![AI and ML](./readme/demo/AI.gif) | ![Map](./readme/demo/MapPage.jpg) |
 
-| Routine screen                                        | Profile screen                            | Dark Mode                             |
-| ----------------------------------------------------- | ----------------------------------------- | ------------------------------------- |
-| ![Calendar syncing](./readme/demo/Calendar-small.gif) | ![Profile](./readme/demo/ProfilePage.jpg) | ![Dark](./readme/demo/dark-small.gif) |
+| Routine screen                                  | Profile screen                            | Dark Mode                       |
+| ----------------------------------------------- | ----------------------------------------- | ------------------------------- |
+| ![Calendar syncing](./readme/demo/Calendar.gif) | ![Profile](./readme/demo/ProfilePage.jpg) | ![Dark](./readme/demo/dark.gif) |
 
 ### Admin Screens (Web)
 
 | Landing screen                        |
 | ------------------------------------- |
-| ![Landing](./readme/demo/landing.gif) |
+| ![Landing](./readme/demo/Landing.gif) |
 
 ### Automation Workflow
 
