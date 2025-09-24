@@ -19,7 +19,7 @@
 
 <a href="https://app.eraser.io/workspace/KwPAEJ6ihtTdqEIWptbE?origin=share">Eraser Link</a>
 
-<img src="./readme/demo/ER diagram.png" width="700"/>
+<img src="./readme/demo/ER diagram.png" width="500"/>
 
 ### Component Diagram
 
